@@ -14,9 +14,17 @@ final class NetworkManager {
     
     private init() { }
     
-    func searchPhoto(api: MoiveAPIRequest) {
-        AF.request(api.endPoint, method: api.method, parameters: api.parameter, headers: api.header).responseString { response in
-            dump(response)
+    func searchMovie<T: Decodable>(
+        api: MoiveAPIRequest,
+        type: T.Type
+    ) {
+        AF.request(api.endPoint, method: api.method, parameters: api.parameter, headers: api.header).responseDecodable(of: T.self) { response in
+            switch response.result {
+            case .success(let value):
+                dump(value)
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 }
