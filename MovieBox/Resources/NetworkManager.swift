@@ -14,11 +14,14 @@ final class NetworkManager {
     
     private init() { }
     
-    func searchMovie<T: Decodable>(
-        api: MoiveAPIRequest,
-        type: T.Type
+    func fetchData<T: Decodable>(
+        apiRequest: MoiveAPIRequest,
+        requestType: T.Type
     ) {
-        AF.request(api.endPoint, method: api.method, parameters: api.parameter, headers: api.header).responseDecodable(of: T.self) { response in
+        AF.request(apiRequest.endPoint,
+                   method: apiRequest.method,
+                   parameters: apiRequest.parameter,
+                   headers: apiRequest.header).responseDecodable(of: T.self) { response in
             switch response.result {
             case .success(let value):
                 dump(value)
