@@ -12,7 +12,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NetworkManager.shared.searchPhoto(api: .trendingMovies)
+        NetworkManager.shared.searchPhoto(api: .movieCredits(id: "545611"))
     }
 
 }
