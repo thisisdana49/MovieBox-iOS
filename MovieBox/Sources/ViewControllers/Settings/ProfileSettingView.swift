@@ -66,13 +66,13 @@ class ProfileSettingView: BaseView {
         imageView.layer.borderWidth = 3
         imageView.clipsToBounds = true
         
-        cameraImageView.image = UIImage(systemName: "camera.fill")?.withTintColor(.white).withRenderingMode(.alwaysOriginal)
+        cameraImageView.image = UIImage(systemName: "camera.fill")?.withTintColor(.baseWhite).withRenderingMode(.alwaysOriginal)
         cameraImageView.contentMode = .center
         cameraImageView.backgroundColor = .mainBlue
         cameraImageView.layer.cornerRadius = 20
         cameraImageView.clipsToBounds = true
         
-        textField.textColor = .white
+        textField.textColor = .baseWhite
         
         guideLabel.text = "사용할 수 있는 닉네임이에요"
         guideLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)

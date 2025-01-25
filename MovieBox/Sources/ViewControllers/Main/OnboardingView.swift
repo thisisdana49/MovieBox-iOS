@@ -57,11 +57,11 @@ class OnboardingView: BaseView {
         
         titleLabel.text = "Onboarding"
         titleLabel.font = UIFont.italicSystemFont(ofSize: 30, weight: .bold)
-        titleLabel.textColor = .white
+        titleLabel.textColor = .baseWhite
         
         subtitleLabel.text = "당신만의 영화 세상.\nMovieBox를 시작해 보세요."
         subtitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
-        subtitleLabel.textColor = .white
+        subtitleLabel.textColor = .baseWhite
         subtitleLabel.textAlignment = .center
         subtitleLabel.numberOfLines = 2
     }

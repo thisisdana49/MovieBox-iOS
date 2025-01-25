@@ -16,7 +16,7 @@ class CustomButton: UIButton {
         
         setTitle(title, for: .normal)
         setTitleColor(.mainBlue, for: .normal)
-        backgroundColor = .black
+        backgroundColor = .baseBlack
         layer.borderColor = UIColor.mainBlue.cgColor
         layer.borderWidth = 2
         layer.cornerRadius = 20

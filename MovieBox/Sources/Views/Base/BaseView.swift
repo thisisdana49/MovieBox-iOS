@@ -21,7 +21,7 @@ class BaseView: UIView {
     func configureHierarchy() {}
     func configureLayout() {}
     func configureView() {
-        backgroundColor = .black
+        backgroundColor = .baseBlack
     }
     
     @available(*, unavailable)
