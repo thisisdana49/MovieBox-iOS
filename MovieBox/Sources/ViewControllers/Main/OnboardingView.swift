@@ -12,7 +12,7 @@ class OnboardingView: BaseView {
     let imageView = UIImageView()
     let titleLabel = UILabel()
     let subtitleLabel = UILabel()
-    let startButton = UIButton()
+    let startButton = CustomButton(title: "시작하기")
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -64,12 +64,5 @@ class OnboardingView: BaseView {
         subtitleLabel.textColor = .white
         subtitleLabel.textAlignment = .center
         subtitleLabel.numberOfLines = 2
-        
-        startButton.setTitle("시작하기", for: .normal)
-        startButton.setTitleColor(.mainBlue, for: .normal)
-        startButton.backgroundColor = .black
-        startButton.layer.borderColor = UIColor.mainBlue.cgColor
-        startButton.layer.borderWidth = 1
-        startButton.layer.cornerRadius = 20
     }
 }
