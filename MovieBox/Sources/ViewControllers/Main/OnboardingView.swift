@@ -50,7 +50,7 @@ class OnboardingView: BaseView {
     }
     
     override func configureView() {
-        backgroundColor = .black
+        super.configureView()
         
         imageView.image = .onboarding
         imageView.contentMode = .scaleAspectFill
