@@ -9,7 +9,7 @@ import UIKit
 
 class RecentKeywordTableViewCell: UITableViewCell {
 
-    let titleLabel = UILabel()
+    let headerLabel = UILabel()
     let scrollView = UIScrollView()
     let stackView = UIStackView()
     
@@ -21,20 +21,20 @@ class RecentKeywordTableViewCell: UITableViewCell {
     }
 
     func configureHierarchy() {
-        contentView.addSubview(titleLabel)
+        contentView.addSubview(headerLabel)
         contentView.addSubview(scrollView)
         scrollView.addSubview(stackView)
     }
 
     func configureLayout() {
-        titleLabel.snp.makeConstraints { make in
+        headerLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView).offset(20)
             make.horizontalEdges.equalTo(contentView).inset(16)
             make.height.equalTo(20)
         }
         
         scrollView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.top.equalTo(headerLabel.snp.bottom).offset(8)
             make.width.equalToSuperview()
             make.height.equalTo(60)
         }
@@ -55,8 +55,8 @@ class RecentKeywordTableViewCell: UITableViewCell {
         stackView.distribution = .fillProportionally
         stackView.alignment = .center
         
-        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
-        titleLabel.textColor = .baseWhite
+        headerLabel.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
+        headerLabel.textColor = .baseWhite
     }
     
     func configureData(keywords: [String]) {

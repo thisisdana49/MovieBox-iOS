@@ -16,7 +16,8 @@ final class NetworkManager {
     
     func fetchData<T: Decodable>(
         apiRequest: MoiveAPIRequest,
-        requestType: T.Type
+        requestType: T.Type,
+        successHandler: @escaping (T) -> Void
     ) {
         AF.request(apiRequest.endPoint,
                    method: apiRequest.method,
@@ -25,6 +26,7 @@ final class NetworkManager {
             switch response.result {
             case .success(let value):
                 dump(value)
+                successHandler(value)
             case .failure(let error):
                 print(error)
             }

@@ -9,34 +9,34 @@ import UIKit
 
 class MainView: BaseView {
 
-    let profileSectionView = ProfileSectionView()
+    let profileSection = ProfileSectionView()
     let recentKeywordsView = RecentKeywordTableViewCell()
-    let movieTableView = UITableView()
+    let todaysMovieSection = MainMovieSectionView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
     override func configureHierarchy() {
-        addSubview(profileSectionView)
+        addSubview(profileSection)
         addSubview(recentKeywordsView)
-        addSubview(movieTableView)
+        addSubview(todaysMovieSection)
     }
     
     override func configureLayout() {
-        profileSectionView.snp.makeConstraints { make in
+        profileSection.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(20)
             make.top.equalTo(safeAreaLayoutGuide).offset(8)
             make.height.equalTo(130)
         }
         
         recentKeywordsView.snp.makeConstraints { make in
-            make.top.equalTo(profileSectionView.snp.bottom)
+            make.top.equalTo(profileSection.snp.bottom)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(100)
         }
         
-        movieTableView.snp.makeConstraints { make in
+        todaysMovieSection.snp.makeConstraints { make in
             make.top.equalTo(recentKeywordsView.snp.bottom)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(safeAreaLayoutGuide)
@@ -46,7 +46,7 @@ class MainView: BaseView {
     override func configureView() {
         super.configureView()
         
-        recentKeywordsView.titleLabel.text = "최근 검색어"
+        recentKeywordsView.headerLabel.text = "최근 검색어"
     }
     
 }
