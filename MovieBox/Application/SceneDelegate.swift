@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let userIsFirst = UserDefaultsManager.get(forKey: .isFirst) as? Bool, userIsFirst == false {
             vc = TabBarViewController()
         } else {
-            vc = OnboardingViewController()
+            vc = UINavigationController(rootViewController: OnboardingViewController())
         }
         
         guard let scene = (scene as? UIWindowScene) else { return }

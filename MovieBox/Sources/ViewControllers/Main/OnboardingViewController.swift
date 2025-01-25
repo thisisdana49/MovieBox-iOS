@@ -9,12 +9,20 @@ import UIKit
 
 class OnboardingViewController: UIViewController {
 
-    var isFirst = true
+    let mainView = OnboardingView()
+    
+    override func loadView() {
+        view = mainView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        UserDefaultsManager.set(to: isFirst, forKey: .isFirst)
+        mainView.startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    func startButtonTapped() {
+        navigationController?.pushViewController(ProfileSettingViewController(), animated: true)
     }
     
 }
