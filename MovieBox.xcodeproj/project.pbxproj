@@ -20,7 +20,7 @@
 		3E078ECF2D43C32F00A4C085 /* Exceptions for "MovieBox" folder in "MovieBox" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Application/Info.plist,
+				Info.plist,
 			);
 			target = 3E078EBC2D43C32D00A4C085 /* MovieBox */;
 		};

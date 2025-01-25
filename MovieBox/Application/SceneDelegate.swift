@@ -13,11 +13,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        var vc: UIViewController
+
+        if UserDefaultsManager.get(forKey: .isFirst) == nil {
+            UserDefaultsManager.set(to: true, forKey: .isFirst)
+        }
+        
+        if let userIsFirst = UserDefaultsManager.get(forKey: .isFirst) as? Bool, userIsFirst == false {
+            vc = TabBarViewController()
+        } else {
+            vc = OnboardingViewController()
+        }
+        
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
-        let nav = UINavigationController(rootViewController: MainViewController())
-        window?.rootViewController = nav
+        window?.rootViewController = vc
         window?.makeKeyAndVisible()
     }
 
