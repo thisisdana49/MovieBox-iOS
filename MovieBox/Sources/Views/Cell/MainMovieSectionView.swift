@@ -1,5 +1,5 @@
 //
-//  MainTableViewCell.swift
+//  MainMovieSectionView.swift
 //  MovieBox
 //
 //  Created by 조다은 on 1/25/25.
@@ -8,8 +8,6 @@
 import UIKit
 
 class MainMovieSectionView: BaseView {
-
-    static let id = "MainTableViewCell"
 
     let headerLabel = UILabel()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())

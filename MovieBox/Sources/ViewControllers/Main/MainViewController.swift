@@ -29,10 +29,18 @@ class MainViewController: UIViewController {
     }
     
     func configureView() {
+        navigationItem.title = "MovieBox"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
+        
         mainView.recentKeywordsView.configureData(keywords: recentKeywords)
         mainView.todaysMovieSection.collectionView.delegate = self
         mainView.todaysMovieSection.collectionView.dataSource = self
         mainView.todaysMovieSection.collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.id)
+    }
+    
+    @objc
+    func searchButtonTapped(_ sender: UIBarButtonItem) {
+        navigationController?.pushViewController(SearchViewController(), animated: true)
     }
     
 }

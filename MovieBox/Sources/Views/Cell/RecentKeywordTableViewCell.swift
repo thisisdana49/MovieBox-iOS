@@ -1,5 +1,5 @@
 //
-//  MainTableViewCell.swift
+//  RecentKeywordTableViewCell.swift
 //  MovieBox
 //
 //  Created by 조다은 on 1/25/25.

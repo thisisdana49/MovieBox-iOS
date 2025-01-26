@@ -25,7 +25,7 @@ final class NetworkManager {
                    headers: apiRequest.header).responseDecodable(of: T.self) { response in
             switch response.result {
             case .success(let value):
-                dump(value)
+//                dump(value)
                 successHandler(value)
             case .failure(let error):
                 print(error)
