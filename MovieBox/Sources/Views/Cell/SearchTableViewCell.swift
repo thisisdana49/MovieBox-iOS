@@ -27,7 +27,6 @@ class SearchTableViewCell: UITableViewCell {
     }
     
     func configureData(movie: Movie) {
-        print(movie.posterPath)
         let posterURL = "https://image.tmdb.org/t/p/original/\(movie.posterPath ?? "")"
         if let imageURL = URL(string: posterURL) {
             posterImageView.kf.setImage(with: imageURL)

@@ -50,6 +50,22 @@ struct Movie: Codable {
     }
 }
 
+struct MovieCredit: Codable {
+    let cast: [MovieCast]
+}
+
+struct MovieCast: Codable {
+    let name: String
+    let originalName: String
+    let profilePath: String?
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case originalName = "original_name"
+        case profilePath = "profile_path"
+    }
+}
+
 struct MovieImage: Codable {
     let backdrops: [MovieImageDetail]
     let posters: [MovieImageDetail]

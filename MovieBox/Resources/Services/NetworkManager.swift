@@ -22,10 +22,15 @@ final class NetworkManager {
         AF.request(apiRequest.endPoint,
                    method: apiRequest.method,
                    parameters: apiRequest.parameter,
-                   headers: apiRequest.header).responseDecodable(of: T.self) { response in
+                   headers: apiRequest.header)
+//        .responseString(completionHandler: { value in
+//            dump(value)
+//        })
+        .responseDecodable(of: T.self) { response in
             switch response.result {
             case .success(let value):
 //                dump(value)
+//                print(apiRequest.endPoint)
                 successHandler(value)
             case .failure(let error):
                 print(error)
