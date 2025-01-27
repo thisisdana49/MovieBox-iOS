@@ -17,7 +17,7 @@ class SearchDetailView: BaseView {
     let castSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let posterSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let informView = MovieInformView()
-    let synopsisView = UIView()
+    let synopsisView = MovieSynopsisView()
     
     lazy var tableView = {
         let view = UITableView()
@@ -32,6 +32,7 @@ class SearchDetailView: BaseView {
     
     func configureData(movie: Movie?) {
         informView.configureData(releaseDate: movie?.releaseDate, voteAverage: movie?.voteAverage, genre: "액션, 스릴러")
+        synopsisView.configureData(content: movie?.overview ?? "")
     }
     
     override func configureHierarchy() {
@@ -73,8 +74,7 @@ class SearchDetailView: BaseView {
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(150)
         }
-        synopsisView.backgroundColor = .baseWhite
-        
+
         castSection.snp.makeConstraints { make in
             make.top.equalTo(synopsisView.snp.bottom)
             make.horizontalEdges.equalToSuperview()
