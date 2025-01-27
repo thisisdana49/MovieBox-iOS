@@ -46,8 +46,6 @@ class SearchDetailView: BaseView {
         
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
-//            make.width.equalTo(scrollView.snp.width)
-//            make.verticalEdges.equalTo(scrollView)
         }
     }
     
@@ -91,6 +89,12 @@ class SearchDetailView: BaseView {
             make.height.equalTo(150)
         }
         posterSection.backgroundColor = .systemBlue
+        
+        contentView.snp.remakeConstraints() { make in
+            make.edges.equalTo(scrollView)
+            make.width.equalTo(scrollView.snp.width)
+            make.bottom.equalTo(posterSection.snp.bottom)
+        }
     }
     
     override func configureView() {
