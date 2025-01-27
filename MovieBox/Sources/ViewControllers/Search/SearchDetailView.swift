@@ -16,7 +16,7 @@ class SearchDetailView: BaseView {
     let backdropSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let castSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let posterSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    let informView = UIView()
+    let informView = MovieInformView()
     let synopsisView = UIView()
     
     lazy var tableView = {
@@ -31,7 +31,7 @@ class SearchDetailView: BaseView {
     }
     
     func configureData(movie: Movie?) {
-        
+        informView.configureData(releaseDate: movie?.releaseDate, voteAverage: movie?.voteAverage, genre: "액션, 스릴러")
     }
     
     override func configureHierarchy() {
@@ -65,9 +65,8 @@ class SearchDetailView: BaseView {
         informView.snp.makeConstraints { make in
             make.top.equalTo(backdropSection.snp.bottom)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(150)
+            make.height.equalTo(40)
         }
-        informView.backgroundColor = .systemMint
         
         synopsisView.snp.makeConstraints { make in
             make.top.equalTo(informView.snp.bottom)
@@ -90,7 +89,7 @@ class SearchDetailView: BaseView {
         }
         posterSection.backgroundColor = .systemBlue
         
-        contentView.snp.remakeConstraints() { make in
+        contentView.snp.remakeConstraints { make in
             make.edges.equalTo(scrollView)
             make.width.equalTo(scrollView.snp.width)
             make.bottom.equalTo(posterSection.snp.bottom)
@@ -101,6 +100,8 @@ class SearchDetailView: BaseView {
         super.configureView()
         
         backdropSection.isPagingEnabled = true
+        
+        
     }
 
 }
