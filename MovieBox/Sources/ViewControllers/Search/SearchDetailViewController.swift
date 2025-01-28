@@ -25,12 +25,13 @@ final class SearchDetailViewController: UIViewController {
         
         // TODO: Movie Detail Model 만들기
         // TODO: DispatchGroup으로 만들기
-        NetworkManager.shared.fetchData(apiRequest: .movieCredits(id: "545611"), requestType: MovieCredit.self) { value in
+        NetworkManager.shared.fetchData(apiRequest: .movieCredits(id: String(movie!.id)), requestType: MovieCredit.self) { value in
             self.movieCredit = value
-            self.mainView.posterSection.reloadData()
+            self.mainView.castSection.reloadData()
         }
         NetworkManager.shared.fetchData(apiRequest: .movieImages(id: String(movie!.id)), requestType: MovieImage.self) { value in
             self.movieImage = value
+            self.mainView.posterSection.reloadData()
             self.mainView.backdropSection.reloadData()
         }
         
@@ -44,12 +45,17 @@ final class SearchDetailViewController: UIViewController {
         mainView.backdropSection.register(BackdropCollectionViewCell.self, forCellWithReuseIdentifier: BackdropCollectionViewCell.id)
         mainView.backdropSection.collectionViewLayout = backdropLayout()
         
+        mainView.castSection.delegate = self
+        mainView.castSection.dataSource = self
+        mainView.castSection.tag = 1
+        mainView.castSection.register(CastCollectionViewCell.self, forCellWithReuseIdentifier: CastCollectionViewCell.id)
+        mainView.castSection.collectionViewLayout = castLayout()
+        
         mainView.posterSection.delegate = self
         mainView.posterSection.dataSource = self
-        mainView.posterSection.tag = 1
+        mainView.posterSection.tag = 2
         mainView.posterSection.register(PosterCollectionViewCell.self, forCellWithReuseIdentifier: PosterCollectionViewCell.id)
         mainView.posterSection.collectionViewLayout = posterLayout()
-        mainView.posterSection.reloadData()
     }
     
 }
@@ -61,19 +67,34 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView.tag == 0 {
             movieImage?.backdrops.count ?? 0
-        } else {
+        }
+        else if collectionView.tag == 1 {
+            movieCredit?.cast.count ?? 0
+        }
+        else {
             movieImage?.posters.count ?? 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
         if collectionView.tag == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackdropCollectionViewCell.id, for: indexPath) as! BackdropCollectionViewCell
             let backdrop = movieImage?.backdrops[indexPath.item]
             cell.configureData(imagePath: backdrop?.filePath)
             
             return cell
-        } else {
+        }
+        
+        else if collectionView.tag == 1 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCollectionViewCell.id, for: indexPath) as! CastCollectionViewCell
+            let cast = movieCredit?.cast[indexPath.item]
+            cell.configureData(cast: cast)
+            print(self, #function)
+            return cell
+        }
+        
+        else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.id, for: indexPath) as! PosterCollectionViewCell
             let poster = movieImage?.posters[indexPath.item]
             cell.configureData(imagePath: poster?.filePath)
@@ -112,4 +133,18 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         return layout
     }
     
+    private func castLayout() -> UICollectionViewLayout {
+        let spacing: CGFloat = 8
+        
+        let deviceWidth = UIScreen.main.bounds.width
+        let cellWidth = deviceWidth - spacing
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = spacing
+        layout.minimumInteritemSpacing = spacing
+        layout.itemSize = CGSizeMake(200, 50)
+        layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
+        return layout
+    }
 }

@@ -70,24 +70,24 @@ class SearchDetailView: BaseView {
         }
         
         synopsisView.snp.makeConstraints { make in
-            make.top.equalTo(informView.snp.bottom)
+            make.top.equalTo(informView.snp.bottom).offset(12)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(150)
+            make.height.equalTo(160)
         }
 
         castSection.snp.makeConstraints { make in
             make.top.equalTo(synopsisView.snp.bottom)
             make.horizontalEdges.equalToSuperview()
-            make.bottom.equalTo(posterSection.snp.top)
+            make.height.equalTo(150)
         }
-        castSection.backgroundColor = .systemOrange
+        castSection.backgroundColor = .baseBlack
         
         posterSection.snp.makeConstraints { make in
-            make.bottom.equalToSuperview()
+            make.top.equalTo(castSection.snp.bottom)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(150)
         }
-        posterSection.backgroundColor = .systemBlue
+        posterSection.backgroundColor = .baseBlack
         
         contentView.snp.remakeConstraints { make in
             make.edges.equalTo(scrollView)
@@ -100,8 +100,6 @@ class SearchDetailView: BaseView {
         super.configureView()
         
         backdropSection.isPagingEnabled = true
-        
-        
     }
 
 }
