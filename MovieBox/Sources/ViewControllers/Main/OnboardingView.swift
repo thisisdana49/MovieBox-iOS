@@ -27,25 +27,25 @@ class OnboardingView: BaseView {
     
     override func configureLayout() {
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).offset(20)
+            make.top.equalTo(safeAreaLayoutGuide).offset(16)
             make.horizontalEdges.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(0.5)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(20)
+            make.top.equalTo(imageView.snp.bottom).offset(16)
             make.centerX.equalToSuperview()
         }
         
         subtitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.centerX.equalToSuperview()
         }
         
         startButton.snp.makeConstraints { make in
-            make.top.equalTo(subtitleLabel.snp.bottom).offset(60)
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(40)
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(40)
+            make.horizontalEdges.equalToSuperview().inset(16)
+            make.height.equalTo(44)
         }
     }
     
@@ -60,7 +60,7 @@ class OnboardingView: BaseView {
         titleLabel.textColor = .baseWhite
         
         subtitleLabel.text = "당신만의 영화 세상.\nMovieBox를 시작해 보세요."
-        subtitleLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        subtitleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         subtitleLabel.textColor = .baseWhite
         subtitleLabel.textAlignment = .center
         subtitleLabel.numberOfLines = 2

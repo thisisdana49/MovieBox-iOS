@@ -14,12 +14,24 @@ class CustomButton: UIButton {
     init(title: String) {
         super.init(frame: .zero)
         
-        setTitle(title, for: .normal)
-        setTitleColor(.mainBlue, for: .normal)
-        backgroundColor = .baseBlack
-        layer.borderColor = UIColor.mainBlue.cgColor
-        layer.borderWidth = 2
-        layer.cornerRadius = 20
+        configureView(title: title)
+    }
+    
+    private func configureView(title: String) {
+        var config = UIButton.Configuration.borderedTinted()
+
+        var titleAttr = AttributedString.init(title)
+        titleAttr.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        config.attributedTitle = titleAttr
+        
+        config.baseBackgroundColor = .baseBlack
+        config.baseForegroundColor = .mainBlue
+        
+        config.cornerStyle = .capsule
+        config.background.strokeWidth = 2
+        config.background.strokeColor = .mainBlue
+        
+        configuration = config
     }
     
     override init(frame: CGRect) {
