@@ -9,21 +9,36 @@ import UIKit
 
 class SettingsViewController: UIViewController {
 
+    let mainView = SettingsView()
+    let list: [String] = ["자주 묻는 질문", "1:1 문의", "알림 설정", "탈퇴하기"]
+    
+    override func loadView() {
+        view = mainView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        mainView.tableView.delegate = self
+        mainView.tableView.dataSource = self
+    }
+
+}
+
+// MARK: TableView Delegate, TableView DataSource
+extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return list.count
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.textLabel?.text = list[indexPath.row]
+        cell.textLabel?.textColor = .baseWhite
+        cell.backgroundColor = .baseBlack
+        
+        return cell
     }
-    */
-
+    
 }

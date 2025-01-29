@@ -1,17 +1,16 @@
 //
-//  MainView.swift
+//  SettingsView.swift
 //  MovieBox
 //
-//  Created by 조다은 on 1/25/25.
+//  Created by 조다은 on 1/29/25.
 //
 
 import UIKit
 
-class MainView: BaseView {
+class SettingsView: BaseView {
 
     let profileSection = ProfileSectionView()
-    let recentKeywordsView = RecentKeywordTableViewCell()
-    let todaysMovieSection = MainMovieSectionView()
+    let tableView = UITableView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,8 +18,7 @@ class MainView: BaseView {
     
     override func configureHierarchy() {
         addSubview(profileSection)
-        addSubview(recentKeywordsView)
-        addSubview(todaysMovieSection)
+        addSubview(tableView)
     }
     
     override func configureLayout() {
@@ -30,23 +28,14 @@ class MainView: BaseView {
             make.height.equalTo(130)
         }
         
-        recentKeywordsView.snp.makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.top.equalTo(profileSection.snp.bottom)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(100)
-        }
-        
-        todaysMovieSection.snp.makeConstraints { make in
-            make.top.equalTo(recentKeywordsView.snp.bottom)
-            make.horizontalEdges.equalToSuperview()
-            make.bottom.equalTo(safeAreaLayoutGuide)
+            make.bottom.equalToSuperview()
         }
     }
     
     override func configureView() {
         super.configureView()
-        
-        recentKeywordsView.headerLabel.text = "최근 검색어"
     }
-    
 }
