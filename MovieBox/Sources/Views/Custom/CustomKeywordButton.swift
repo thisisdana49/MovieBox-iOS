@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomKeywordButton: UIButton {
+final class CustomKeywordButton: UIButton {
     
     var title: String = ""
     
