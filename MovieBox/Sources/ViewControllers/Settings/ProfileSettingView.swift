@@ -52,7 +52,7 @@ class ProfileSettingView: BaseView {
         completeButton.snp.makeConstraints { make in
             make.top.equalTo(guideLabel.snp.bottom).offset(24)
             make.horizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(40)
+            make.height.equalTo(44)
         }
     }
     

@@ -18,7 +18,13 @@ class ProfileSettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        configureViewController()
+    }
+    
+    fileprivate func configureViewController() {
+        mainView.textField.delegate = self
         mainView.completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
+        navigationItem.title = "프로필 설정"
     }
     
     @objc
@@ -29,5 +35,13 @@ class ProfileSettingViewController: UIViewController {
 
         window.rootViewController = TabBarViewController()
         window.makeKeyAndVisible()
+    }
+}
+
+// MARK: TextField Delegate
+extension ProfileSettingViewController: UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        print(#function)
+        return true
     }
 }
