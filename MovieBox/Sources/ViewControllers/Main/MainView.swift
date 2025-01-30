@@ -10,7 +10,7 @@ import UIKit
 class MainView: BaseView {
 
     let profileSection = ProfileSectionView()
-    let recentKeywordsView = RecentKeywordTableViewCell()
+    let recentKeywordsView = RecentKeywordSectionView()
     let todaysMovieSection = MainMovieSectionView()
     
     override init(frame: CGRect) {

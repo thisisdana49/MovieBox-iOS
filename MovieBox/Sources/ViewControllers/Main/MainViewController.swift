@@ -10,7 +10,11 @@ import UIKit
 class MainViewController: UIViewController {
 
     let mainView = MainView()
-    let recentKeywords: [String] = ["해리포터", "이제훈", "슬램덩크더퍼스트", "위니더푸"]
+//    let recentKeywords: [String] = []
+    var recentKeywords: [String] = ["해리포터", "이제훈", "슬램덩크더퍼스트", "위니더푸"]
+    let buttonAction = UIAction(title: "버튼", image: UIImage(systemName: "heart")) { value in
+        print("클릭됨~", value)
+    }
     var todaysMovies: [Movie] = []
     
     override func loadView() {
@@ -28,6 +32,12 @@ class MainViewController: UIViewController {
         configureView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        mainView.recentKeywordsView.keywordButtons.forEach { button in
+            button.addTarget(self, action: #selector(keywordButtonTapped), for: .touchUpInside)
+        }
+    }
+    
     func configureView() {
         navigationItem.title = "MovieBox"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
@@ -41,6 +51,14 @@ class MainViewController: UIViewController {
     @objc
     func searchButtonTapped(_ sender: UIBarButtonItem) {
         navigationController?.pushViewController(SearchViewController(), animated: true)
+    }
+    
+    @objc
+    func keywordButtonTapped(_ sender: CustomKeywordButton) {
+        print(sender.name)
+        let vc = SearchViewController()
+        vc.searchWord = sender.name
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 }

@@ -11,6 +11,7 @@ class SearchViewController: UIViewController {
 
     let mainView = SearchView()
     var movies: [Movie] = []
+    var searchWord: String = ""
     
     override func loadView() {
         view = mainView
@@ -19,7 +20,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: "all at once"), requestType: MovieListResponse.self) { value in
+        NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: searchWord), requestType: MovieListResponse.self) { value in
             self.movies = value.results
             self.mainView.tableView.reloadData()
         }

@@ -9,13 +9,18 @@ import UIKit
 
 final class CustomKeywordButton: UIButton {
     
-    var title: String = ""
+    var name: String = ""
+    
+    private let xmarkButton = UIButton(type: .system)
+    var onKeywordTapped: (() -> Void)?
+    var onXmarkTapped: (() -> Void)?
     
     init(title: String) {
         super.init(frame: .zero)
+        name = title
         
         var config = UIButton.Configuration.filled()
-
+        
         var titleAttr = AttributedString.init(title)
         titleAttr.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         config.attributedTitle = titleAttr
