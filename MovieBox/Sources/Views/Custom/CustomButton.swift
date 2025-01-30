@@ -9,19 +9,26 @@ import UIKit
 
 class CustomButton: UIButton {
     
-    var title: String = ""
-    
-    init(title: String) {
-        super.init(frame: .zero)
-        
-        configureView(title: title)
+    enum Styles: String {
+        case bordered
+        case filled
     }
     
-    private func configureView(title: String) {
+    var title: String = ""
+    
+    // TODO: Style with Enum
+    init(title: String, style: CustomButton.Styles) {
+        super.init(frame: .zero)
+        
+        if style == .bordered { configureBorderedButton(title: title) }
+        else if style == .filled { configureFilledButton(title: title) }
+    }
+    
+    private func configureBorderedButton(title: String) {
         var config = UIButton.Configuration.borderedTinted()
 
         var titleAttr = AttributedString.init(title)
-        titleAttr.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        titleAttr.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         config.attributedTitle = titleAttr
         
         config.baseBackgroundColor = .baseBlack
@@ -30,6 +37,22 @@ class CustomButton: UIButton {
         config.cornerStyle = .capsule
         config.background.strokeWidth = 2
         config.background.strokeColor = .mainBlue
+        
+        configuration = config
+    }
+    
+    private func configureFilledButton(title: String) {
+        var config = UIButton.Configuration.filled()
+
+        var titleAttr = AttributedString.init(title)
+        titleAttr.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        config.attributedTitle = titleAttr
+        
+        config.baseBackgroundColor = .mainBlue
+        config.baseForegroundColor = .baseWhite
+        
+        config.cornerStyle = .fixed
+        config.background.cornerRadius = 8
         
         configuration = config
     }

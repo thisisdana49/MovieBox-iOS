@@ -12,7 +12,7 @@ final class OnboardingView: BaseView {
     let imageView = UIImageView()
     let titleLabel = UILabel()
     let subtitleLabel = UILabel()
-    let startButton = CustomButton(title: "시작하기")
+    let startButton = CustomButton(title: "시작하기", style: .bordered)
     
     override init(frame: CGRect) {
         super.init(frame: frame)

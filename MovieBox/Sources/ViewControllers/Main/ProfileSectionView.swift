@@ -14,7 +14,7 @@ class ProfileSectionView: BaseView {
     let nicknameLabel = UILabel()
     let registerDateLabel = UILabel()
     let profileSettingButton = UIButton()
-    let likeBoxButton = UIButton()
+    let likeBoxButton = CustomButton(title: "0개의 무비박스 보관중", style: .filled)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,7 +55,8 @@ class ProfileSectionView: BaseView {
         }
         
         likeBoxButton.snp.makeConstraints { make in
-            make.bottom.horizontalEdges.equalToSuperview().inset(20)
+            make.bottom.horizontalEdges.equalToSuperview().inset(16)
+            make.height.equalTo(40)
         }
     }
     
@@ -68,7 +69,7 @@ class ProfileSectionView: BaseView {
         profileImageView.backgroundColor = .gray3
         profileImageView.layer.cornerRadius = 20
         profileImageView.layer.borderColor = UIColor.mainBlue.cgColor
-        profileImageView.layer.borderWidth = 3
+        profileImageView.layer.borderWidth = 2.5
         profileImageView.clipsToBounds = true
         
         profileSettingButton.setImage(UIImage(systemName: "chevron.right")?.withTintColor(.mainBlue).withRenderingMode(.alwaysOriginal), for: .normal)
@@ -80,11 +81,6 @@ class ProfileSectionView: BaseView {
         registerDateLabel.text = "24.04.12 가입"
         registerDateLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         registerDateLabel.textColor = .gray1
-        
-        likeBoxButton.setTitle("0개의 무비박스 보관중", for: .normal)
-        likeBoxButton.setTitleColor(.baseWhite, for: .normal)
-        likeBoxButton.backgroundColor = .mainBlue
-        likeBoxButton.layer.cornerRadius = 8
     }
 
 }

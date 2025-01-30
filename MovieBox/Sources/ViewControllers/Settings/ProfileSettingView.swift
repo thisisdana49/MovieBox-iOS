@@ -13,7 +13,7 @@ class ProfileSettingView: BaseView {
     let cameraImageView = UIImageView()
     let textField = UITextField()
     let guideLabel = UILabel()
-    let completeButton = CustomButton(title: "완료")
+    let completeButton = CustomButton(title: "완료", style: .bordered)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
