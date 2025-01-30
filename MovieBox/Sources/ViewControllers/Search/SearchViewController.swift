@@ -10,8 +10,10 @@ import UIKit
 class SearchViewController: UIViewController {
 
     let mainView = SearchView()
+    
     var movies: [Movie] = []
     var searchWord: String = ""
+    var isNoResult = false
     
     override func loadView() {
         view = mainView
@@ -20,18 +22,31 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: searchWord), requestType: MovieListResponse.self) { value in
-            self.movies = value.results
-            self.mainView.tableView.reloadData()
-        }
-        
         configureView()
+        callRequest()
+    }
+    
+    fileprivate func callRequest() {
+        NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: searchWord), requestType: MovieListResponse.self) { value in
+            if value.totalResults == 0 {
+                self.isNoResult = true
+                self.mainView.tableView.reloadData()
+            } else {
+                self.isNoResult = false
+                self.movies = value.results
+                self.mainView.tableView.reloadData()
+            }
+        }
     }
 
     func configureView() {
+        navigationItem.title = "영화 검색"
+        
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
         mainView.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.id)
+        
+        mainView.searchTextField.text = searchWord
     }
 }
 
@@ -40,6 +55,11 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isNoResult && searchWord != "" {
+            tableView.setEmptyMessage("원하는 검색결과를 찾지 못했습니다.")
+        } else {
+            tableView.restore()
+        }
         return movies.count
     }
     

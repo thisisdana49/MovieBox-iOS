@@ -25,6 +25,7 @@ class SearchView: BaseView {
         searchTextField.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide)
             make.horizontalEdges.equalToSuperview().inset(16)
+            make.height.equalTo(44)
         }
         
         tableView.snp.makeConstraints { make in

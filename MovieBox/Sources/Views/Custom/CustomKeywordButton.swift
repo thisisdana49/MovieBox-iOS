@@ -22,7 +22,7 @@ final class CustomKeywordButton: UIButton {
         var config = UIButton.Configuration.filled()
         
         var titleAttr = AttributedString.init(title)
-        titleAttr.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        titleAttr.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         config.attributedTitle = titleAttr
         
         config.baseBackgroundColor = .baseWhite

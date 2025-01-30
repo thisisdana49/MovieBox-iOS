@@ -137,7 +137,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         let spacing: CGFloat = 8
         
         let deviceWidth = UIScreen.main.bounds.width
-        let cellWidth = deviceWidth - spacing
+//        let cellWidth = deviceWidth - spacing
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
