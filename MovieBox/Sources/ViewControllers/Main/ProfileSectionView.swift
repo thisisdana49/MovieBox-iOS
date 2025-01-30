@@ -36,26 +36,27 @@ class ProfileSectionView: BaseView {
         }
         
         profileImageView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().inset(20)
-            make.size.equalTo(40)
+            make.top.leading.equalToSuperview().inset(14)
+            make.size.equalTo(48)
         }
         profileSettingButton.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview().inset(20)
-            make.size.equalTo(40)
+            make.top.trailing.equalToSuperview().inset(14)
+            make.width.equalTo(12)
+            make.height.equalTo(48)
         }
         nicknameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(20)
-            make.leading.equalTo(profileImageView.snp.trailing).offset(16)
+            make.bottom.equalTo(profileImageView.snp.centerY)
+            make.leading.equalTo(profileImageView.snp.trailing).offset(8)
             make.trailing.equalTo(profileSettingButton.snp.leading)
         }
         registerDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLabel.snp.bottom)
-            make.leading.equalTo(profileImageView.snp.trailing).offset(16)
+            make.top.equalTo(nicknameLabel.snp.bottom).offset(4)
+            make.leading.equalTo(profileImageView.snp.trailing).offset(8)
             make.trailing.equalTo(profileSettingButton.snp.leading)
         }
         
         likeBoxButton.snp.makeConstraints { make in
-            make.bottom.horizontalEdges.equalToSuperview().inset(16)
+            make.bottom.horizontalEdges.equalToSuperview().inset(12)
             make.height.equalTo(40)
         }
     }
@@ -67,20 +68,20 @@ class ProfileSectionView: BaseView {
         profileImageView.image = UIImage(named: "profile_\(Int.random(in: 0...11))")
         profileImageView.contentMode = .scaleAspectFit
         profileImageView.backgroundColor = .gray3
-        profileImageView.layer.cornerRadius = 20
+        profileImageView.layer.cornerRadius = 24
         profileImageView.layer.borderColor = UIColor.mainBlue.cgColor
         profileImageView.layer.borderWidth = 2.5
         profileImageView.clipsToBounds = true
         
-        profileSettingButton.setImage(UIImage(systemName: "chevron.right")?.withTintColor(.mainBlue).withRenderingMode(.alwaysOriginal), for: .normal)
+        profileSettingButton.setImage(UIImage(systemName: "chevron.right")?.withTintColor(.gray2).withRenderingMode(.alwaysOriginal), for: .normal)
         
         nicknameLabel.text = "다우니맛도리탕"
-        nicknameLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        nicknameLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         nicknameLabel.textColor = .baseWhite
         
         registerDateLabel.text = "24.04.12 가입"
         registerDateLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        registerDateLabel.textColor = .gray1
+        registerDateLabel.textColor = .gray2
     }
 
 }

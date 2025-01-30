@@ -25,8 +25,8 @@ class MainView: BaseView {
     
     override func configureLayout() {
         profileSection.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).offset(8)
-            make.horizontalEdges.equalToSuperview().inset(20)
+            make.top.equalTo(safeAreaLayoutGuide).offset(4)
+            make.horizontalEdges.equalToSuperview().inset(16)
             make.height.equalTo(130)
         }
         
