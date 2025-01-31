@@ -12,6 +12,9 @@ struct UserDefaultsManager {
     enum Keys: String {
         // app start
         case isFirst
+        case userNickname
+        case joinDate
+        case profileImage
         // notifications
         // alert
     }

@@ -80,9 +80,10 @@ class ProfileSettingView: BaseView {
         
         textField.textColor = .baseWhite
         
-        guideLabel.text = "사용할 수 있는 닉네임이에요"
-        guideLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        guideLabel.textColor = .mainBlue
+        // TODO: extension으로 빼기
+//        guideLabel.text = "사용할 수 있는 닉네임이에요"
+//        guideLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+//        guideLabel.textColor = .mainBlue
     }
     
 }
