@@ -84,4 +84,10 @@ struct UserDefaultsManager {
     static func isLikedMovie(_ movieID: Int) -> Bool {
         return getLikedMovies().contains(movieID)
     }
+    
+    static func clearAll() {
+        let domain = Bundle.main.bundleIdentifier!
+        userDefault.removePersistentDomain(forName: domain)
+        print("초기화 완료!")
+    }
 }

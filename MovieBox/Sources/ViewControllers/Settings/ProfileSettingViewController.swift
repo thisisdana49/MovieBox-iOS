@@ -54,6 +54,7 @@ class ProfileSettingViewController: UIViewController {
         UserDefaultsManager.set(to: profileImage, forKey: .profileImage)
         UserDefaultsManager.set(to: false, forKey: .isFirst)
         
+        // TODO: extension + enum
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let window = windowScene.windows.first else { return }
         
         window.rootViewController = TabBarViewController()
