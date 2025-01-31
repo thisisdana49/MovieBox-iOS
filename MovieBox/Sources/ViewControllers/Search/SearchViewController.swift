@@ -9,6 +9,7 @@ import UIKit
 
 final class SearchViewController: UIViewController {
 
+    var passDelegate: PassDataDelegate?
     let mainView = SearchView()
     
     var movies: [Movie] = []
@@ -76,9 +77,9 @@ final class SearchViewController: UIViewController {
 extension SearchViewController: UISearchTextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print(#function)
         guard let inputText = textField.text else { return true }
         searchWord = inputText
+        passDelegate?.didSearchKeyword(inputText)
         return true
     }
     

@@ -8,10 +8,10 @@
 import UIKit
 
 class MainViewController: UIViewController {
-
+    
     let mainView = MainView()
-//    let recentKeywords: [String] = []
-    var recentKeywords: [String] = ["해리포터", "이제훈", "슬램덩크더퍼스트", "위니더푸"]
+    var recentKeywords: [String] = []
+//    var recentKeywords: [String] = ["해리포터", "이제훈", "슬램덩크더퍼스트", "위니더푸"]
     let buttonAction = UIAction(title: "버튼", image: UIImage(systemName: "heart")) { value in
         print("클릭됨~", value)
     }
@@ -52,7 +52,9 @@ class MainViewController: UIViewController {
     
     @objc
     func searchButtonTapped(_ sender: UIBarButtonItem) {
-        navigationController?.pushViewController(SearchViewController(), animated: true)
+        let vc = SearchViewController()
+        vc.passDelegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc
@@ -81,6 +83,21 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.configureData(poster: movie.posterPath ?? "", title: movie.title, overview: movie.overview)
         
         return cell
+    }
+    
+}
+
+
+// MARK: Pass Delegate
+extension MainViewController: PassDataDelegate {
+    
+    func didSearchKeyword(_ keyword: String) {
+        if !recentKeywords.contains(keyword) {
+            recentKeywords.insert(keyword, at: 0)
+        }
+        print("최근 검색어: \(recentKeywords)")
+        
+        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
     }
     
 }
