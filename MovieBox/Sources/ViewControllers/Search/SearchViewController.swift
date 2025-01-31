@@ -101,8 +101,6 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id, for: indexPath) as! SearchTableViewCell
         let movie = movies[indexPath.row]
         
-        cell.posterImageView.backgroundColor = .yellow
-        cell.genreStackView.backgroundColor = .systemPink
         cell.configureData(movie: movie)
         
         return cell

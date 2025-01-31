@@ -26,13 +26,38 @@ class SearchTableViewCell: UITableViewCell {
         configureLayout()
     }
     
-    func configureData(movie: Movie) {
-        let posterURL = "https://image.tmdb.org/t/p/original/\(movie.posterPath ?? "")"
-        if let imageURL = URL(string: posterURL) {
-            posterImageView.kf.setImage(with: imageURL)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        posterImageView.image = nil
+        titleLabel.text = nil
+        releaseDateLabel.text = nil
+
+        genreStackView.arrangedSubviews.forEach {
+            genreStackView.removeArrangedSubview($0)
+            $0.removeFromSuperview()
         }
+    }
+    
+    func configureData(movie: Movie) {
+        if let posterPath = movie.posterPath, let posterURL = movie.posterURL {
+            posterImageView.kf.setImage(with: posterURL)
+        } else {
+            posterImageView.image = .noPoster
+        }
+        
+        let genres = GenreMapper.genreNames(from: movie.genreIds)
+        genres.forEach { genre in
+            let label = CustomLabel()
+            label.text = genre
+            genreStackView.addArrangedSubview(label)
+        }
+        
+        let releaseDate = Date.fromString(movie.releaseDate, format: "yyyy-MM-dd")
+        let formattedDate = releaseDate?.toFormattedString()
+        
         titleLabel.text = movie.title
-        releaseDateLabel.text = movie.releaseDate
+        releaseDateLabel.text = formattedDate
     }
     
     func configureHierarchy() {
@@ -48,16 +73,17 @@ class SearchTableViewCell: UITableViewCell {
             make.top.equalToSuperview().inset(16)
             make.leading.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(16)
-            make.width.equalTo(100)
+            make.width.equalTo(90)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentView).inset(16)
+            make.top.equalTo(posterImageView.snp.top).inset(4)
             make.leading.equalTo(posterImageView.snp.trailing).offset(16)
+            make.trailing.equalTo(contentView).inset(16)
         }
         
         releaseDateLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).inset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.leading.equalTo(posterImageView.snp.trailing).offset(16)
         }
         
@@ -70,26 +96,29 @@ class SearchTableViewCell: UITableViewCell {
         genreStackView.snp.makeConstraints { make in
             make.bottom.equalTo(contentView).inset(16)
             make.leading.equalTo(posterImageView.snp.trailing).offset(16)
-            make.trailing.equalTo(likeButton.snp.leading)
-            make.height.equalTo(30)
+//            make.trailing.equalTo(likeButton.snp.leading)
+            make.height.equalTo(25)
         }
     }
     
     func configureView() {
         backgroundColor = .baseBlack
         
-        posterImageView.image = UIImage(systemName: "star")
         posterImageView.contentMode = .scaleAspectFill
         posterImageView.layer.cornerRadius = 10
         posterImageView.clipsToBounds = true
         
         titleLabel.textColor = .baseWhite
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        titleLabel.numberOfLines = 2
         
-        releaseDateLabel.textColor = .gray1
-        releaseDateLabel.font = UIFont.systemFont(ofSize: 13, weight: .medium)
+        releaseDateLabel.textColor = .gray2
+        releaseDateLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         
-        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        genreStackView.distribution = .fillProportionally
+        genreStackView.spacing = 4
+        
+        likeButton.setImage(UIImage(systemName: "heart")?.withTintColor(.mainBlue).withRenderingMode(.alwaysOriginal), for: .normal)
     }
     
     override func awakeFromNib() {
