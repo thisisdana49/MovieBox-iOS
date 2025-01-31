@@ -38,7 +38,20 @@ class SearchView: BaseView {
     override func configureView() {
         super.configureView()
         
-        searchTextField.placeholder = "영화를 검색해보세요"
+        if let leftIcon = searchTextField.leftView as? UIImageView {
+            leftIcon.tintColor = .gray1
+        }
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.gray2,
+            .font: UIFont.systemFont(ofSize: 14, weight: .medium)
+        ]
+        searchTextField.attributedPlaceholder = NSAttributedString(string: "영화를 검색해보세요.", attributes: attributes)
+        searchTextField.textColor = .baseWhite
+        searchTextField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        searchTextField.backgroundColor = .gray3
+        searchTextField.layer.cornerRadius = 8
+        searchTextField.clipsToBounds = true
+
         
         tableView.backgroundColor = .baseBlack
     }
