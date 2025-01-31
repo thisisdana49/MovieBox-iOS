@@ -7,13 +7,13 @@
 
 import UIKit
 
-class ProfileSettingView: BaseView {
+final class ProfileSettingView: BaseView {
     
     var profileImage: Int = 0
     
     let imageView = UIImageView()
     let cameraImageView = UIImageView()
-    let textField = UITextField()
+    let textField = CustomTextField()
     let guideLabel = UILabel()
     let completeButton = CustomButton(title: "완료", style: .bordered)
     
@@ -23,6 +23,16 @@ class ProfileSettingView: BaseView {
         profileImage = Int.random(in: 0...11)
         imageView.image = UIImage(named: "profile_\(profileImage)")
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let bottomBorder = CALayer()
+        bottomBorder.frame = CGRect(x: 0, y: textField.frame.height + 12, width: textField.frame.width, height: 1)
+        bottomBorder.backgroundColor = UIColor.white.cgColor
+        textField.layer.addSublayer(bottomBorder)
+    }
+
     
     override func configureHierarchy() {
         addSubview(imageView)
@@ -55,7 +65,7 @@ class ProfileSettingView: BaseView {
         }
         
         completeButton.snp.makeConstraints { make in
-            make.top.equalTo(guideLabel.snp.bottom).offset(24)
+            make.top.equalTo(textField.snp.bottom).offset(56)
             make.horizontalEdges.equalToSuperview().inset(20)
             make.height.equalTo(44)
         }
@@ -79,11 +89,10 @@ class ProfileSettingView: BaseView {
         cameraImageView.clipsToBounds = true
         
         textField.textColor = .baseWhite
+        textField.borderStyle = .none
         
         // TODO: extension으로 빼기
-//        guideLabel.text = "사용할 수 있는 닉네임이에요"
-//        guideLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-//        guideLabel.textColor = .mainBlue
+        guideLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
     }
     
 }

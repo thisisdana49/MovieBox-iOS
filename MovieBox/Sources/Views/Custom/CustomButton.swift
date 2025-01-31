@@ -31,7 +31,7 @@ class CustomButton: UIButton {
         var config = UIButton.Configuration.borderedTinted()
 
         var titleAttr = AttributedString.init(title)
-        titleAttr.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        titleAttr.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         config.attributedTitle = titleAttr
         
         config.baseBackgroundColor = .baseBlack

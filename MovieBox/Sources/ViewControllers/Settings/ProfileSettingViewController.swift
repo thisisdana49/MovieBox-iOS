@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileSettingViewController: UIViewController {
+final class ProfileSettingViewController: UIViewController {
     
     var nickname: String = ""
     let mainView = ProfileSettingView()
