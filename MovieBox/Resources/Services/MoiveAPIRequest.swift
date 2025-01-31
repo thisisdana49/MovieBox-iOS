@@ -10,7 +10,7 @@ import Alamofire
 
 enum MoiveAPIRequest {
     case trendingMovies
-    case searchMovies(keyword: String)
+    case searchMovies(keyword: String, page: Int)
     case movieImages(id: String)
     case movieCredits(id: String)
     
@@ -47,11 +47,11 @@ enum MoiveAPIRequest {
                 "language": "ko-KR",
                 "page": 1
             ]
-        case .searchMovies(let keyword):
+        case .searchMovies(let keyword, let page):
             return [
                 "language": "ko-KR",
                 "query": keyword,
-                "page": 1,
+                "page": page,
             ]
         case .movieImages:
             return [:]

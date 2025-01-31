@@ -8,7 +8,7 @@
 import UIKit
 
 class SearchView: BaseView {
-
+    // TODO: Search TextField UI Design
     let searchTextField = UISearchTextField()
     let tableView = UITableView()
     

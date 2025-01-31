@@ -7,12 +7,24 @@
 
 import UIKit
 
-class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController {
 
     let mainView = SearchView()
     
     var movies: [Movie] = []
-    var searchWord: String = ""
+    var searchWord: String = "" {
+        didSet {
+            page = 1
+            callRequest()
+        }
+    }
+    private var page = 1 {
+        didSet {
+            isEnd = page == totalPages
+        }
+    }
+    private var totalPages = 0
+    private var isEnd = false
     var isNoResult = false
     
     override func loadView() {
@@ -27,14 +39,21 @@ class SearchViewController: UIViewController {
     }
     
     fileprivate func callRequest() {
-        NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: searchWord), requestType: MovieListResponse.self) { value in
-            if value.totalResults == 0 {
-                self.isNoResult = true
-                self.mainView.tableView.reloadData()
+        NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: searchWord, page: page), requestType: MovieListResponse.self) { value in
+            if self.page == 1 {
+                if value.totalResults == 0 {
+                    self.isNoResult = true
+                } else {
+                    self.isNoResult = false
+                    self.movies = value.results
+                }
             } else {
-                self.isNoResult = false
-                self.movies = value.results
-                self.mainView.tableView.reloadData()
+                self.movies.append(contentsOf: value.results)
+            }
+            self.mainView.tableView.reloadData()
+            
+            if self.page == 1 {
+                self.mainView.tableView.scrollsToTop = true
             }
         }
     }
@@ -44,10 +63,25 @@ class SearchViewController: UIViewController {
         
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
+        mainView.tableView.prefetchDataSource = self
         mainView.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.id)
         
+        mainView.searchTextField.delegate = self
         mainView.searchTextField.text = searchWord
     }
+}
+
+
+// MARK: SearchTextField Delegate
+extension SearchViewController: UISearchTextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print(#function)
+        guard let inputText = textField.text else { return true }
+        searchWord = inputText
+        return true
+    }
+    
 }
 
 
@@ -83,6 +117,26 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 140
+    }
+    
+}
+
+
+// MARK: TableView DataSource Prefetching
+extension SearchViewController: UITableViewDataSourcePrefetching {
+    // TODO: cancel previous perform request
+//    override class func cancelPreviousPerformRequests(withTarget aTarget: Any) {
+//        <#code#>
+//    }
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        print(#function)
+        for indexPath in indexPaths {
+            if (movies.count - 2) == indexPath.row && !isEnd {
+                page += 1
+                callRequest()
+            }
+        }
     }
     
 }

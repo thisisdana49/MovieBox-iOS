@@ -21,16 +21,17 @@ extension UITableView {
             label.sizeToFit()
             return label
         }()
-        addSubview(messageLabel)
-        
-        messageLabel.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).offset(200)
-            make.centerX.equalToSuperview()
-        }
+//        addSubview(messageLabel)
+//        
+//        messageLabel.snp.makeConstraints { make in
+//            make.top.equalTo(safeAreaLayoutGuide).offset(200)
+//            make.centerX.equalToSuperview()
+//        }
+        backgroundView = messageLabel
     }
 
     func restore() {
-        self.backgroundView = nil
+        backgroundView = nil
     }
 
 }
