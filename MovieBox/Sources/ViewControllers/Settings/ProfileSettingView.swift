@@ -8,7 +8,9 @@
 import UIKit
 
 class ProfileSettingView: BaseView {
-
+    
+    var profileImage: String = ""
+    
     let imageView = UIImageView()
     let cameraImageView = UIImageView()
     let textField = UITextField()
@@ -17,8 +19,12 @@ class ProfileSettingView: BaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        let randomInt = Int.random(in: 0...11)
+        profileImage = "profile_\(randomInt)"
+        imageView.image = UIImage(named: profileImage)
     }
-
+    
     override func configureHierarchy() {
         addSubview(imageView)
         addSubview(cameraImageView)
@@ -58,13 +64,14 @@ class ProfileSettingView: BaseView {
     
     override func configureView() {
         super.configureView()
-
-        imageView.image = UIImage(named: "profile_\(Int.random(in: 0...11))")
+        print(#function, profileImage)
+        
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 60
         imageView.layer.borderColor = UIColor.mainBlue.cgColor
         imageView.layer.borderWidth = 3
         imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
         
         cameraImageView.image = UIImage(systemName: "camera.fill")?.withTintColor(.baseWhite).withRenderingMode(.alwaysOriginal)
         cameraImageView.contentMode = .center
