@@ -17,6 +17,8 @@ class SearchDetailView: BaseView {
     
     let castHeaderLabel = UILabel()
     let castSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    
+    let posterHeaderLabel = UILabel()
     let posterSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let informView = MovieInformView()
     let synopsisView = MovieSynopsisView()
@@ -59,6 +61,7 @@ class SearchDetailView: BaseView {
         contentView.addSubview(synopsisView)
         contentView.addSubview(castHeaderLabel)
         contentView.addSubview(castSection)
+        contentView.addSubview(posterHeaderLabel)
         contentView.addSubview(posterSection)
         
         backdropSection.snp.makeConstraints { make in
@@ -97,8 +100,13 @@ class SearchDetailView: BaseView {
         }
         castSection.backgroundColor = .baseBlack
         
+        posterHeaderLabel.snp.makeConstraints { make in
+            make.top.equalTo(castSection.snp.bottom).offset(12)
+            make.horizontalEdges.equalToSuperview().inset(12)
+            make.height.equalTo(20)
+        }
         posterSection.snp.makeConstraints { make in
-            make.top.equalTo(castSection.snp.bottom)
+            make.top.equalTo(posterHeaderLabel.snp.bottom)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(150)
         }
@@ -124,6 +132,10 @@ class SearchDetailView: BaseView {
         castHeaderLabel.text = "Cast"
         castHeaderLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         castHeaderLabel.textColor = .baseWhite
+        
+        posterHeaderLabel.text = "Poster"
+        posterHeaderLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        posterHeaderLabel.textColor = .baseWhite
     }
     
 }
