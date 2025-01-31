@@ -9,7 +9,7 @@ import UIKit
 
 final class ProfileImageSettingViewController: UIViewController {
     
-    var profileImage: String = ""
+    var profileImage: Int = 0
     let profileImages: [UIImage] = [.profile0, .profile1, .profile2, .profile3, .profile4, .profile5, .profile6, .profile7, .profile8, .profile9, .profile10, .profile11 ]
     let mainView = ProfileImageSettingView()
     
@@ -22,12 +22,16 @@ final class ProfileImageSettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureViewController()
+        
+        selectedIndexPath = IndexPath(item: profileImage, section: 0)
+        mainView.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .top)
+        mainView.imageView.image = profileImages[selectedIndexPath?.row ?? 0]
     }
     
     fileprivate func configureViewController() {
         navigationItem.title = "프로필 이미지 설정"
         
-        mainView.imageView.image = UIImage(named: profileImage)
+        mainView.imageView.image = UIImage(named: "profile_\(profileImage)")
         
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = self
@@ -61,7 +65,7 @@ extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollect
             let previousCell = collectionView.cellForItem(at: selectedIndexPath) as? ProfileImageCollectionViewCell
             previousCell?.setSelected(false)
         }
-
+        
         let currentCell = collectionView.cellForItem(at: indexPath) as? ProfileImageCollectionViewCell
         currentCell?.setSelected(true)
         

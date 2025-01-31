@@ -9,7 +9,7 @@ import UIKit
 
 class ProfileImageSettingView: BaseView {
     
-    var profileImage: String = ""
+    var profileImage: Int = 0
     
     let imageView = UIImageView()
     let cameraImageView = UIImageView()
@@ -17,8 +17,6 @@ class ProfileImageSettingView: BaseView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print(#function, profileImage)
-        
     }
     
     override func configureHierarchy() {

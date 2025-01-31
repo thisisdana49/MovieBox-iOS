@@ -9,7 +9,7 @@ import UIKit
 
 class ProfileSettingView: BaseView {
     
-    var profileImage: String = ""
+    var profileImage: Int = 0
     
     let imageView = UIImageView()
     let cameraImageView = UIImageView()
@@ -20,9 +20,8 @@ class ProfileSettingView: BaseView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let randomInt = Int.random(in: 0...11)
-        profileImage = "profile_\(randomInt)"
-        imageView.image = UIImage(named: profileImage)
+        profileImage = Int.random(in: 0...11)
+        imageView.image = UIImage(named: "profile_\(profileImage)")
     }
     
     override func configureHierarchy() {
