@@ -80,7 +80,7 @@ class SearchDetailView: BaseView {
         synopsisView.snp.makeConstraints { make in
             make.top.equalTo(informView.snp.bottom).offset(12)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(160)
+            make.height.equalTo(100)
         }
         
         castSection.snp.makeConstraints { make in

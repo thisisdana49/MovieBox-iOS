@@ -8,27 +8,68 @@
 import UIKit
 
 class MovieSynopsisView: BaseView {
-
+    
+    var isExpanded = false {
+        didSet {
+            updateContent()
+        }
+    }
+    let lineHeight: CGFloat = 20
+    
     let headerLabel = UILabel()
+    let moreButton = UIButton()
     let contentLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    func moreButtonTapped() {
+        isExpanded.toggle()
+        
+        let newHeight = calculateContentHeight(expanded: isExpanded)
+        NotificationCenter.default.post(
+            name: NSNotification.Name("ToggleSynopsisHeight"),
+            object: newHeight)
+        
     }
     
     func configureData(content: String) {
         contentLabel.text = content
     }
     
+    func calculateContentHeight(expanded: Bool) -> CGFloat {
+        let maxLines = expanded ? contentLabel.calculateNumberOfLines() : 3
+        return CGFloat(maxLines) * lineHeight + 20
+    }
+    
+    // TODO: synopsis 없을 때 처리
+    func updateContent() {
+        contentLabel.numberOfLines = isExpanded ? 0 : 3
+        moreButton.setTitle(isExpanded ? "Hide" : "More", for: .normal)
+        
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8) {
+            self.layoutIfNeeded()
+        }
+    }
+    
     override func configureHierarchy() {
         addSubview(headerLabel)
+        addSubview(moreButton)
         addSubview(contentLabel)
     }
-
+    
     override func configureLayout() {
         headerLabel.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.equalTo(12)
+            make.leading.equalToSuperview().inset(12)
+        }
+        
+        moreButton.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.trailing.equalToSuperview().inset(12)
         }
         
         contentLabel.snp.makeConstraints { make in
@@ -42,10 +83,15 @@ class MovieSynopsisView: BaseView {
         headerLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         headerLabel.textColor = .white
         
+        moreButton.setTitle("More", for: .normal)
+        moreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        moreButton.setTitleColor(.mainBlue, for: .normal)
+        
         contentLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         contentLabel.textColor = .gray1
         contentLabel.textAlignment = .justified
-        contentLabel.numberOfLines = 0
+        contentLabel.lineBreakMode = .byTruncatingTail
+        contentLabel.numberOfLines = 3
     }
     
 }

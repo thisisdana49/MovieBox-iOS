@@ -47,7 +47,7 @@ class CustomLikeButton: UIButton {
         }
         updateButtonUI()
         NotificationCenter.default.post(
-            name: NSNotification.Name("reloadLikedButtons"),
+            name: NSNotification.Name("ReloadLikedButtons"),
             object: nil
         )
     }

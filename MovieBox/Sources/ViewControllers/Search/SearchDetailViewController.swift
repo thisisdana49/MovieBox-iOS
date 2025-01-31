@@ -24,6 +24,13 @@ final class SearchDetailViewController: UIViewController {
         
         configureCollectionView()
         
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(toggleSynopsisHeight),
+            name: NSNotification.Name("ToggleSynopsisHeight"),
+            object: nil
+        )
+        
         // TODO: Movie Detail Model 만들기
         // TODO: DispatchGroup으로 만들기
         NetworkManager.shared.fetchData(apiRequest: .movieCredits(id: String(movie!.id)), requestType: MovieCredit.self) { value in
@@ -41,6 +48,19 @@ final class SearchDetailViewController: UIViewController {
         
         navigationItem.title = movie?.title
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: likeButton)
+    }
+    
+    @objc
+    private func toggleSynopsisHeight(_ notification: Notification) {
+        guard let newHeight = notification.object as? CGFloat else { return }
+
+        UIView.animate(withDuration: 0.3) {
+            self.mainView.synopsisView.snp.updateConstraints { make in
+                make.height.equalTo(newHeight)
+            }
+            
+            self.view.layoutIfNeeded()
+        }
     }
     
     func configureCollectionView() {

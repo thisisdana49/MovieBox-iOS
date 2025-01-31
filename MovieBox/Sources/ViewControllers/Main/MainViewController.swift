@@ -28,7 +28,7 @@ final class MainViewController: UIViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(reloadCollectionView),
-            name: NSNotification.Name("reloadLikedButtons"),
+            name: NSNotification.Name("ReloadLikedButtons"),
             object: nil
         )
         configureView()
