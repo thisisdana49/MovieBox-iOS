@@ -25,6 +25,10 @@ class ProfileImageCollectionViewCell: UICollectionViewCell {
         profileImageView.layer.borderWidth = 1
         profileImageView.layer.borderColor = UIColor.gray2.cgColor
         profileImageView.alpha = 0.5
+        
+        DispatchQueue.main.async {
+            self.profileImageView.layer.cornerRadius = self.profileImageView.frame.width / 2
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -47,5 +51,6 @@ class ProfileImageCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         
         profileImageView.layer.cornerRadius = profileImageView.frame.size.width / 2
+        profileImageView.clipsToBounds = true
     }
 }

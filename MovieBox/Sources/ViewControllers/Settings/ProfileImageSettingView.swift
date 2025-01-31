@@ -12,6 +12,7 @@ class ProfileImageSettingView: BaseView {
     var profileImage: String = ""
     
     let imageView = UIImageView()
+    let cameraImageView = UIImageView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: profileImageLayout())
     
     override init(frame: CGRect) {
@@ -22,6 +23,7 @@ class ProfileImageSettingView: BaseView {
     
     override func configureHierarchy() {
         addSubview(imageView)
+        addSubview(cameraImageView)
         addSubview(collectionView)
     }
     
@@ -31,8 +33,14 @@ class ProfileImageSettingView: BaseView {
             make.centerX.equalToSuperview()
             make.size.equalTo(120)
         }
+        cameraImageView.snp.makeConstraints { make in
+            make.bottom.equalTo(imageView.snp.bottom)
+            make.trailing.equalTo(imageView.snp.trailing)
+            make.size.equalTo(40)
+        }
+        
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(20)
+            make.top.equalTo(imageView.snp.bottom).offset(40)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview().inset(200)
         }
@@ -47,6 +55,12 @@ class ProfileImageSettingView: BaseView {
         imageView.layer.borderWidth = 3
         imageView.clipsToBounds = true
         imageView.isUserInteractionEnabled = true
+        
+        cameraImageView.image = UIImage(systemName: "camera.fill")?.withTintColor(.baseWhite).withRenderingMode(.alwaysOriginal)
+        cameraImageView.contentMode = .center
+        cameraImageView.backgroundColor = .mainBlue
+        cameraImageView.layer.cornerRadius = 20
+        cameraImageView.clipsToBounds = true
         
         collectionView.backgroundColor = .baseBlack
     }
