@@ -83,5 +83,29 @@ class ProfileSectionView: BaseView {
         registerDateLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         registerDateLabel.textColor = .gray2
     }
+    
+    func updateUserInfo() {
+        guard let profileImageIndex = UserDefaultsManager.get(forKey: .profileImage) as? Int,
+              let nickname = UserDefaultsManager.get(forKey: .userNickname) as? String,
+              let registerDateStamp = UserDefaultsManager.get(forKey: .joinDate) as? Double
+        else {
+            print(UserDefaultsManager.get(forKey: .profileImage) as? Int)
+            print(UserDefaultsManager.get(forKey: .userNickname) as? String)
+            print(UserDefaultsManager.get(forKey: .joinDate) as? Double)
+            
+            profileImageView.image = UIImage(named: "profile_0")
+            nicknameLabel.text = "사용자"
+            registerDateLabel.text = "yy.MM.dd 가입"
+
+            return
+        }
+
+        let registerDate = Date(timeIntervalSince1970: registerDateStamp)
+        let formattedDate = registerDate.toFormattedString("yy.MM.dd")
+        
+        profileImageView.image = UIImage(named: "profile_\(profileImageIndex)")
+        nicknameLabel.text = nickname
+        registerDateLabel.text = "\(formattedDate) 가입"
+    }
 
 }

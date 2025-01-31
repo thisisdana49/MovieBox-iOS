@@ -23,7 +23,7 @@ struct UserDefaultsManager {
     
     static func set<T>(to: T, forKey: Self.Keys) {
         userDefault.setValue(to, forKey: forKey.rawValue)
-        print("UserDefaultsManager: save \(forKey) complete")
+        print("UserDefaultsManager: save \(to) in \(forKey) complete")
     }
     
     static func get(forKey: Self.Keys) -> Any? {

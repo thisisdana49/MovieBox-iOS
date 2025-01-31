@@ -69,7 +69,7 @@ extension ProfileSettingViewController: UITextFieldDelegate {
             print(#function)
             return
         }
-        let nickname = inputText
+        nickname = inputText
         validateNickname(nickname)
     }
     

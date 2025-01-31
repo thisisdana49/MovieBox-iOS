@@ -36,6 +36,8 @@ class MainViewController: UIViewController {
         mainView.recentKeywordsView.keywordButtons.forEach { button in
             button.addTarget(self, action: #selector(keywordButtonTapped), for: .touchUpInside)
         }
+        
+        mainView.profileSection.updateUserInfo()
     }
     
     func configureView() {
