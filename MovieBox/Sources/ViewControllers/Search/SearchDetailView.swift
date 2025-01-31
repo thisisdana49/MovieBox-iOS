@@ -8,12 +8,13 @@
 import UIKit
 
 class SearchDetailView: BaseView {
-
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
     
     let sectionList = ["backdrops", "Informs", "Synopsis", "Cast", "Poster"]
     let backdropSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    let pageControl = UIPageControl()
     let castSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let posterSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let informView = MovieInformView()
@@ -39,7 +40,7 @@ class SearchDetailView: BaseView {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
     }
-
+    
     override func configureLayout() {
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
@@ -52,6 +53,7 @@ class SearchDetailView: BaseView {
     
     func configureContentView() {
         contentView.addSubview(backdropSection)
+        contentView.addSubview(pageControl)
         contentView.addSubview(informView)
         contentView.addSubview(synopsisView)
         contentView.addSubview(castSection)
@@ -61,6 +63,12 @@ class SearchDetailView: BaseView {
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(280)
+        }
+        
+        pageControl.snp.makeConstraints { make in
+            make.bottom.equalTo(backdropSection.snp.bottom).offset(-12)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(20)
         }
         
         informView.snp.makeConstraints { make in
@@ -74,7 +82,7 @@ class SearchDetailView: BaseView {
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(160)
         }
-
+        
         castSection.snp.makeConstraints { make in
             make.top.equalTo(synopsisView.snp.bottom)
             make.horizontalEdges.equalToSuperview()
@@ -100,6 +108,11 @@ class SearchDetailView: BaseView {
         super.configureView()
         
         backdropSection.isPagingEnabled = true
+        backdropSection.showsHorizontalScrollIndicator = false
+        pageControl.numberOfPages = 5
+        pageControl.currentPage = 0
+        pageControl.pageIndicatorTintColor = .gray2
+        pageControl.currentPageIndicatorTintColor = .gray1
     }
-
+    
 }

@@ -12,9 +12,6 @@ final class MainViewController: UIViewController {
     let mainView = MainView()
     var recentKeywords: [String] = []
 //    var recentKeywords: [String] = ["해리포터", "이제훈", "슬램덩크더퍼스트", "위니더푸"]
-    let buttonAction = UIAction(title: "버튼", image: UIImage(systemName: "heart")) { value in
-        print("클릭됨~", value)
-    }
     var todaysMovies: [Movie] = []
     
     override func loadView() {
@@ -73,7 +70,7 @@ final class MainViewController: UIViewController {
     
     @objc
     func keywordButtonTapped(_ sender: CustomKeywordButton) {
-        print(sender.name)
+        // TODO: 선택 시 순서 변경 되도록 구현
         let vc = SearchViewController()
         vc.searchWord = sender.name
         navigationController?.pushViewController(vc, animated: true)
@@ -106,6 +103,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.configureData(movie)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = SearchDetailViewController()
+        vc.movie = todaysMovies[indexPath.row]
+        
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 }

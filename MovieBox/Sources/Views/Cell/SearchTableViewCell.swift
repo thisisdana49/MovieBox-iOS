@@ -62,11 +62,11 @@ class SearchTableViewCell: UITableViewCell {
     }
     
     func configureHierarchy() {
-        addSubview(posterImageView)
-        addSubview(titleLabel)
-        addSubview(releaseDateLabel)
-        addSubview(genreStackView)
-        addSubview(likeButton)
+        contentView.addSubview(posterImageView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(releaseDateLabel)
+        contentView.addSubview(genreStackView)
+        contentView.addSubview(likeButton)
     }
     
     func configureLayout() {
@@ -118,17 +118,6 @@ class SearchTableViewCell: UITableViewCell {
         
         genreStackView.distribution = .fillProportionally
         genreStackView.spacing = 4
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     required init?(coder: NSCoder) {

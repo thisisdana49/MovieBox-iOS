@@ -11,6 +11,7 @@ final class SearchDetailViewController: UIViewController {
 
     let mainView = SearchDetailView()
     var movie: Movie?
+    var likeButton = CustomLikeButton()
     var movieCredit: MovieCredit?
     var movieImage: MovieImage?
     
@@ -36,6 +37,10 @@ final class SearchDetailViewController: UIViewController {
         }
         
         mainView.configureData(movie: movie)
+        likeButton.setMovieID(movie!.id)
+        
+        navigationItem.title = movie?.title
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: likeButton)
     }
     
     func configureCollectionView() {
@@ -62,17 +67,17 @@ final class SearchDetailViewController: UIViewController {
 
 
 // MARK: CollectionView Delegate, CollectionView DataSource
-extension SearchDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension SearchDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView.tag == 0 {
-            movieImage?.backdrops.count ?? 0
+            return min(movieImage?.backdrops.count ?? 0, 5)
         }
         else if collectionView.tag == 1 {
-            movieCredit?.cast.count ?? 0
+            return movieCredit?.cast.count ?? 0
         }
         else {
-            movieImage?.posters.count ?? 0
+            return movieImage?.posters.count ?? 0
         }
     }
     
@@ -80,7 +85,8 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
 
         if collectionView.tag == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackdropCollectionViewCell.id, for: indexPath) as! BackdropCollectionViewCell
-            let backdrop = movieImage?.backdrops[indexPath.item]
+            let backdrops = movieImage?.backdrops.prefix(5)
+            let backdrop = backdrops?[indexPath.item]
             cell.configureData(imagePath: backdrop?.filePath)
             
             return cell
@@ -100,6 +106,13 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
             cell.configureData(imagePath: poster?.filePath)
             
             return cell
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == mainView.backdropSection {
+            let pageIndex = Int(scrollView.contentOffset.x / scrollView.frame.width)
+            mainView.pageControl.currentPage = pageIndex
         }
     }
     
