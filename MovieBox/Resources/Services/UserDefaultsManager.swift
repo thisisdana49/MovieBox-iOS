@@ -15,6 +15,7 @@ struct UserDefaultsManager {
         case userNickname
         case joinDate
         case profileImage
+        case likedMovies
         // notifications
         // alert
     }
@@ -28,5 +29,28 @@ struct UserDefaultsManager {
     
     static func get(forKey: Self.Keys) -> Any? {
         return userDefault.object(forKey: forKey.rawValue)
+    }
+    
+    static func saveLikedMovie(_ movieID: Int) {
+        var likedMovies = getLikedMovies()
+        if !likedMovies.contains(movieID) {
+            likedMovies.append(movieID)
+        }
+        userDefault.setValue(likedMovies, forKey: Keys.likedMovies.rawValue)
+        print(#function, likedMovies)
+    }
+    
+    static func getLikedMovies() -> [Int] {
+        return userDefault.array(forKey: Keys.likedMovies.rawValue) as? [Int] ?? []
+    }
+    
+    static func removeLikedMovie(_ movieID: Int) {
+        var likedMovies = getLikedMovies()
+        likedMovies.removeAll { $0 == movieID }
+        userDefault.setValue(likedMovies, forKey: Keys.likedMovies.rawValue)
+    }
+    
+    static func isLikedMovie(_ movieID: Int) -> Bool {
+        return getLikedMovies().contains(movieID)
     }
 }

@@ -36,6 +36,8 @@ final class MainCollectionViewCell: UICollectionViewCell {
         }
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
+        
+        likeButton.setMovieID(movie.id)
     }
     
     func configureHierarchy() {

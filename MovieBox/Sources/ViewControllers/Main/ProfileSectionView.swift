@@ -14,10 +14,31 @@ class ProfileSectionView: BaseView {
     let nicknameLabel = UILabel()
     let registerDateLabel = UILabel()
     let profileSettingButton = UIButton()
-    let likeBoxButton = CustomButton(title: "0개의 무비박스 보관중", style: .filled)
+    let likeBoxButton = CustomButton(title: "", style: .filled)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+    }
+    
+    func updateUserInfo() {
+        guard let profileImageIndex = UserDefaultsManager.get(forKey: .profileImage) as? Int,
+              let nickname = UserDefaultsManager.get(forKey: .userNickname) as? String,
+              let registerDateStamp = UserDefaultsManager.get(forKey: .joinDate) as? Double
+        else {
+            profileImageView.image = UIImage(named: "profile_0")
+            nicknameLabel.text = "사용자"
+            registerDateLabel.text = "yy.MM.dd 가입"
+
+            return
+        }
+        let likedMovies = UserDefaultsManager.getLikedMovies()
+        let registerDate = Date(timeIntervalSince1970: registerDateStamp)
+        let formattedDate = registerDate.toFormattedString("yy.MM.dd")
+        
+        profileImageView.image = UIImage(named: "profile_\(profileImageIndex)")
+        nicknameLabel.text = nickname
+        registerDateLabel.text = "\(formattedDate) 가입"
+        likeBoxButton.updateButtonTitle("\(likedMovies.count - 1)개의 무비박스 보관중")
     }
     
     override func configureHierarchy() {
@@ -75,37 +96,11 @@ class ProfileSectionView: BaseView {
         
         profileSettingButton.setImage(UIImage(systemName: "chevron.right")?.withTintColor(.gray2).withRenderingMode(.alwaysOriginal), for: .normal)
         
-        nicknameLabel.text = "다우니맛도리탕"
         nicknameLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         nicknameLabel.textColor = .baseWhite
         
-        registerDateLabel.text = "24.04.12 가입"
         registerDateLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         registerDateLabel.textColor = .gray2
-    }
-    
-    func updateUserInfo() {
-        guard let profileImageIndex = UserDefaultsManager.get(forKey: .profileImage) as? Int,
-              let nickname = UserDefaultsManager.get(forKey: .userNickname) as? String,
-              let registerDateStamp = UserDefaultsManager.get(forKey: .joinDate) as? Double
-        else {
-            print(UserDefaultsManager.get(forKey: .profileImage) as? Int)
-            print(UserDefaultsManager.get(forKey: .userNickname) as? String)
-            print(UserDefaultsManager.get(forKey: .joinDate) as? Double)
-            
-            profileImageView.image = UIImage(named: "profile_0")
-            nicknameLabel.text = "사용자"
-            registerDateLabel.text = "yy.MM.dd 가입"
-
-            return
-        }
-
-        let registerDate = Date(timeIntervalSince1970: registerDateStamp)
-        let formattedDate = registerDate.toFormattedString("yy.MM.dd")
-        
-        profileImageView.image = UIImage(named: "profile_\(profileImageIndex)")
-        nicknameLabel.text = nickname
-        registerDateLabel.text = "\(formattedDate) 가입"
     }
 
 }

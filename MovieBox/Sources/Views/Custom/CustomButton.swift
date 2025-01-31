@@ -23,6 +23,10 @@ class CustomButton: UIButton {
         else if style == .filled { configureFilledButton(title: title) }
     }
     
+    func updateButtonTitle(_ title: String) {
+        configureFilledButton(title: title)
+    }
+    
     private func configureBorderedButton(title: String) {
         var config = UIButton.Configuration.borderedTinted()
 
@@ -44,7 +48,7 @@ class CustomButton: UIButton {
         var config = UIButton.Configuration.filled()
 
         var titleAttr = AttributedString.init(title)
-        titleAttr.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        titleAttr.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         config.attributedTitle = titleAttr
         
         config.baseBackgroundColor = .mainBlue

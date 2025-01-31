@@ -24,11 +24,17 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print(#function, UserDefaultsManager.getLikedMovies())
         NetworkManager.shared.fetchData(apiRequest: .trendingMovies, requestType: MovieListResponse.self) { value in
             self.todaysMovies = value.results
             self.mainView.todaysMovieSection.collectionView.reloadData()
         }
-        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(reloadCollectionView),
+            name: NSNotification.Name("reloadCollectionView"),
+            object: nil
+        )
         configureView()
     }
     
@@ -38,6 +44,12 @@ final class MainViewController: UIViewController {
         }
         
         mainView.profileSection.updateUserInfo()
+    }
+    
+    @objc
+    private func reloadCollectionView() {
+        mainView.todaysMovieSection.collectionView.reloadData()
+        print(#function)
     }
     
     func configureView() {

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class RecentKeywordSectionView: BaseView {
     
@@ -72,7 +73,7 @@ class RecentKeywordSectionView: BaseView {
         
         emptyLabel.snp.makeConstraints { make in
             make.top.equalTo(headerLabel.snp.bottom).offset(8)
-            make.width.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.height.equalTo(60)
         }
     }
