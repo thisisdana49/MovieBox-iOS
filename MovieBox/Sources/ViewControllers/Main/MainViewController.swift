@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+final class MainViewController: UIViewController {
     
     let mainView = MainView()
     var recentKeywords: [String] = []
@@ -79,8 +79,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.id, for: indexPath) as! MainCollectionViewCell
         
         let movie = todaysMovies[indexPath.row]
-        
-        cell.configureData(poster: movie.posterPath ?? "", title: movie.title, overview: movie.overview)
+        // TODO: 전달용 model 구성
+        cell.configureData(movie)
         
         return cell
     }

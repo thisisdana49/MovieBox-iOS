@@ -102,7 +102,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id, for: indexPath) as! SearchTableViewCell
         let movie = movies[indexPath.row]
         
-        cell.configureData(movie: movie)
+        cell.configureData(movie)
         
         return cell
     }

@@ -39,7 +39,7 @@ class SearchTableViewCell: UITableViewCell {
         }
     }
     
-    func configureData(movie: Movie) {
+    func configureData(_ movie: Movie) {
         if let posterPath = movie.posterPath, let posterURL = movie.posterURL {
             posterImageView.kf.setImage(with: posterURL)
         } else {

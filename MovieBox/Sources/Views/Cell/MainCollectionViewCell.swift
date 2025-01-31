@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class MainCollectionViewCell: UICollectionViewCell {
+final class MainCollectionViewCell: UICollectionViewCell {
     
 //    static let id = "MainCollectionViewCell"
     static var id: String {
@@ -18,7 +18,7 @@ class MainCollectionViewCell: UICollectionViewCell {
     let posterImageView = UIImageView()
     let titleLabel = UILabel()
     let overviewLabel = UILabel()
-    let likeButton = UIButton()
+    let likeButton = CustomLikeButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,13 +28,14 @@ class MainCollectionViewCell: UICollectionViewCell {
         configureLayout()
     }
     
-    func configureData(poster: String, title: String, overview: String) {
-        let posterURL = "https://image.tmdb.org/t/p/original/\(poster)"
-        if let imageURL = URL(string: posterURL) {
-            posterImageView.kf.setImage(with: imageURL)
+    func configureData(_ movie: Movie) {
+        if let posterPath = movie.posterPath, let posterURL = movie.posterURL {
+            posterImageView.kf.setImage(with: posterURL)
+        } else {
+            posterImageView.image = .noPoster
         }
-        titleLabel.text = title
-        overviewLabel.text = overview
+        titleLabel.text = movie.title
+        overviewLabel.text = movie.overview
     }
     
     func configureHierarchy() {
@@ -46,41 +47,42 @@ class MainCollectionViewCell: UICollectionViewCell {
     
     func configureLayout() {
         posterImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
+            make.top.equalToSuperview()
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
             make.height.equalTo(self.snp.width).multipliedBy(1.5)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(posterImageView.snp.bottom)
+            make.top.equalTo(posterImageView.snp.bottom).offset(6)
             make.leading.equalToSuperview()
         }
         
         likeButton.snp.makeConstraints { make in
-            make.top.equalTo(posterImageView.snp.bottom)
+            make.top.equalTo(posterImageView.snp.bottom).offset(4)
             make.trailing.equalToSuperview()
+            make.size.equalTo(25)
         }
         
         overviewLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom)
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview()
         }
     }
     
     func configureView() {
         posterImageView.image = UIImage(systemName: "star.fill")
-        posterImageView.layer.cornerRadius = 15
+        posterImageView.layer.cornerRadius = 10
         posterImageView.clipsToBounds = true
         
-        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         titleLabel.textColor = .baseWhite
         
-        overviewLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        overviewLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         overviewLabel.textColor = .gray1
         overviewLabel.numberOfLines = 2
         
-        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        backgroundColor = .gray3
     }
     
     required init?(coder: NSCoder) {

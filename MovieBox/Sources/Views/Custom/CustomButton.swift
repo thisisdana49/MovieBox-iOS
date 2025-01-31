@@ -15,8 +15,7 @@ class CustomButton: UIButton {
     }
     
     var title: String = ""
-    
-    // TODO: Style with Enum
+
     init(title: String, style: CustomButton.Styles) {
         super.init(frame: .zero)
         

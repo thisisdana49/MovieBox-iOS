@@ -28,7 +28,7 @@ class MainMovieSectionView: BaseView {
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(headerLabel.snp.bottom)
+            make.top.equalTo(headerLabel.snp.bottom).offset(12)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(safeAreaInsets)
         }
@@ -41,17 +41,18 @@ class MainMovieSectionView: BaseView {
         headerLabel.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
         headerLabel.textColor = .baseWhite
         
-        collectionView.backgroundColor = .baseBlack
+//        collectionView.backgroundColor = .baseBlack
+        collectionView.backgroundColor = .systemOrange
     }
     
     static private func layout() -> UICollectionViewLayout {
         let inset: CGFloat = 16
-        let spacing: CGFloat = 10
+        let spacing: CGFloat = 12
         let deviceWidth = UIScreen.main.bounds.width
         let cellWidth = deviceWidth - spacing - inset
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: cellWidth / 1.6, height: cellWidth / 1.6 * 1.9)
+        layout.itemSize = CGSize(width: cellWidth / 1.7, height: cellWidth / 1.7 * 1.8)
         layout.minimumLineSpacing = spacing
         layout.minimumInteritemSpacing = 0
         layout.sectionInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: 0)
