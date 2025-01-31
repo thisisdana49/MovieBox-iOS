@@ -32,7 +32,7 @@ class SearchDetailView: BaseView {
     }
     
     func configureData(movie: Movie?) {
-        informView.configureData(releaseDate: movie?.releaseDate, voteAverage: movie?.voteAverage, genre: "액션, 스릴러")
+        informView.configureData(releaseDate: movie?.releaseDate, voteAverage: movie?.voteAverage, genres: movie?.genreIds)
         synopsisView.configureData(content: movie?.overview ?? "")
     }
     

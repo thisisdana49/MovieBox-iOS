@@ -18,15 +18,21 @@ class MovieInformView: BaseView {
         super.init(frame: frame)
     }
     
-    func configureData(releaseDate: String?, voteAverage: Double?, genre: String) {
-        guard let releaseDate, let voteAverage else { return }
+    func configureData(releaseDate dateStr: String?, voteAverage: Double?, genres: [Int]?) {
+        guard let dateStr, let voteAverage else { return }
+        let releaseDate = Date.fromString(dateStr, format: "yyyy-MM-dd")
+        let formattedDate = releaseDate?.toFormattedString() ?? ""
+        let genres = GenreMapper.genreNames(from: genres ?? []).prefix(2)
+        
         let fullString = NSMutableAttributedString(string: "")
         fullString.append(NSAttributedString(attachment: calendarSymbol))
-        fullString.append(NSAttributedString(string: "  \(releaseDate)  |  "))
+        fullString.append(NSAttributedString(string: "  \(formattedDate)  |  "))
         fullString.append(NSAttributedString(attachment: starSymbol))
         fullString.append(NSAttributedString(string: "  \(voteAverage)  |  "))
         fullString.append(NSAttributedString(attachment: filmSymbol))
-        fullString.append(NSAttributedString(string: "  \(genre)"))
+        fullString.append(NSAttributedString(string: "  \(genres.joined(separator: ", "))"))
+        
+        
         informsLabel.attributedText = fullString
     }
     
