@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SnapKit
 
-class MovieSynopsisView: BaseView {
+final class MovieSynopsisView: BaseView {
     
     var isExpanded = false {
         didSet {
@@ -42,7 +43,7 @@ class MovieSynopsisView: BaseView {
     
     func calculateContentHeight(expanded: Bool) -> CGFloat {
         let maxLines = expanded ? contentLabel.calculateNumberOfLines() : 3
-        return CGFloat(maxLines) * lineHeight + 20
+        return CGFloat(maxLines) * lineHeight + 40
     }
     
     // TODO: synopsis 없을 때 처리
@@ -81,7 +82,7 @@ class MovieSynopsisView: BaseView {
     override func configureView() {
         headerLabel.text = "Synopsis"
         headerLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-        headerLabel.textColor = .white
+        headerLabel.textColor = .baseWhite
         
         moreButton.setTitle("More", for: .normal)
         moreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)

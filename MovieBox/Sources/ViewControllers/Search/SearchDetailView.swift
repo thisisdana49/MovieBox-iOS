@@ -12,9 +12,10 @@ class SearchDetailView: BaseView {
     let scrollView = UIScrollView()
     let contentView = UIView()
     
-    let sectionList = ["backdrops", "Informs", "Synopsis", "Cast", "Poster"]
     let backdropSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let pageControl = UIPageControl()
+    
+    let castHeaderLabel = UILabel()
     let castSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let posterSection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let informView = MovieInformView()
@@ -56,6 +57,7 @@ class SearchDetailView: BaseView {
         contentView.addSubview(pageControl)
         contentView.addSubview(informView)
         contentView.addSubview(synopsisView)
+        contentView.addSubview(castHeaderLabel)
         contentView.addSubview(castSection)
         contentView.addSubview(posterSection)
         
@@ -83,10 +85,15 @@ class SearchDetailView: BaseView {
             make.height.equalTo(100)
         }
         
-        castSection.snp.makeConstraints { make in
+        castHeaderLabel.snp.makeConstraints { make in
             make.top.equalTo(synopsisView.snp.bottom)
+            make.horizontalEdges.equalToSuperview().inset(12)
+            make.height.equalTo(20)
+        }
+        castSection.snp.makeConstraints { make in
+            make.top.equalTo(castHeaderLabel.snp.bottom)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(150)
+            make.height.equalTo(140)
         }
         castSection.backgroundColor = .baseBlack
         
@@ -113,6 +120,10 @@ class SearchDetailView: BaseView {
         pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = .gray2
         pageControl.currentPageIndicatorTintColor = .gray1
+        
+        castHeaderLabel.text = "Cast"
+        castHeaderLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        castHeaderLabel.textColor = .baseWhite
     }
     
 }

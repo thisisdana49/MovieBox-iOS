@@ -167,17 +167,18 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
     }
     
     private func castLayout() -> UICollectionViewLayout {
-        let spacing: CGFloat = 8
+        let sectionInset: CGFloat = 12
+        let spacing: CGFloat = 12
         
         let deviceWidth = UIScreen.main.bounds.width
-        let cellWidth = deviceWidth - spacing
+        let cellWidth = deviceWidth - (spacing * 2) - (sectionInset)
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
-        layout.itemSize = CGSizeMake(200, 50)
-        layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
+        layout.minimumInteritemSpacing = 0
+        layout.itemSize = CGSizeMake(cellWidth / 2.2, 50)
+        layout.sectionInset = UIEdgeInsets(top: spacing, left: sectionInset, bottom: spacing, right: sectionInset)
         return layout
     }
 }

@@ -23,8 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let appearance = UINavigationBarAppearance()
         let backButtonAppearance = UIBarButtonItemAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .black
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.backgroundColor = .baseBlack
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.baseWhite]
         backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.black]
         appearance.backButtonAppearance = backButtonAppearance
         

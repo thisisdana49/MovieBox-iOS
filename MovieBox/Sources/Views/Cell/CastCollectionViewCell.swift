@@ -25,28 +25,30 @@ class CastCollectionViewCell: UICollectionViewCell {
         castImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
-            make.size.equalTo(60)
+            make.size.equalTo(55)
         }
         nameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalTo(castImageView.snp.trailing)
+            make.bottom.equalTo(castImageView.snp.centerY).offset(-4)
+            make.leading.equalTo(castImageView.snp.trailing).offset(8)
         }
         engNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom)
-            make.leading.equalTo(castImageView.snp.trailing)
+            make.top.equalTo(castImageView.snp.centerY).offset(4)
+            make.leading.equalTo(castImageView.snp.trailing).offset(8)
         }
         
         castImageView.contentMode = .scaleAspectFill
-        castImageView.layer.cornerRadius = 30
+        castImageView.layer.cornerRadius = 27.5
         castImageView.clipsToBounds = true
         
         nameLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         nameLabel.textColor = .baseWhite
         
         engNameLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        engNameLabel.textColor = .gray1
+        engNameLabel.textColor = .gray2
     }
     // TODO: Prefetch Data
+    // TODO: Label 말줄임표
+    // TODO: 메서드 구분
     func configureData(cast: MovieCast?) {
         if let cast, let profilePath = cast.profilePath, let castURL = URL(string: "https://image.tmdb.org/t/p/w500/\(profilePath)") {
             castImageView.kf.setImage(with: castURL)
