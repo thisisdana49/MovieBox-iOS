@@ -24,7 +24,6 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(#function, UserDefaultsManager.getLikedMovies())
         NetworkManager.shared.fetchData(apiRequest: .trendingMovies, requestType: MovieListResponse.self) { value in
             self.todaysMovies = value.results
             self.mainView.todaysMovieSection.collectionView.reloadData()
@@ -32,13 +31,15 @@ final class MainViewController: UIViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(reloadCollectionView),
-            name: NSNotification.Name("reloadCollectionView"),
+            name: NSNotification.Name("reloadLikedButtons"),
             object: nil
         )
         configureView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        recentKeywords = UserDefaultsManager.getSearchKeywords()
+        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
         mainView.recentKeywordsView.keywordButtons.forEach { button in
             button.addTarget(self, action: #selector(keywordButtonTapped), for: .touchUpInside)
         }
@@ -49,14 +50,15 @@ final class MainViewController: UIViewController {
     @objc
     private func reloadCollectionView() {
         mainView.todaysMovieSection.collectionView.reloadData()
-        print(#function)
+//        print(#function)
     }
     
     func configureView() {
         navigationItem.title = "MovieBox"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
         
-        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
+        mainView.recentKeywordsView.deleteButton.addTarget(self, action: #selector(clearAllKeywords), for: .touchUpInside)
+        
         mainView.todaysMovieSection.collectionView.delegate = self
         mainView.todaysMovieSection.collectionView.dataSource = self
         mainView.todaysMovieSection.collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.id)
@@ -75,6 +77,15 @@ final class MainViewController: UIViewController {
         let vc = SearchViewController()
         vc.searchWord = sender.name
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc
+    func clearAllKeywords() {
+        recentKeywords.removeAll()
+        
+        UserDefaultsManager.clearSearchKeywords()
+
+        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
     }
     
 }
@@ -108,7 +119,7 @@ extension MainViewController: PassDataDelegate {
             recentKeywords.insert(keyword, at: 0)
         }
         print("최근 검색어: \(recentKeywords)")
-        
+        UserDefaultsManager.saveSearchKeyword(keyword)
         mainView.recentKeywordsView.configureData(keywords: recentKeywords)
     }
     

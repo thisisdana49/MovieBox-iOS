@@ -16,6 +16,7 @@ struct UserDefaultsManager {
         case joinDate
         case profileImage
         case likedMovies
+        case searchKeywords
         // notifications
         // alert
     }
@@ -30,7 +31,37 @@ struct UserDefaultsManager {
     static func get(forKey: Self.Keys) -> Any? {
         return userDefault.object(forKey: forKey.rawValue)
     }
+
+    static func saveSearchKeyword(_ keyword: String) {
+        var keywords = getSearchKeywords()
+        if keywords.contains(keyword) {
+            keywords.removeAll { $0 == keyword }
+        }
+        keywords.insert(keyword, at: 0)
+
+        if keywords.count > 10 {
+            keywords.removeLast()
+        }
+        
+        userDefault.setValue(keywords, forKey: Keys.searchKeywords.rawValue)
+    }
     
+    // search keywords
+    static func getSearchKeywords() -> [String] {
+        return userDefault.array(forKey: Keys.searchKeywords.rawValue) as? [String] ?? []
+    }
+
+    static func removeSearchKeyword(_ keyword: String) {
+        var keywords = getSearchKeywords()
+        keywords.removeAll { $0 == keyword }
+        userDefault.setValue(keywords, forKey: Keys.searchKeywords.rawValue)
+    }
+
+    static func clearSearchKeywords() {
+        userDefault.removeObject(forKey: Keys.searchKeywords.rawValue)
+    }
+    
+    // liked movie
     static func saveLikedMovie(_ movieID: Int) {
         var likedMovies = getLikedMovies()
         if !likedMovies.contains(movieID) {

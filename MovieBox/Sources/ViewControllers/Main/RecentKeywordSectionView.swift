@@ -11,6 +11,7 @@ import SnapKit
 class RecentKeywordSectionView: BaseView {
     
     let headerLabel = UILabel()
+    let deleteButton = UIButton()
     let scrollView = UIScrollView()
     let stackView = UIStackView()
     let emptyLabel = UILabel()
@@ -25,9 +26,11 @@ class RecentKeywordSectionView: BaseView {
         keywordButtons.removeAll()
         
         if keywords.isEmpty {
+            deleteButton.isHidden = true
             emptyLabel.isHidden = false
             stackView.isHidden = true
         } else {
+            deleteButton.isHidden = false
             stackView.isHidden = false
             emptyLabel.isHidden = true
             
@@ -47,6 +50,7 @@ class RecentKeywordSectionView: BaseView {
     
     override func configureHierarchy() {
         addSubview(headerLabel)
+        addSubview(deleteButton)
         addSubview(scrollView)
         scrollView.addSubview(stackView)
         addSubview(emptyLabel)
@@ -55,7 +59,12 @@ class RecentKeywordSectionView: BaseView {
     override func configureLayout() {
         headerLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
-            make.horizontalEdges.equalToSuperview().inset(16)
+            make.leading.equalToSuperview().inset(16)
+            make.height.equalTo(20)
+        }
+        deleteButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().inset(16)
             make.height.equalTo(20)
         }
         
@@ -89,6 +98,11 @@ class RecentKeywordSectionView: BaseView {
         
         headerLabel.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
         headerLabel.textColor = .baseWhite
+        
+        deleteButton.setTitle("전체 삭제", for: .normal)
+        deleteButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        deleteButton.setTitleColor(.mainBlue, for: .normal)
+        deleteButton.isHidden = true
         
         emptyLabel.text = "최근 검색어 내역이 없습니다."
         emptyLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)

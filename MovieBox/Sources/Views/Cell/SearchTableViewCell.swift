@@ -16,7 +16,7 @@ class SearchTableViewCell: UITableViewCell {
     let releaseDateLabel = UILabel()
     let genreStackView = UIStackView()
     let genreLabel = UILabel()
-    let likeButton = UIButton()
+    let likeButton = CustomLikeButton()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -58,6 +58,7 @@ class SearchTableViewCell: UITableViewCell {
         
         titleLabel.text = movie.title
         releaseDateLabel.text = formattedDate
+        likeButton.setMovieID(movie.id)
     }
     
     func configureHierarchy() {
@@ -117,8 +118,6 @@ class SearchTableViewCell: UITableViewCell {
         
         genreStackView.distribution = .fillProportionally
         genreStackView.spacing = 4
-        
-        likeButton.setImage(UIImage(systemName: "heart")?.withTintColor(.mainBlue).withRenderingMode(.alwaysOriginal), for: .normal)
     }
     
     override func awakeFromNib() {

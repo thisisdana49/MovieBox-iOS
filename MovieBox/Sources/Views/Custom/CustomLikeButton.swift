@@ -47,7 +47,7 @@ class CustomLikeButton: UIButton {
         }
         updateButtonUI()
         NotificationCenter.default.post(
-            name: NSNotification.Name("reloadCollectionView"),
+            name: NSNotification.Name("reloadLikedButtons"),
             object: nil
         )
     }
@@ -61,6 +61,8 @@ class CustomLikeButton: UIButton {
             config?.image = unselectedImage
             isSelected = false
         }
+        print(#function, isSelected)
+
         configuration = config
     }
     

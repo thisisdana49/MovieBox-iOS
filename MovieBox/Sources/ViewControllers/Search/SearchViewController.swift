@@ -129,7 +129,7 @@ extension SearchViewController: UITableViewDataSourcePrefetching {
 //    }
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        print(#function)
+//        print(#function)
         for indexPath in indexPaths {
             if (movies.count - 2) == indexPath.row && !isEnd {
                 page += 1
