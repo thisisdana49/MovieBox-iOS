@@ -112,6 +112,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isNoResult && searchWord != "" {
+            movies.removeAll()
             tableView.setEmptyMessage("원하는 검색결과를 찾지 못했습니다.")
         } else {
             tableView.restore()
