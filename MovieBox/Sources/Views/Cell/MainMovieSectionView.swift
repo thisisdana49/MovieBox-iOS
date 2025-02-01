@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainMovieSectionView: BaseView {
+final class MainMovieSectionView: BaseView {
 
     let headerLabel = UILabel()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())

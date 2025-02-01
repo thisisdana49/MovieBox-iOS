@@ -7,9 +7,7 @@
 
 import UIKit
 
-class SearchTableViewCell: UITableViewCell {
-
-    static let id = "SearchTableViewCell"
+final class SearchTableViewCell: UITableViewCell {
     
     let posterImageView = UIImageView()
     let titleLabel = UILabel()

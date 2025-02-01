@@ -7,10 +7,8 @@
 
 import UIKit
 
-class PosterCollectionViewCell: UICollectionViewCell {
-    
-    static let id = "PosterCollectionViewCell"
-    
+final class PosterCollectionViewCell: UICollectionViewCell {
+        
     let posterImageView = UIImageView()
 
     override init(frame: CGRect) {

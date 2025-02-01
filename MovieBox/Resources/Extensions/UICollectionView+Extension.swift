@@ -35,3 +35,11 @@ extension UICollectionView {
     }
 
 }
+
+extension UICollectionViewCell {
+    
+    static var id: String {
+        String(describing: self)
+    }
+    
+}

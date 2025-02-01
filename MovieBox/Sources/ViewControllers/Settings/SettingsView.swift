@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SettingsView: BaseView {
+final class SettingsView: BaseView {
 
     let profileSection = ProfileSectionView()
     let tableView = UITableView(frame: .zero, style: .plain)

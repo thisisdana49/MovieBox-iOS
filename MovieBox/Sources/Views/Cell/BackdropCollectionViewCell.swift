@@ -9,9 +9,7 @@ import UIKit
 import Kingfisher
 
 final class BackdropCollectionViewCell: UICollectionViewCell {
-    
-    static let id = "BackdropCollectionViewCell"
-    
+        
     let backdropImageView = UIImageView()
     // TODO: Indicators 추가
     override init(frame: CGRect) {

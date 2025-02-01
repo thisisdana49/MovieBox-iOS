@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class RecentKeywordSectionView: BaseView {
+final class RecentKeywordSectionView: BaseView {
     
     let headerLabel = UILabel()
     let deleteButton = UIButton()

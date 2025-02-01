@@ -7,10 +7,8 @@
 
 import UIKit
 
-class CastCollectionViewCell: UICollectionViewCell {
-    
-    static let id = "CastCollectionViewCell"
-    
+final class CastCollectionViewCell: UICollectionViewCell {
+        
     let castImageView = UIImageView()
     let nameLabel = UILabel()
     let engNameLabel = UILabel()

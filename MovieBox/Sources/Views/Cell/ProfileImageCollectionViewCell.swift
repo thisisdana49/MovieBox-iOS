@@ -7,10 +7,8 @@
 
 import UIKit
 
-class ProfileImageCollectionViewCell: UICollectionViewCell {
-    
-    static let id = "ProfileImageCollectionViewCell"
-    
+final class ProfileImageCollectionViewCell: UICollectionViewCell {
+        
     let profileImageView = UIImageView()
     
     override init(frame: CGRect) {

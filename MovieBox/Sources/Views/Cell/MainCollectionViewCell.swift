@@ -10,11 +10,6 @@ import Kingfisher
 
 final class MainCollectionViewCell: UICollectionViewCell {
     
-//    static let id = "MainCollectionViewCell"
-    static var id: String {
-        String(describing: self)
-    }
-    
     let posterImageView = UIImageView()
     let titleLabel = UILabel()
     let overviewLabel = UILabel()
