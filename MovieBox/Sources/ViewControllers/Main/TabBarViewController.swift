@@ -16,9 +16,9 @@ final class TabBarViewController: UITabBarController {
         let upcoimingVC = MainViewController()
         let settingsVC = SettingsViewController()
         
-        mainVC.tabBarItem.image = UIImage.init(systemName: "popcorn")
-        upcoimingVC.tabBarItem.image = UIImage.init(systemName: "film.stack")
-        settingsVC.tabBarItem.image = UIImage.init(systemName: "person.crop.circle")
+        mainVC.tabBarItem = UITabBarItem(title: "CINEMA", image: UIImage(systemName: "popcorn"), selectedImage: UIImage(systemName: "popcorn.fill"))
+        upcoimingVC.tabBarItem = UITabBarItem(title: "UPCOMING", image: UIImage(systemName: "film.stack"), selectedImage: UIImage(systemName: "film.stack.fill"))
+        settingsVC.tabBarItem = UITabBarItem(title: "PROFILE", image: UIImage(systemName: "person.crop.circle"), selectedImage: UIImage(systemName: "person.crop.circle.fill"))
         
         self.tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0);
         

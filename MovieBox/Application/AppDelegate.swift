@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         configureGlobalNavigationBarAppearance()
+        configureGlobalTabBarAppearance()
         
         return true
     }
@@ -33,6 +34,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().tintColor = .mainBlue
     }
+    
+    private func configureGlobalTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .baseBlack
+        appearance.stackedLayoutAppearance.normal.iconColor = .gray1
+        appearance.stackedLayoutAppearance.selected.iconColor = .mainBlue
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.gray1]
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.mainBlue]
+        
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        UITabBar.appearance().tintColor = .mainBlue
+    }
+
     
     // MARK: UISceneSession Lifecycle
     
