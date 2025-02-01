@@ -1,4 +1,5 @@
 APIKey.swift
+Config.swift
 *.xcconfig
 
 ### Swift ###
