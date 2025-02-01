@@ -50,7 +50,9 @@ final class ProfileSettingViewController: UIViewController {
     
     private func setupNavigationBarButton() {
         let completeButton = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(completeButtonTapped))
+        let dismissButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissView))
         navigationItem.rightBarButtonItem = completeButton
+        navigationItem.setLeftBarButton(dismissButton, animated: true)
     }
     
     private func configureViewController() {
@@ -63,6 +65,22 @@ final class ProfileSettingViewController: UIViewController {
         navigationItem.title = "프로필 설정"
     }
     
+    private func saveUserInformation() {
+        let joinDate = Date().timeIntervalSince1970
+        let profileImage = mainView.profileImage
+        
+        UserDefaultsManager.set(to: nickname, forKey: .userNickname)
+        UserDefaultsManager.set(to: joinDate, forKey: .joinDate)
+        UserDefaultsManager.set(to: profileImage, forKey: .profileImage)
+        UserDefaultsManager.set(to: false, forKey: .isFirst)
+    }
+    
+    // TODO: 리팩토링
+    @objc
+    func dismissView() {
+        dismiss(animated: true)
+    }
+    
     @objc
     func imageViewTapped() {
         let vc = ProfileImageSettingViewController()
@@ -73,19 +91,18 @@ final class ProfileSettingViewController: UIViewController {
     
     @objc
     func completeButtonTapped() {
-        let joinDate = Date().timeIntervalSince1970
-        let profileImage = mainView.profileImage
+        saveUserInformation()
         
-        UserDefaultsManager.set(to: nickname, forKey: .userNickname)
-        UserDefaultsManager.set(to: joinDate, forKey: .joinDate)
-        UserDefaultsManager.set(to: profileImage, forKey: .profileImage)
-        UserDefaultsManager.set(to: false, forKey: .isFirst)
-        
-        // TODO: extension + enum
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let window = windowScene.windows.first else { return }
-        
-        window.rootViewController = TabBarViewController()
-        window.makeKeyAndVisible()
+        switch mode {
+        case .onboarding:
+            // TODO: extension + enum
+            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let window = windowScene.windows.first else { return }
+            
+            window.rootViewController = TabBarViewController()
+            window.makeKeyAndVisible()
+        case .edit:
+            dismiss(animated: true)
+        }
     }
 }
 

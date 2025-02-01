@@ -53,6 +53,7 @@ final class MainViewController: UIViewController {
         navigationItem.title = "MovieBox"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
         
+        // TODO: Noti로 구성?
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileInformViewTapped))
         mainView.profileSection.addGestureRecognizer(tapGesture)
         mainView.profileSection.isUserInteractionEnabled = true
@@ -73,12 +74,13 @@ final class MainViewController: UIViewController {
     
     @objc
     func profileInformViewTapped() {
-        print(#function)
         let currentNickname = UserDefaultsManager.get(forKey: .userNickname) as? String ?? "사용자"
         let vc = ProfileSettingViewController()
         vc.mode = .edit(currentNickname: currentNickname)
         
-        navigationController?.pushViewController(vc, animated: true)
+        let nav = UINavigationController(rootViewController: vc)
+        
+        present(nav, animated: true)
     }
     
     @objc

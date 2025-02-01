@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SnapKit
 
-class ProfileImageSettingView: BaseView {
+final class ProfileImageSettingView: BaseView {
     
     var profileImage: Int = 0
     

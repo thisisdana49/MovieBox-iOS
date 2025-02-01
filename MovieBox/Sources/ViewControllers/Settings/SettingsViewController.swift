@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
+final class SettingsViewController: UIViewController {
 
     let mainView = SettingsView()
     let list: [String] = ["자주 묻는 질문", "1:1 문의", "알림 설정", "탈퇴하기"]
@@ -22,11 +22,27 @@ class SettingsViewController: UIViewController {
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
         
+        // TODO: Noti로 구성?
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileInformViewTapped))
+        mainView.profileSection.addGestureRecognizer(tapGesture)
+        mainView.profileSection.isUserInteractionEnabled = true
+        
         navigationItem.title = "설정"
     }
     
     override func viewWillAppear(_ animated: Bool) {
         mainView.profileSection.updateUserInfo()
+    }
+    
+    @objc
+    func profileInformViewTapped() {
+        let currentNickname = UserDefaultsManager.get(forKey: .userNickname) as? String ?? "사용자"
+        let vc = ProfileSettingViewController()
+        vc.mode = .edit(currentNickname: currentNickname)
+        
+        let nav = UINavigationController(rootViewController: vc)
+        
+        present(nav, animated: true)
     }
 
 }
