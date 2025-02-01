@@ -20,36 +20,54 @@ final class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NetworkManager.shared.fetchData(apiRequest: .trendingMovies, requestType: MovieListResponse.self) { value in
-            self.todaysMovies = value.results
-            self.mainView.todaysMovieSection.collectionView.reloadData()
-        }
+        setupView()
+        setupNotifications()
+        fetchTrendingMovies()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateRecentKeywords()
+        mainView.profileSection.updateUserInfo()
+    }
+    
+    private func fetchTrendingMovies() {
+        NetworkManager.shared.fetchData(
+            apiRequest: .trendingMovies,
+            requestType: MovieListResponse.self,
+            successHandler: { [weak self] value in
+                self?.todaysMovies = value.results
+                self?.mainView.todaysMovieSection.collectionView.reloadData()
+            },
+            failureHandler: { error in
+                print("네트워크 오류", error.localizedDescription)
+            }
+        )
+    }
+    
+    private func setupNotifications() {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(reloadCollectionView),
             name: NSNotification.Name("ReloadLikedButtons"),
             object: nil
         )
-        configureView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    private func updateRecentKeywords() {
         recentKeywords = UserDefaultsManager.getSearchKeywords()
         mainView.recentKeywordsView.configureData(keywords: recentKeywords)
         mainView.recentKeywordsView.keywordButtons.forEach { button in
             button.addTarget(self, action: #selector(keywordButtonTapped), for: .touchUpInside)
         }
-        
-        mainView.profileSection.updateUserInfo()
     }
     
-    @objc
-    private func reloadCollectionView() {
-        mainView.todaysMovieSection.collectionView.reloadData()
-        mainView.profileSection.updateUserInfo()
+    private func setupView() {
+        configureNavigationBar()
+        configureView()
     }
     
-    func configureView() {
+    private func configureView() {
         navigationItem.title = "MovieBox"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
         
@@ -65,12 +83,38 @@ final class MainViewController: UIViewController {
         mainView.todaysMovieSection.collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.id)
     }
     
+    
+    private func configureNavigationBar() {
+        navigationItem.title = "MovieBox"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "magnifyingglass"),
+            style: .plain,
+            target: self,
+            action: #selector(searchButtonTapped)
+        )
+    }
+    
+    @objc
+    private func reloadCollectionView() {
+        mainView.todaysMovieSection.collectionView.reloadData()
+        mainView.profileSection.updateUserInfo()
+    }
+    
     @objc
     func searchButtonTapped(_ sender: UIBarButtonItem) {
         let vc = SearchViewController()
         vc.passDelegate = self
         vc.isFromMainView = true
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc
+    func clearAllKeywords() {
+        recentKeywords.removeAll()
+        
+        UserDefaultsManager.clearSearchKeywords()
+        
+        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
     }
     
     @objc
@@ -91,15 +135,6 @@ final class MainViewController: UIViewController {
         let vc = SearchViewController()
         vc.searchWord = sender.name
         navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    @objc
-    func clearAllKeywords() {
-        recentKeywords.removeAll()
-        
-        UserDefaultsManager.clearSearchKeywords()
-        
-        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
     }
     
 }

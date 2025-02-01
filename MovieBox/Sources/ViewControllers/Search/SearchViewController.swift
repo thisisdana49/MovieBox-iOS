@@ -13,12 +13,12 @@ final class SearchViewController: UIViewController {
     var isFromMainView: Bool = false
 
     let mainView = SearchView()
-    
     var movies: [Movie] = []
+    
     var searchWord: String = "" {
         didSet {
             page = 1
-            callRequest()
+            fetchMovies()
         }
     }
     private var page = 1 {
@@ -37,8 +37,8 @@ final class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureView()
-        callRequest()
+        setupView()
+        fetchMovies()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,7 +53,19 @@ final class SearchViewController: UIViewController {
         }
     }
     
-    fileprivate func callRequest() {
+    private func setupView() {
+        navigationItem.title = "영화 검색"
+        
+        mainView.tableView.delegate = self
+        mainView.tableView.dataSource = self
+        mainView.tableView.prefetchDataSource = self
+        mainView.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.id)
+        
+        mainView.searchTextField.delegate = self
+        mainView.searchTextField.text = searchWord
+    }
+    
+    private func fetchMovies() {
         NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: searchWord, page: page), requestType: MovieListResponse.self) { value in
             if self.page == 1 {
                 if value.totalResults == 0 {
@@ -65,25 +77,20 @@ final class SearchViewController: UIViewController {
             } else {
                 self.movies.append(contentsOf: value.results)
             }
-            self.mainView.tableView.reloadData()
             
-            if self.page == 1 {
-                self.mainView.tableView.scrollsToTop = true
+            DispatchQueue.main.async {
+                self.mainView.tableView.reloadData()
+                
+                if self.page == 1 {
+                    self.mainView.tableView.setContentOffset(.zero, animated: true)
+                }
             }
+        }
+        failureHandler: { error in
+            print("네트워크 오류", error.localizedDescription)
         }
     }
 
-    func configureView() {
-        navigationItem.title = "영화 검색"
-        
-        mainView.tableView.delegate = self
-        mainView.tableView.dataSource = self
-        mainView.tableView.prefetchDataSource = self
-        mainView.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.id)
-        
-        mainView.searchTextField.delegate = self
-        mainView.searchTextField.text = searchWord
-    }
 }
 
 
@@ -147,7 +154,7 @@ extension SearchViewController: UITableViewDataSourcePrefetching {
         for indexPath in indexPaths {
             if (movies.count - 2) == indexPath.row && !isEnd {
                 page += 1
-                callRequest()
+                fetchMovies()
             }
         }
     }

@@ -8,7 +8,7 @@
 import UIKit
 
 final class SearchDetailViewController: UIViewController {
-
+    
     let mainView = SearchDetailView()
     var movie: Movie?
     var likeButton = CustomLikeButton()
@@ -22,44 +22,49 @@ final class SearchDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureCollectionView()
+        setupView()
+        fetchMovieData()
+    }
+    
+    // TODO: Movie Detail Model 만들기
+    private func fetchMovieData() {
+        guard let movie = movie else { return }
+        let group = DispatchGroup()
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(toggleSynopsisHeight),
-            name: NSNotification.Name("ToggleSynopsisHeight"),
-            object: nil
-        )
-        
-        // TODO: Movie Detail Model 만들기
-        // TODO: DispatchGroup으로 만들기
-        NetworkManager.shared.fetchData(apiRequest: .movieCredits(id: String(movie!.id)), requestType: MovieCredit.self) { value in
-            self.movieCredit = value
-            self.mainView.castSection.reloadData()
+        group.enter()
+        NetworkManager.shared.fetchData(apiRequest: .movieCredits(id: "\(movie.id)"), requestType: MovieCredit.self) { [weak self] value in
+            self?.movieCredit = value
+            group.leave()
+        } failureHandler: { error in
+            print("네트워크 오류", error.localizedDescription)
+            group.leave()
         }
-        NetworkManager.shared.fetchData(apiRequest: .movieImages(id: String(movie!.id)), requestType: MovieImage.self) { value in
-            self.movieImage = value
-            self.mainView.posterSection.reloadData()
-            self.mainView.backdropSection.reloadData()
+        
+        group.enter()
+        NetworkManager.shared.fetchData(apiRequest: .movieImages(id: "\(movie.id)"), requestType: MovieImage.self) { [weak self] value in
+            self?.movieImage = value
+            group.leave()
+        } failureHandler: { error in
+            print("네트워크 오류", error.localizedDescription)
+            group.leave()
+        }
+        
+        group.notify(queue: .main) { [weak self] in
+            self?.mainView.castSection.reloadData()
+            self?.mainView.posterSection.reloadData()
+            self?.mainView.backdropSection.reloadData()
             
-            DispatchQueue.main.async {
-                let backdropCount = min(5, max(0, value.backdrops.count))
-                self.mainView.pageControl.numberOfPages = backdropCount
-                self.mainView.pageControl.isHidden = (backdropCount == 0)
+            if let backdropCount = self?.movieImage?.backdrops.prefix(5).count {
+                self?.mainView.pageControl.numberOfPages = backdropCount
+                self?.mainView.pageControl.isHidden = (backdropCount == 0)
             }
         }
-        
-        mainView.configureData(movie: movie)
-        likeButton.setMovieID(movie!.id)
-        
-        navigationItem.title = movie?.title
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: likeButton)
     }
     
     @objc
     private func toggleSynopsisHeight(_ notification: Notification) {
         guard let newHeight = notification.object as? CGFloat else { return }
-
+        
         UIView.animate(withDuration: 0.3) {
             self.mainView.synopsisView.snp.updateConstraints { make in
                 make.height.equalTo(newHeight)
@@ -69,7 +74,25 @@ final class SearchDetailViewController: UIViewController {
         }
     }
     
-    func configureCollectionView() {
+    private func setupView() {
+        guard let movie = movie else { return }
+        
+        navigationItem.title = movie.title
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: likeButton)
+        likeButton.setMovieID(movie.id)
+        
+        mainView.configureData(movie: movie)
+        configureCollectionView()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(toggleSynopsisHeight),
+            name: NSNotification.Name("ToggleSynopsisHeight"),
+            object: nil
+        )
+    }
+    
+    private func configureCollectionView() {
         mainView.backdropSection.delegate = self
         mainView.backdropSection.dataSource = self
         mainView.backdropSection.tag = 0
@@ -121,7 +144,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         if collectionView.tag == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackdropCollectionViewCell.id, for: indexPath) as! BackdropCollectionViewCell
             let backdrops = movieImage?.backdrops.prefix(5)
