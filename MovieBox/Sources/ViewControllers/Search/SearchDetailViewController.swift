@@ -146,7 +146,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if collectionView.tag == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackdropCollectionViewCell.id, for: indexPath) as! BackdropCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackdropCollectionViewCell.id, for: indexPath) as? BackdropCollectionViewCell else { return UICollectionViewCell() }
             let backdrops = movieImage?.backdrops.prefix(5)
             if backdrops?.isEmpty ?? true {
                 cell.configureData(imagePath: nil)
@@ -159,7 +159,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         }
         
         else if collectionView.tag == 1 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCollectionViewCell.id, for: indexPath) as! CastCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCollectionViewCell.id, for: indexPath) as? CastCollectionViewCell else { return UICollectionViewCell() }
             let cast = movieCredit?.cast[indexPath.item]
             cell.configureData(cast: cast)
             print(self, #function)
@@ -167,7 +167,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         }
         
         else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.id, for: indexPath) as! PosterCollectionViewCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.id, for: indexPath) as? PosterCollectionViewCell else { return UICollectionViewCell() }
             let poster = movieImage?.posters[indexPath.item]
             cell.configureData(imagePath: poster?.filePath)
             
