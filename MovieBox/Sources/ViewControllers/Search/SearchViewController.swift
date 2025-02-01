@@ -10,6 +10,8 @@ import UIKit
 final class SearchViewController: UIViewController {
 
     var passDelegate: SearchKeywordPassDelegate?
+    var isFromMainView: Bool = false
+
     let mainView = SearchView()
     
     var movies: [Movie] = []
@@ -37,6 +39,18 @@ final class SearchViewController: UIViewController {
         
         configureView()
         callRequest()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        mainView.tableView.reloadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isFromMainView {
+            mainView.searchTextField.becomeFirstResponder()
+        }
     }
     
     fileprivate func callRequest() {

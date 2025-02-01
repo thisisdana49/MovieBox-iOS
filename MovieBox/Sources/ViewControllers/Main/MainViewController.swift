@@ -46,7 +46,7 @@ final class MainViewController: UIViewController {
     @objc
     private func reloadCollectionView() {
         mainView.todaysMovieSection.collectionView.reloadData()
-        //        print(#function)
+        mainView.profileSection.updateUserInfo()
     }
     
     func configureView() {
@@ -69,6 +69,7 @@ final class MainViewController: UIViewController {
     func searchButtonTapped(_ sender: UIBarButtonItem) {
         let vc = SearchViewController()
         vc.passDelegate = self
+        vc.isFromMainView = true
         navigationController?.pushViewController(vc, animated: true)
     }
     
