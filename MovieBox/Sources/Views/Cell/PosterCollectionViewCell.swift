@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Kingfisher
+import SnapKit
 
 final class PosterCollectionViewCell: UICollectionViewCell {
         
@@ -19,10 +21,8 @@ final class PosterCollectionViewCell: UICollectionViewCell {
         }
     }
     // TODO: Prefetch Data
-    func configureData(imagePath: String?) {
-        if let imagePath, let posterURL = URL(string: "https://image.tmdb.org/t/p/original/\(imagePath)") {
-            posterImageView.kf.setImage(with: posterURL)
-        }
+    func configureData(with image: MovieImageDetail?) {
+        posterImageView.kf.setImage(with: image?.imageURL, placeholder: UIImage(named: "no_poster"))
     }
     
     required init?(coder: NSCoder) {

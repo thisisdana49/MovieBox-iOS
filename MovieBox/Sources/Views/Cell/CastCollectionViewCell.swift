@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Kingfisher
+import SnapKit
 
 final class CastCollectionViewCell: UICollectionViewCell {
         
@@ -16,10 +18,29 @@ final class CastCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        configureHierarchy()
+        configureLayout()
+        configureView()
+    }
+    // TODO: Prefetch Data
+    func configureData(cast: MovieCast?) {
+        castImageView.kf.setImage(with: cast?.profileURL, placeholder: UIImage(named: "no_profile"))
+
+        nameLabel.text = cast?.name
+        engNameLabel.text = cast?.originalName
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configureHierarchy() {
         contentView.addSubview(castImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(engNameLabel)
-        
+    }
+    
+    private func configureLayout() {
         castImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
@@ -35,7 +56,9 @@ final class CastCollectionViewCell: UICollectionViewCell {
             make.leading.equalTo(castImageView.snp.trailing).offset(8)
             make.trailing.lessThanOrEqualToSuperview().offset(-8)
         }
-        
+    }
+    
+    private func configureView() {
         castImageView.contentMode = .scaleAspectFill
         castImageView.layer.cornerRadius = 27.5
         castImageView.clipsToBounds = true
@@ -49,26 +72,6 @@ final class CastCollectionViewCell: UICollectionViewCell {
         engNameLabel.textColor = .gray2
         engNameLabel.lineBreakMode = .byTruncatingTail
         engNameLabel.numberOfLines = 1
-    }
-    // TODO: Prefetch Data
-    // TODO: Label 말줄임표
-    // TODO: 메서드 구분
-    func configureData(cast: MovieCast?) {
-        if let cast {
-            if let profilePath = cast.profilePath {
-                let castURL = URL(string: "https://image.tmdb.org/t/p/w500/\(profilePath)")
-                castImageView.kf.setImage(with: castURL)
-            } else {
-                castImageView.image = .noProfile
-            }
-        }
-        
-        nameLabel.text = cast?.name
-        engNameLabel.text = cast?.originalName
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
 }

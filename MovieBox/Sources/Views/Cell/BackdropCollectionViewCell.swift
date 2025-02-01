@@ -7,11 +7,12 @@
 
 import UIKit
 import Kingfisher
+import SnapKit
 
 final class BackdropCollectionViewCell: UICollectionViewCell {
         
     let backdropImageView = UIImageView()
-    // TODO: Indicators 추가
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -22,13 +23,8 @@ final class BackdropCollectionViewCell: UICollectionViewCell {
         backdropImageView.contentMode = .scaleAspectFill
     }
     
-    func configureData(imagePath: String?) {
-        if let imagePath {
-            let backdropURL = URL(string: "https://image.tmdb.org/t/p/original/\(imagePath)")
-            backdropImageView.kf.setImage(with: backdropURL)
-        } else {
-            backdropImageView.image = .noBackdrop
-        }
+    func configureData(with image: MovieImageDetail?) {
+        backdropImageView.kf.setImage(with: image?.imageURL, placeholder: UIImage(named: "no_backdrop"))
     }
 
     required init?(coder: NSCoder) {

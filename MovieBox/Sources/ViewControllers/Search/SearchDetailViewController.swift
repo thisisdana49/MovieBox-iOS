@@ -149,10 +149,10 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackdropCollectionViewCell.id, for: indexPath) as? BackdropCollectionViewCell else { return UICollectionViewCell() }
             let backdrops = movieImage?.backdrops.prefix(5)
             if backdrops?.isEmpty ?? true {
-                cell.configureData(imagePath: nil)
+                cell.configureData(with: nil)
             } else {
                 let backdrop = backdrops?[indexPath.item]
-                cell.configureData(imagePath: backdrop?.filePath)
+                cell.configureData(with: backdrop)
             }
             
             return cell
@@ -169,7 +169,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.id, for: indexPath) as? PosterCollectionViewCell else { return UICollectionViewCell() }
             let poster = movieImage?.posters[indexPath.item]
-            cell.configureData(imagePath: poster?.filePath)
+            cell.configureData(with: poster)
             
             return cell
         }

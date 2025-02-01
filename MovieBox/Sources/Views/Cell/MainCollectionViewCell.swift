@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import SnapKit
 
 final class MainCollectionViewCell: UICollectionViewCell {
     
@@ -24,11 +25,8 @@ final class MainCollectionViewCell: UICollectionViewCell {
     }
     
     func configureData(_ movie: Movie) {
-        if let posterPath = movie.posterPath, let posterURL = movie.posterURL {
-            posterImageView.kf.setImage(with: posterURL)
-        } else {
-            posterImageView.image = .noPoster
-        }
+        posterImageView.kf.setImage(with: movie.posterURL, placeholder: UIImage(named: "no_poster"))
+
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
         

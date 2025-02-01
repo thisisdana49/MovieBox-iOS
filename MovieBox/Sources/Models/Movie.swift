@@ -73,6 +73,16 @@ struct MovieCast: Codable {
     }
 }
 
+extension MovieCast {
+    var profileURL: URL? {
+        if let profilePath {
+            return URL(string: "https://image.tmdb.org/t/p/w500/\(profilePath)")
+        } else {
+            return nil
+        }
+    }
+}
+
 struct MovieImage: Codable {
     let backdrops: [MovieImageDetail]
     let posters: [MovieImageDetail]
@@ -88,5 +98,11 @@ struct MovieImageDetail: Codable {
         case height, width
         case aspectRatio = "aspect_ratio"
         case filePath = "file_path"
+    }
+}
+
+extension MovieImageDetail {
+    var imageURL: URL? {
+        return URL(string: "https://image.tmdb.org/t/p/original/\(filePath)")
     }
 }

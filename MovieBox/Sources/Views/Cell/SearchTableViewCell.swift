@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Kingfisher
+import SnapKit
 
 final class SearchTableViewCell: UITableViewCell {
     
@@ -38,11 +40,7 @@ final class SearchTableViewCell: UITableViewCell {
     }
     
     func configureData(_ movie: Movie) {
-        if let posterPath = movie.posterPath, let posterURL = movie.posterURL {
-            posterImageView.kf.setImage(with: posterURL)
-        } else {
-            posterImageView.image = .noPoster
-        }
+        posterImageView.kf.setImage(with: movie.posterURL, placeholder: UIImage(named: "no_poster"))
         
         let genres = GenreMapper.genreNames(from: movie.genreIds).prefix(2)
         genres.forEach { genre in
