@@ -73,7 +73,6 @@ final class MainCollectionViewCell: UICollectionViewCell {
     }
     
     func configureView() {
-        posterImageView.image = UIImage(systemName: "star.fill")
         posterImageView.layer.cornerRadius = 10
         posterImageView.clipsToBounds = true
         
@@ -83,8 +82,6 @@ final class MainCollectionViewCell: UICollectionViewCell {
         overviewLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         overviewLabel.textColor = .gray1
         overviewLabel.numberOfLines = 2
-        
-        backgroundColor = .gray3
     }
     
     required init?(coder: NSCoder) {

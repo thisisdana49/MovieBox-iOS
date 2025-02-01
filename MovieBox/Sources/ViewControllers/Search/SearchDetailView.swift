@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchDetailView: BaseView {
+final class SearchDetailView: BaseView {
     
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -106,7 +106,7 @@ class SearchDetailView: BaseView {
             make.height.equalTo(20)
         }
         posterSection.snp.makeConstraints { make in
-            make.top.equalTo(posterHeaderLabel.snp.bottom)
+            make.top.equalTo(posterHeaderLabel.snp.bottom).offset(4)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(150)
         }

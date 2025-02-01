@@ -46,7 +46,7 @@ class SearchTableViewCell: UITableViewCell {
             posterImageView.image = .noPoster
         }
         
-        let genres = GenreMapper.genreNames(from: movie.genreIds)
+        let genres = GenreMapper.genreNames(from: movie.genreIds).prefix(2)
         genres.forEach { genre in
             let label = CustomLabel()
             label.text = genre

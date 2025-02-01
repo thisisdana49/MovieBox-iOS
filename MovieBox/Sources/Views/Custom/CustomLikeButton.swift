@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomLikeButton: UIButton {
+final class CustomLikeButton: UIButton {
     
     private var movieID: Int = 0
     
@@ -61,8 +61,7 @@ class CustomLikeButton: UIButton {
             config?.image = unselectedImage
             isSelected = false
         }
-        print(#function, isSelected)
-
+        
         configuration = config
     }
     

@@ -38,7 +38,18 @@ final class MovieSynopsisView: BaseView {
     }
     
     func configureData(content: String) {
+        if content.isEmpty {
+            contentLabel.text = "\n줄거리 정보가 없는 영화입니다."
+            contentLabel.textAlignment = .center
+            moreButton.isHidden = true
+            return
+        }
+        
         contentLabel.text = content
+        layoutIfNeeded()
+        
+        let totalLines = contentLabel.calculateNumberOfLines()
+        moreButton.isHidden = totalLines <= 3
     }
     
     func calculateContentHeight(expanded: Bool) -> CGFloat {

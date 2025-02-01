@@ -28,7 +28,7 @@ class MainMovieSectionView: BaseView {
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(headerLabel.snp.bottom).offset(12)
+            make.top.equalTo(headerLabel.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(safeAreaInsets)
         }

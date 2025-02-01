@@ -41,6 +41,12 @@ final class SearchDetailViewController: UIViewController {
             self.movieImage = value
             self.mainView.posterSection.reloadData()
             self.mainView.backdropSection.reloadData()
+            
+            DispatchQueue.main.async {
+                let backdropCount = min(5, max(0, value.backdrops.count))
+                self.mainView.pageControl.numberOfPages = backdropCount
+                self.mainView.pageControl.isHidden = (backdropCount == 0)
+            }
         }
         
         mainView.configureData(movie: movie)
@@ -91,12 +97,25 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView.tag == 0 {
-            return min(movieImage?.backdrops.count ?? 0, 5)
+            let backdropCount = movieImage?.backdrops.count ?? 0
+            return min(5, max(1, backdropCount))
         }
         else if collectionView.tag == 1 {
+            if movieCredit?.cast.count == 0 {
+                collectionView.setEmptyMessage("출연진 정보가 없는 영화입니다.")
+            }
+            else {
+                collectionView.restore()
+            }
             return movieCredit?.cast.count ?? 0
         }
         else {
+            if movieImage?.posters.count == 0 {
+                collectionView.setEmptyMessage("포스터 이미지가 없는 영화입니다.")
+            }
+            else {
+                collectionView.restore()
+            }
             return movieImage?.posters.count ?? 0
         }
     }
@@ -106,8 +125,12 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         if collectionView.tag == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackdropCollectionViewCell.id, for: indexPath) as! BackdropCollectionViewCell
             let backdrops = movieImage?.backdrops.prefix(5)
-            let backdrop = backdrops?[indexPath.item]
-            cell.configureData(imagePath: backdrop?.filePath)
+            if backdrops?.isEmpty ?? true {
+                cell.configureData(imagePath: nil)
+            } else {
+                let backdrop = backdrops?[indexPath.item]
+                cell.configureData(imagePath: backdrop?.filePath)
+            }
             
             return cell
         }
@@ -161,7 +184,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = spacing
-        layout.itemSize = CGSizeMake(cellWidth / 3.5, cellWidth / 3.5 * 1.2)
+        layout.itemSize = CGSizeMake(cellWidth / 3.5, cellWidth / 3.5 * 1.3)
         layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
         return layout
     }
@@ -175,7 +198,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = spacing
+        layout.minimumLineSpacing = 24
         layout.minimumInteritemSpacing = 0
         layout.itemSize = CGSizeMake(cellWidth / 2.2, 50)
         layout.sectionInset = UIEdgeInsets(top: spacing, left: sectionInset, bottom: spacing, right: sectionInset)

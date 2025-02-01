@@ -25,8 +25,11 @@ class BackdropCollectionViewCell: UICollectionViewCell {
     }
     
     func configureData(imagePath: String?) {
-        if let imagePath, let backdropURL = URL(string: "https://image.tmdb.org/t/p/original/\(imagePath)") {
+        if let imagePath {
+            let backdropURL = URL(string: "https://image.tmdb.org/t/p/original/\(imagePath)")
             backdropImageView.kf.setImage(with: backdropURL)
+        } else {
+            backdropImageView.image = .noBackdrop
         }
     }
 

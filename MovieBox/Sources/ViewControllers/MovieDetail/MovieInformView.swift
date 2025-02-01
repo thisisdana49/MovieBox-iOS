@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SnapKit
 
-class MovieInformView: BaseView {
+final class MovieInformView: BaseView {
 
     let calendarSymbol = NSTextAttachment()
     let starSymbol = NSTextAttachment()
@@ -20,15 +21,17 @@ class MovieInformView: BaseView {
     
     func configureData(releaseDate dateStr: String?, voteAverage: Double?, genres: [Int]?) {
         guard let dateStr, let voteAverage else { return }
+        // TODO: 따로 Model로 구성
         let releaseDate = Date.fromString(dateStr, format: "yyyy-MM-dd")
         let formattedDate = releaseDate?.toFormattedString() ?? ""
-        let genres = GenreMapper.genreNames(from: genres ?? []).prefix(2)
-        
+        var genres = GenreMapper.genreNames(from: genres ?? []).prefix(2)
+        if genres.count == 0 { genres.append("정보 없음") }
+        let roundedAverage = round(voteAverage * 10) / 10
         let fullString = NSMutableAttributedString(string: "")
         fullString.append(NSAttributedString(attachment: calendarSymbol))
         fullString.append(NSAttributedString(string: "  \(formattedDate)  |  "))
         fullString.append(NSAttributedString(attachment: starSymbol))
-        fullString.append(NSAttributedString(string: "  \(voteAverage)  |  "))
+        fullString.append(NSAttributedString(string: "  \(roundedAverage)  |  "))
         fullString.append(NSAttributedString(attachment: filmSymbol))
         fullString.append(NSAttributedString(string: "  \(genres.joined(separator: ", "))"))
         
