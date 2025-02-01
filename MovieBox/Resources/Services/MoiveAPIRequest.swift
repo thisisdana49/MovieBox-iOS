@@ -15,7 +15,7 @@ enum MoiveAPIRequest {
     case movieCredits(id: String)
     
     var baseURL: String {
-        return "https://api.themoviedb.org"
+        return Config.baseURL
     }
     
     var endPoint: String {

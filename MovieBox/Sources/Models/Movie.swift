@@ -12,7 +12,7 @@ struct MovieListResponse: Codable {
     let results: [Movie]
     let totalPages: Int
     let totalResults: Int
-
+    
     enum CodingKeys: String, CodingKey {
         case page
         case results
@@ -35,7 +35,7 @@ struct Movie: Codable {
     let voteCount: Int
     let adult: Bool
     let originalLanguage: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id, title, overview, popularity
         case originalTitle = "original_title"
@@ -53,7 +53,7 @@ struct Movie: Codable {
 extension Movie {
     var posterURL: URL? {
         guard let path = posterPath else { return nil }
-        return URL(string: "https://image.tmdb.org/t/p/w500/\(path)")
+        return URL(string: "\(Config.imageBaseURL)w500/\(path)")
     }
 }
 
@@ -65,7 +65,7 @@ struct MovieCast: Codable {
     let name: String
     let originalName: String
     let profilePath: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case name
         case originalName = "original_name"
@@ -76,7 +76,7 @@ struct MovieCast: Codable {
 extension MovieCast {
     var profileURL: URL? {
         if let profilePath {
-            return URL(string: "https://image.tmdb.org/t/p/w500/\(profilePath)")
+            return URL(string: "\(Config.imageBaseURL)w500/\(profilePath)")
         } else {
             return nil
         }
@@ -103,6 +103,6 @@ struct MovieImageDetail: Codable {
 
 extension MovieImageDetail {
     var imageURL: URL? {
-        return URL(string: "https://image.tmdb.org/t/p/original/\(filePath)")
+        return URL(string: "\(Config.imageBaseURL)original/\(filePath)")
     }
 }

@@ -17,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         configureGlobalNavigationBarAppearance()
         configureGlobalTabBarAppearance()
         
+//        UITextField.appearance().keyboardAppearance = .dark
+//        UITextView.appearance().keyboardAppearance = .dark
+        
         return true
     }
     
