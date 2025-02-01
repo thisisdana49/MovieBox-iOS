@@ -82,7 +82,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                         UserDefaultsManager.clearAll()
                         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let window = windowScene.windows.first else { return }
                         
-                        window.rootViewController = OnboardingViewController()
+                        window.rootViewController = UINavigationController(rootViewController: OnboardingViewController())
                         window.makeKeyAndVisible()
                     }),
                     UIAlertAction(title: "취소", style: .cancel)
