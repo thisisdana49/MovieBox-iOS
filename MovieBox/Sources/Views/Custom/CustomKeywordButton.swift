@@ -6,45 +6,76 @@
 //
 
 import UIKit
+import SnapKit
 
-final class CustomKeywordButton: UIButton {
+final class CustomKeywordButton: UIView {
     
     var name: String = ""
     
+    private let titleLabel = UILabel()
     private let xmarkButton = UIButton(type: .system)
+    
     var onKeywordTapped: (() -> Void)?
     var onXmarkTapped: (() -> Void)?
     
     init(title: String) {
         super.init(frame: .zero)
         name = title
-        
-        var config = UIButton.Configuration.filled()
-        
-        var titleAttr = AttributedString.init(title)
-        titleAttr.font = UIFont.systemFont(ofSize: 15, weight: .medium)
-        config.attributedTitle = titleAttr
-        
-        config.baseBackgroundColor = .baseWhite
-        config.baseForegroundColor = .baseBlack
-        
-        config.image = UIImage(systemName: "xmark")
-        config.imagePadding = 10
-        config.imagePlacement = .trailing
-        
-        config.buttonSize = .small
-        config.cornerStyle = .capsule
-        
-        self.configuration = config
+        setupView()
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private func setupView() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(keywordTapped))
+        addGestureRecognizer(tapGesture)
+        isUserInteractionEnabled = true
+        
+        backgroundColor = .baseWhite
+        layer.cornerRadius = 17.5
+        layer.masksToBounds = true
+        
+        titleLabel.text = name
+        titleLabel.font = .systemFont(ofSize: 15, weight: .semibold)
+        titleLabel.textColor = .baseBlack
+        
+        xmarkButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        xmarkButton.tintColor = .baseBlack
+        xmarkButton.addTarget(self, action: #selector(xmarkTapped), for: .touchUpInside)
+        
+        addSubview(titleLabel)
+        addSubview(xmarkButton)
+        
+        
+        snp.makeConstraints { make in
+            make.height.equalTo(35)
+            make.width.greaterThanOrEqualTo(60)
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(12)
+            make.centerY.equalToSuperview()
+        }
+        
+        xmarkButton.snp.makeConstraints { make in
+            make.leading.equalTo(titleLabel.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().inset(10)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(18)
+        }
+
+    }
+    
+    @objc
+    private func keywordTapped() {
+        onKeywordTapped?()
+    }
+    
+    @objc
+    private func xmarkTapped() {
+        onXmarkTapped?()
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }

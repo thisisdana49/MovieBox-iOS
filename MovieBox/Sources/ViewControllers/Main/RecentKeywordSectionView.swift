@@ -39,12 +39,6 @@ final class RecentKeywordSectionView: BaseView {
                 stackView.addArrangedSubview(button)
                 keywordButtons.append(button)
             }
-            
-            stackView.arrangedSubviews.forEach { button in
-                button.snp.makeConstraints { make in
-                    make.height.equalTo(stackView.snp.height).inset(8)
-                }
-            }
         }
     }
     

@@ -57,8 +57,15 @@ final class MainViewController: UIViewController {
     private func updateRecentKeywords() {
         recentKeywords = UserDefaultsManager.getSearchKeywords()
         mainView.recentKeywordsView.configureData(keywords: recentKeywords)
+
         mainView.recentKeywordsView.keywordButtons.forEach { button in
-            button.addTarget(self, action: #selector(keywordButtonTapped), for: .touchUpInside)
+            // TODO: weak self 다시 한번 복습
+            button.onKeywordTapped = { [weak self] in
+                self?.keywordButtonTapped(button)
+            }
+            button.onXmarkTapped = { [weak self] in
+                self?.removeKeyword(button)
+            }
         }
     }
     
@@ -109,15 +116,6 @@ final class MainViewController: UIViewController {
     }
     
     @objc
-    func clearAllKeywords() {
-        recentKeywords.removeAll()
-        
-        UserDefaultsManager.clearSearchKeywords()
-        
-        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
-    }
-    
-    @objc
     func profileInformViewTapped() {
         let currentNickname = UserDefaultsManager.get(forKey: .userNickname) as? String ?? "사용자"
         let vc = ProfileSettingViewController()
@@ -130,11 +128,29 @@ final class MainViewController: UIViewController {
     }
     
     @objc
+    func clearAllKeywords() {
+        recentKeywords.removeAll()
+        
+        UserDefaultsManager.clearSearchKeywords()
+        
+        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
+    }
+    
+    @objc
     func keywordButtonTapped(_ sender: CustomKeywordButton) {
         // TODO: 선택 시 순서 변경 되도록 구현
+        print(#function)
         let vc = SearchViewController()
         vc.searchWord = sender.name
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func removeKeyword(_ button: CustomKeywordButton) {
+        guard let index = recentKeywords.firstIndex(of: button.name) else { return }
+        recentKeywords.remove(at: index)
+        
+        UserDefaultsManager.removeSearchKeyword(button.name)
+        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
     }
     
 }

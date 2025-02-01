@@ -49,6 +49,7 @@ final class MovieSynopsisView: BaseView {
         layoutIfNeeded()
         
         let totalLines = contentLabel.calculateNumberOfLines()
+        print(#function, totalLines)
         moreButton.isHidden = totalLines <= 3
     }
     
