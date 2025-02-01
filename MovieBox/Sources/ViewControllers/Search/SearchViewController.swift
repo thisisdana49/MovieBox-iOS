@@ -9,7 +9,7 @@ import UIKit
 
 final class SearchViewController: UIViewController {
 
-    var passDelegate: PassDataDelegate?
+    var passDelegate: SearchKeywordPassDelegate?
     let mainView = SearchView()
     
     var movies: [Movie] = []

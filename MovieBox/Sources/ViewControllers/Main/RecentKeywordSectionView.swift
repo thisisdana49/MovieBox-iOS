@@ -106,12 +106,9 @@ class RecentKeywordSectionView: BaseView {
         
         emptyLabel.text = "최근 검색어 내역이 없습니다."
         emptyLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        emptyLabel.textColor = .gray1
+        emptyLabel.textColor = .gray2
         emptyLabel.textAlignment = .center
         emptyLabel.isHidden = true
-        
-        scrollView.backgroundColor = .yellow
-        stackView.backgroundColor = .systemPink
     }
     
 }

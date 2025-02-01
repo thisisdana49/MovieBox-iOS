@@ -11,7 +11,6 @@ final class MainViewController: UIViewController {
     
     let mainView = MainView()
     var recentKeywords: [String] = []
-//    var recentKeywords: [String] = ["해리포터", "이제훈", "슬램덩크더퍼스트", "위니더푸"]
     var todaysMovies: [Movie] = []
     
     override func loadView() {
@@ -47,12 +46,16 @@ final class MainViewController: UIViewController {
     @objc
     private func reloadCollectionView() {
         mainView.todaysMovieSection.collectionView.reloadData()
-//        print(#function)
+        //        print(#function)
     }
     
     func configureView() {
         navigationItem.title = "MovieBox"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileInformViewTapped))
+        mainView.profileSection.addGestureRecognizer(tapGesture)
+        mainView.profileSection.isUserInteractionEnabled = true
         
         mainView.recentKeywordsView.deleteButton.addTarget(self, action: #selector(clearAllKeywords), for: .touchUpInside)
         
@@ -69,6 +72,16 @@ final class MainViewController: UIViewController {
     }
     
     @objc
+    func profileInformViewTapped() {
+        print(#function)
+        let currentNickname = UserDefaultsManager.get(forKey: .userNickname) as? String ?? "사용자"
+        let vc = ProfileSettingViewController()
+        vc.mode = .edit(currentNickname: currentNickname)
+        
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc
     func keywordButtonTapped(_ sender: CustomKeywordButton) {
         // TODO: 선택 시 순서 변경 되도록 구현
         let vc = SearchViewController()
@@ -81,7 +94,7 @@ final class MainViewController: UIViewController {
         recentKeywords.removeAll()
         
         UserDefaultsManager.clearSearchKeywords()
-
+        
         mainView.recentKeywordsView.configureData(keywords: recentKeywords)
     }
     
@@ -116,7 +129,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
 
 // MARK: Pass Delegate
-extension MainViewController: PassDataDelegate {
+extension MainViewController: SearchKeywordPassDelegate {
     
     func didSearchKeyword(_ keyword: String) {
         if !recentKeywords.contains(keyword) {

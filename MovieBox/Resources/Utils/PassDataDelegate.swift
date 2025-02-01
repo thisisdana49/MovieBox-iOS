@@ -7,6 +7,10 @@
 
 import Foundation
 
-protocol PassDataDelegate: AnyObject {
+protocol SearchKeywordPassDelegate: AnyObject {
     func didSearchKeyword(_ keyword: String)
+}
+
+protocol ProfileImagePassDelegate: AnyObject {
+    func didSelectProfileImage(_ imageIndex: Int)
 }

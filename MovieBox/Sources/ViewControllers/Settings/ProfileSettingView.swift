@@ -17,11 +17,23 @@ final class ProfileSettingView: BaseView {
     let guideLabel = UILabel()
     let completeButton = CustomButton(title: "완료", style: .bordered)
     
+    init(mode: ProfileSettingMode) {
+        super.init(frame: .zero)
+        
+        switch mode {
+        case .onboarding:
+            profileImage = Int.random(in: 0...11)
+        case .edit(let currentNickname):
+            profileImage = UserDefaultsManager.get(forKey: .profileImage) as? Int ?? 0
+            textField.text = currentNickname
+            completeButton.isHidden = true
+        }
+        
+        imageView.image = UIImage(named: "profile_\(profileImage)")
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        profileImage = Int.random(in: 0...11)
-        imageView.image = UIImage(named: "profile_\(profileImage)")
     }
     
     override func layoutSubviews() {
@@ -32,7 +44,7 @@ final class ProfileSettingView: BaseView {
         bottomBorder.backgroundColor = UIColor.white.cgColor
         textField.layer.addSublayer(bottomBorder)
     }
-
+    
     
     override func configureHierarchy() {
         addSubview(imageView)

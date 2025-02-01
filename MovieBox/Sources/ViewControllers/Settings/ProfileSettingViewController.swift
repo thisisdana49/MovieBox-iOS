@@ -7,18 +7,28 @@
 
 import UIKit
 
+enum ProfileSettingMode {
+    case onboarding
+    case edit(currentNickname: String)
+}
+
 final class ProfileSettingViewController: UIViewController {
     
+    var mode: ProfileSettingMode = .onboarding
+    
     var nickname: String = ""
-    let mainView = ProfileSettingView()
+    // TODO: VC가 가진 mainView 모두 private
+    private var mainView: ProfileSettingView!
     
     override func loadView() {
+        mainView = ProfileSettingView(mode: mode)
         view = mainView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupUI()
         configureViewController()
     }
     
@@ -27,7 +37,23 @@ final class ProfileSettingViewController: UIViewController {
         mainView.textField.becomeFirstResponder()
     }
     
-    fileprivate func configureViewController() {
+    private func setupUI() {
+        switch mode {
+        case .onboarding:
+            navigationItem.title = "프로필 설정"
+        case .edit(let currentNickname):
+            navigationItem.title = "프로필 수정"
+            mainView.textField.text = currentNickname
+            setupNavigationBarButton()
+        }
+    }
+    
+    private func setupNavigationBarButton() {
+        let completeButton = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(completeButtonTapped))
+        navigationItem.rightBarButtonItem = completeButton
+    }
+    
+    private func configureViewController() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
         mainView.imageView.addGestureRecognizer(tapGesture)
         
@@ -40,6 +66,7 @@ final class ProfileSettingViewController: UIViewController {
     @objc
     func imageViewTapped() {
         let vc = ProfileImageSettingViewController()
+        vc.passDelegate = self
         vc.profileImage = mainView.profileImage
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -102,6 +129,16 @@ extension ProfileSettingViewController: UITextFieldDelegate {
         mainView.guideLabel.text = "사용할 수 있는 닉네임이에요"
         mainView.guideLabel.textColor = .mainBlue
         mainView.completeButton.isEnabled = true
+    }
+    
+}
+
+// MARK: Pass Delegate
+extension ProfileSettingViewController: ProfileImagePassDelegate {
+    
+    func didSelectProfileImage(_ imageIndex: Int) {
+        mainView.profileImage = imageIndex
+        mainView.imageView.image = UIImage(named: "profile_\(imageIndex)")
     }
     
 }

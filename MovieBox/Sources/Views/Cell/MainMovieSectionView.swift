@@ -41,8 +41,7 @@ class MainMovieSectionView: BaseView {
         headerLabel.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
         headerLabel.textColor = .baseWhite
         
-//        collectionView.backgroundColor = .baseBlack
-        collectionView.backgroundColor = .systemOrange
+        collectionView.backgroundColor = .baseBlack
     }
     
     static private func layout() -> UICollectionViewLayout {

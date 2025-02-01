@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileSectionView: BaseView {
+final class ProfileSectionView: BaseView {
 
     let profileInformView = UIView()
     let profileImageView = UIImageView()
@@ -38,7 +38,7 @@ class ProfileSectionView: BaseView {
         profileImageView.image = UIImage(named: "profile_\(profileImageIndex)")
         nicknameLabel.text = nickname
         registerDateLabel.text = "\(formattedDate) 가입"
-        likeBoxButton.updateButtonTitle("\(likedMovies.count - 1)개의 무비박스 보관중")
+        likeBoxButton.updateButtonTitle("\(likedMovies.count)개의 무비박스 보관중")
     }
     
     override func configureHierarchy() {
@@ -88,7 +88,7 @@ class ProfileSectionView: BaseView {
         
         profileImageView.image = UIImage(named: "profile_\(Int.random(in: 0...11))")
         profileImageView.contentMode = .scaleAspectFit
-        profileImageView.backgroundColor = .gray3
+        profileImageView.backgroundColor = .baseBlack
         profileImageView.layer.cornerRadius = 24
         profileImageView.layer.borderColor = UIColor.mainBlue.cgColor
         profileImageView.layer.borderWidth = 2.5

@@ -9,6 +9,8 @@ import UIKit
 
 final class ProfileImageSettingViewController: UIViewController {
     
+    var passDelegate: ProfileImagePassDelegate?
+    
     var profileImage: Int = 0
     let profileImages: [UIImage] = [.profile0, .profile1, .profile2, .profile3, .profile4, .profile5, .profile6, .profile7, .profile8, .profile9, .profile10, .profile11 ]
     let mainView = ProfileImageSettingView()
@@ -26,6 +28,10 @@ final class ProfileImageSettingViewController: UIViewController {
         selectedIndexPath = IndexPath(item: profileImage, section: 0)
         mainView.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .top)
         mainView.imageView.image = profileImages[selectedIndexPath?.row ?? 0]
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        passDelegate?.didSelectProfileImage(selectedIndexPath?.row ?? 0)
     }
     
     fileprivate func configureViewController() {
