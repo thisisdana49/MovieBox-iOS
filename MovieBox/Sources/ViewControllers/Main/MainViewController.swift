@@ -148,9 +148,12 @@ final class MainViewController: UIViewController {
     private func removeKeyword(_ button: CustomKeywordButton) {
         guard let index = recentKeywords.firstIndex(of: button.name) else { return }
         recentKeywords.remove(at: index)
-        
         UserDefaultsManager.removeSearchKeyword(button.name)
+        print(#function)
+        print(recentKeywords)
+        print(UserDefaultsManager.getSearchKeywords())
         mainView.recentKeywordsView.configureData(keywords: recentKeywords)
+        updateRecentKeywords()
     }
     
 }
