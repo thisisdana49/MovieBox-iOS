@@ -77,6 +77,7 @@ final class MainViewController: UIViewController {
     func profileInformViewTapped() {
         let currentNickname = UserDefaultsManager.get(forKey: .userNickname) as? String ?? "사용자"
         let vc = ProfileSettingViewController()
+        vc.passDelegate = self
         vc.mode = .edit(currentNickname: currentNickname)
         
         let nav = UINavigationController(rootViewController: vc)
@@ -132,7 +133,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
 
 // MARK: Pass Delegate
-extension MainViewController: SearchKeywordPassDelegate {
+extension MainViewController: SearchKeywordPassDelegate,ProfileSettingPassDelegate {
     
     func didSearchKeyword(_ keyword: String) {
         if !recentKeywords.contains(keyword) {
@@ -141,6 +142,10 @@ extension MainViewController: SearchKeywordPassDelegate {
         print("최근 검색어: \(recentKeywords)")
         UserDefaultsManager.saveSearchKeyword(keyword)
         mainView.recentKeywordsView.configureData(keywords: recentKeywords)
+    }
+    
+    func didUpdateProfile() {
+        mainView.profileSection.updateUserInfo()
     }
     
 }

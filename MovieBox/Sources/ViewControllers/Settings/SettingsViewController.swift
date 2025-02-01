@@ -38,6 +38,7 @@ final class SettingsViewController: UIViewController {
     func profileInformViewTapped() {
         let currentNickname = UserDefaultsManager.get(forKey: .userNickname) as? String ?? "사용자"
         let vc = ProfileSettingViewController()
+        vc.passDelegate = self
         vc.mode = .edit(currentNickname: currentNickname)
         
         let nav = UINavigationController(rootViewController: vc)
@@ -89,4 +90,14 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             )
         }
     }
+}
+
+
+// MARK: Pass Delegate
+extension SettingsViewController: ProfileSettingPassDelegate {
+    
+    func didUpdateProfile() {
+        mainView.profileSection.updateUserInfo()
+    }
+    
 }

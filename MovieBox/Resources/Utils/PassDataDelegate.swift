@@ -14,3 +14,7 @@ protocol SearchKeywordPassDelegate: AnyObject {
 protocol ProfileImagePassDelegate: AnyObject {
     func didSelectProfileImage(_ imageIndex: Int)
 }
+
+protocol ProfileSettingPassDelegate: AnyObject {
+    func didUpdateProfile()
+}

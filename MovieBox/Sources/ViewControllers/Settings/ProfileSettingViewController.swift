@@ -14,6 +14,7 @@ enum ProfileSettingMode {
 
 final class ProfileSettingViewController: UIViewController {
     
+    var passDelegate: ProfileSettingPassDelegate?
     var mode: ProfileSettingMode = .onboarding
     
     var nickname: String = ""
@@ -35,6 +36,11 @@ final class ProfileSettingViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         mainView.textField.becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        passDelegate?.didUpdateProfile()
     }
     
     private func setupUI() {

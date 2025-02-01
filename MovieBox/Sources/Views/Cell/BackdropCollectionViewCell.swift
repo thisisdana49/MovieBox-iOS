@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class BackdropCollectionViewCell: UICollectionViewCell {
+final class BackdropCollectionViewCell: UICollectionViewCell {
     
     static let id = "BackdropCollectionViewCell"
     
