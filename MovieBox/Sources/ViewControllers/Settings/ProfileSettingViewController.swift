@@ -19,6 +19,7 @@ final class ProfileSettingViewController: UIViewController {
     
     var nickname: String = ""
     // TODO: VC가 가진 mainView 모두 private
+    var viewModel = ProfileSettingViewModel()
     private var mainView: ProfileSettingView!
     
     override func loadView() {
@@ -31,11 +32,21 @@ final class ProfileSettingViewController: UIViewController {
         
         setupUI()
         configureViewController()
+        bindData()
+    }
+    
+    private func bindData() {
+        viewModel.inputViewDidLoad.value = ()
+        
+        viewModel.outputProfileImageIndex.bind { [weak self] value in
+            print("outputProfileImageIndex", value)
+            self?.mainView.profileImage = value
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        mainView.textField.becomeFirstResponder()
+        configureActions()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -71,26 +82,18 @@ final class ProfileSettingViewController: UIViewController {
             view.delegate = self
             view.dataSource = self
             view.register(MBTICollectionViewCell.self, forCellWithReuseIdentifier: MBTICollectionViewCell.id)
-            print(#function, view)
         }
         
-        mainView.completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
         navigationItem.title = "PROFILE SETTING"
         navigationController?.navigationBar.topItem?.title = ""
         navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: UIColor.baseBlack]
         navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .baseWhite
         navigationController?.navigationBar.tintColor = .baseBlack
-        
     }
     
-    private func saveUserInformation() {
-        let joinDate = Date().timeIntervalSince1970
-        let profileImage = mainView.profileImage
-        
-        UserDefaultsManager.set(to: nickname, forKey: .userNickname)
-        UserDefaultsManager.set(to: joinDate, forKey: .joinDate)
-        UserDefaultsManager.set(to: profileImage, forKey: .profileImage)
-        UserDefaultsManager.set(to: false, forKey: .isFirst)
+    private func configureActions() {
+        mainView.textField.becomeFirstResponder()
+        mainView.completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
     }
     
     // TODO: 리팩토링
@@ -109,7 +112,7 @@ final class ProfileSettingViewController: UIViewController {
     
     @objc
     func completeButtonTapped() {
-        saveUserInformation()
+        viewModel.inputCompleteButtonTapped.value = ()
         
         switch mode {
         case .onboarding:
@@ -211,8 +214,10 @@ extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MBTICollectionViewCell.id, for: indexPath) as! MBTICollectionViewCell
-        
-        print(collectionView.indexPathsForSelectedItems)
+        print(#function)
+        mainView.mbtiSection.collectionViews.forEach { view in
+            print(view.indexPathsForSelectedItems)
+        }
     }
     
 }

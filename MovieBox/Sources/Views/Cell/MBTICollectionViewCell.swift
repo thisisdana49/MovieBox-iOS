@@ -26,7 +26,7 @@ final class MBTICollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        print(#function)
+//        print(#function)
         setupCell()
     }
     
@@ -45,7 +45,7 @@ final class MBTICollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        print(#function)
+        
         contentView.backgroundColor = .baseWhite
         contentLabel.textColor = .gray2
         contentView.layer.borderWidth = 1
@@ -54,12 +54,12 @@ final class MBTICollectionViewCell: UICollectionViewCell {
     
     // TODO: Prefetch Data
     func configureData(with text: String) {
-        print(#function)
+//        print(#function)
         contentLabel.text = text
     }
     
     func updateUI() {
-        print(#function, isSelected)
+//        print(#function, isSelected)
         if isSelected {
             contentView.backgroundColor = .pointBlue
             contentLabel.textColor = .baseWhite

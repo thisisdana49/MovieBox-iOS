@@ -10,7 +10,12 @@ import SnapKit
 
 final class ProfileSettingView: BaseView {
     
-    var profileImage: Int = 0
+    var profileImage: Int = 0 {
+        didSet {
+            print("profile image did set")
+            imageView.image = UIImage(named: "profile_\(profileImage)")
+        }
+    }
     
     let imageView = UIImageView()
     let cameraImageView = UIImageView()
@@ -22,15 +27,15 @@ final class ProfileSettingView: BaseView {
     init(mode: ProfileSettingMode) {
         super.init(frame: .zero)
         
-        switch mode {
-        case .onboarding:
-            profileImage = Int.random(in: 0...11)
-        case .edit(let currentNickname):
-            profileImage = UserDefaultsManager.get(forKey: .profileImage) as? Int ?? 0
-            textField.text = currentNickname
-            completeButton.isHidden = true
-        }
-        
+//        switch mode {
+//        case .onboarding:
+//            profileImage = Int.random(in: 0...11)
+//        case .edit(let currentNickname):
+//            profileImage = UserDefaultsManager.get(forKey: .profileImage) as? Int ?? 0
+//            textField.text = currentNickname
+//            completeButton.isHidden = true
+//        }
+        print(#function, profileImage)
         imageView.image = UIImage(named: "profile_\(profileImage)")
     }
     
