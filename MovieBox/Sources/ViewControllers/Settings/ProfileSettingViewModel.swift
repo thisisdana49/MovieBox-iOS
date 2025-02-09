@@ -56,9 +56,7 @@ class ProfileSettingViewModel {
         let specialCharacterPattern = "[@#$%]"
         let numberPattern = "\\d"
         
-//        mainView.guideLabel.isHidden = false
         if nickname.count < 2 || nickname.count >= 10 {
-//            mainView.completeButton.isEnabled = false
             outputGuideLabel.value = "2글자 이상 10글자 미만으로 설정해주세요."
             outputNicknameValid.value = false
             outputRegisterAvailable.value = false
@@ -66,14 +64,12 @@ class ProfileSettingViewModel {
         }
         
         if nickname.range(of: specialCharacterPattern, options: .regularExpression) != nil {
-//            mainView.completeButton.isEnabled = false
             outputGuideLabel.value = "닉네임에 @, #, $, % 는 포함할 수 없어요."
             outputNicknameValid.value = false
             return
         }
         
         if nickname.range(of: numberPattern, options: .regularExpression) != nil {
-//            mainView.completeButton.isEnabled = false
             outputGuideLabel.value = "닉네임에 숫자는 포함할 수 없어요."
             outputNicknameValid.value = false
             return
@@ -81,7 +77,6 @@ class ProfileSettingViewModel {
         
         outputGuideLabel.value = "사용할 수 있는 닉네임이에요"
         outputNicknameValid.value = true
-//        mainView.completeButton.isEnabled = true
     }
     
     private func configureMBTI(tag collectionViewTag: Int, indexPath: IndexPath) {
@@ -114,7 +109,7 @@ class ProfileSettingViewModel {
             }
         }
         outputMBTIValid.value = !outputMBTIArray.value.contains(nil)
-        print(outputMBTIArray.value, outputMBTIValid.value)
+//        print(outputMBTIArray.value, outputMBTIValid.value)
     }
     
     private func saveUserInformation() {

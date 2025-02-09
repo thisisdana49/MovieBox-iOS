@@ -39,7 +39,6 @@ final class ProfileSettingViewController: UIViewController {
         viewModel.inputViewDidLoad.value = ()
         
         viewModel.outputProfileImageIndex.bind { [weak self] value in
-            print("outputProfileImageIndex", value)
             self?.mainView.profileImage = value
         }
         
@@ -53,8 +52,6 @@ final class ProfileSettingViewController: UIViewController {
         }
         
         viewModel.outputRegisterAvailable.bind { [weak self] value in
-            print(#function, "register valid test ", value)
-            print(self?.mainView.completeButton.isEnabled)
             self?.mainView.completeButton.isEnabled = value
         }
     }
@@ -97,6 +94,7 @@ final class ProfileSettingViewController: UIViewController {
             view.delegate = self
             view.dataSource = self
             view.register(MBTICollectionViewCell.self, forCellWithReuseIdentifier: MBTICollectionViewCell.id)
+            view.allowsMultipleSelection = true
         }
         
         navigationItem.title = "PROFILE SETTING"
@@ -110,8 +108,7 @@ final class ProfileSettingViewController: UIViewController {
         mainView.textField.becomeFirstResponder()
         mainView.completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
     }
-    
-    // TODO: 리팩토링
+
     @objc
     func dismissView() {
         dismiss(animated: true)
@@ -121,7 +118,8 @@ final class ProfileSettingViewController: UIViewController {
     func imageViewTapped() {
         let vc = ProfileImageSettingViewController()
         vc.passDelegate = self
-        vc.profileImage = mainView.profileImage
+//        vc.profileImage = mainView.profileImage
+        vc.viewModel = viewModel
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -148,8 +146,6 @@ extension ProfileSettingViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         viewModel.inputNicknameText.value = textField.text
         viewModel.inputRegisterAvailable.value = ()
-//        nickname = inputText
-//        validateNickname(nickname)
     }
     
 }
@@ -196,14 +192,27 @@ extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: cell을 다시 가져오면 안되는 이유?
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MBTICollectionViewCell.id, for: indexPath) as! MBTICollectionViewCell
-        viewModel.inputMBTICellTapped.value = (collectionView.tag, indexPath)
-        viewModel.inputRegisterAvailable.value = ()
+        if let selectedItems = collectionView.indexPathsForSelectedItems {
+            for selectedIndexPath in selectedItems where selectedIndexPath != indexPath {
+                collectionView.deselectItem(at: selectedIndexPath, animated: true)
+                if let cell = collectionView.cellForItem(at: selectedIndexPath) as? MBTICollectionViewCell {
+                    cell.updateUI()
+                }
+            }
+        }
+        
         mainView.mbtiSection.collectionViews.forEach { view in
             // TODO: view.indexPathsForSelectedItems 활용한 로직으로 변경해보기!
             print(view.indexPathsForSelectedItems)
         }
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? MBTICollectionViewCell {
+            cell.updateUI()
+        }
+        
+        
+        viewModel.inputMBTICellTapped.value = (collectionView.tag, indexPath)
+        viewModel.inputRegisterAvailable.value = ()
     }
     
 }

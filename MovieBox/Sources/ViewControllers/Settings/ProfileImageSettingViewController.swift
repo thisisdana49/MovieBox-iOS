@@ -9,6 +9,7 @@ import UIKit
 
 final class ProfileImageSettingViewController: UIViewController {
     
+    var viewModel: ProfileSettingViewModel?
     var passDelegate: ProfileImagePassDelegate?
     
     var profileImage: Int = 0

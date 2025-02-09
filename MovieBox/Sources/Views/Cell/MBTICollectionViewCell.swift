@@ -58,7 +58,7 @@ final class MBTICollectionViewCell: UICollectionViewCell {
         contentLabel.text = text
     }
     
-    private func updateUI() {
+    func updateUI() {
 //        print(#function, isSelected)
         if isSelected {
             contentView.backgroundColor = .pointBlue
