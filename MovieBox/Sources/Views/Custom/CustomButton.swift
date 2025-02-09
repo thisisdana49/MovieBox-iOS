@@ -14,12 +14,6 @@ final class CustomButton: UIButton {
         case filled
     }
     
-    override var isEnabled: Bool {
-        didSet {
-            updateUI()
-        }
-    }
-    
     var title: String = ""
 
     init(title: String, style: CustomButton.Styles) {
@@ -33,24 +27,15 @@ final class CustomButton: UIButton {
         configureFilledButton(title: title)
     }
     
-    private func updateUI() {
-        // TODO: 왜 Disabled 시 color가 변경되지 않는지?
-        if !isEnabled {
-            print("it is disabled")
-            configuration?.baseBackgroundColor = .baseGray
-        } else {
-            configuration?.baseBackgroundColor = .pointBlue
-        }
-    }
-    
     private func configureBorderedButton(title: String) {
         var config = UIButton.Configuration.filled()
         let handler: UIButton.ConfigurationUpdateHandler = { button in
             switch button.state {
             case .normal:
-                button.configuration?.baseBackgroundColor = .pointBlue
+                button.configuration?.background.backgroundColor = .pointBlue
             case .disabled:
-                button.configuration?.baseBackgroundColor = .baseGray
+                button.configuration?.attributedTitle = AttributedString(NSAttributedString(string: title, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .bold), .foregroundColor: UIColor.white]))
+                button.configuration?.background.backgroundColor = .baseGray
             default:
                 button.configuration?.baseBackgroundColor = .pointBlue
             }
@@ -61,7 +46,6 @@ final class CustomButton: UIButton {
         config.attributedTitle = titleAttr
         
         config.baseForegroundColor = .baseWhite
-        config.baseBackgroundColor = isEnabled ? .pointBlue : .baseGray
         
         config.cornerStyle = .capsule
 //        config.background.strokeWidth = 2

@@ -15,9 +15,9 @@ enum ProfileSettingMode {
 final class ProfileSettingViewController: UIViewController {
     
     var passDelegate: ProfileSettingPassDelegate?
+    // TODO: mode 속성도 viewmodel로 옮기기
     var mode: ProfileSettingMode = .onboarding
     
-//    var nickname: String = ""
     // TODO: VC가 가진 mainView 모두 private
     var viewModel = ProfileSettingViewModel()
     private var mainView: ProfileSettingView!
