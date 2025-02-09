@@ -209,6 +209,12 @@ extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionVi
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MBTICollectionViewCell.id, for: indexPath) as! MBTICollectionViewCell
+        
+        print(collectionView.indexPathsForSelectedItems)
+    }
+    
 }
 
 // MARK: Pass Delegate
