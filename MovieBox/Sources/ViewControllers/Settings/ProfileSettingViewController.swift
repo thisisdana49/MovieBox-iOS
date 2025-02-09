@@ -17,7 +17,7 @@ final class ProfileSettingViewController: UIViewController {
     var passDelegate: ProfileSettingPassDelegate?
     var mode: ProfileSettingMode = .onboarding
     
-    var nickname: String = ""
+//    var nickname: String = ""
     // TODO: VC가 가진 mainView 모두 private
     var viewModel = ProfileSettingViewModel()
     private var mainView: ProfileSettingView!
@@ -52,8 +52,10 @@ final class ProfileSettingViewController: UIViewController {
             self?.mainView.guideLabel.textColor = value ? .pointBlue : .pointRed
         }
         
-        viewModel.outputRegisterAvailable.lazyBind { [weak self] _ in
-            print(#function, "register valid test ")
+        viewModel.outputRegisterAvailable.bind { [weak self] value in
+            print(#function, "register valid test ", value)
+            print(self?.mainView.completeButton.isEnabled)
+            self?.mainView.completeButton.isEnabled = value
         }
     }
     
@@ -145,7 +147,7 @@ extension ProfileSettingViewController: UITextFieldDelegate {
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
         viewModel.inputNicknameText.value = textField.text
-        
+        viewModel.inputRegisterAvailable.value = ()
 //        nickname = inputText
 //        validateNickname(nickname)
     }
@@ -196,8 +198,8 @@ extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: cell을 다시 가져오면 안되는 이유?
 //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MBTICollectionViewCell.id, for: indexPath) as! MBTICollectionViewCell
-        print(#function, collectionView.tag, indexPath)
         viewModel.inputMBTICellTapped.value = (collectionView.tag, indexPath)
+        viewModel.inputRegisterAvailable.value = ()
         mainView.mbtiSection.collectionViews.forEach { view in
             // TODO: view.indexPathsForSelectedItems 활용한 로직으로 변경해보기!
             print(view.indexPathsForSelectedItems)

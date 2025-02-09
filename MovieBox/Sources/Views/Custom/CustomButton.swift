@@ -14,6 +14,12 @@ final class CustomButton: UIButton {
         case filled
     }
     
+    override var isEnabled: Bool {
+        didSet {
+            updateUI()
+        }
+    }
+    
     var title: String = ""
 
     init(title: String, style: CustomButton.Styles) {
@@ -27,20 +33,41 @@ final class CustomButton: UIButton {
         configureFilledButton(title: title)
     }
     
+    private func updateUI() {
+        // TODO: 왜 Disabled 시 color가 변경되지 않는지?
+        if !isEnabled {
+            print("it is disabled")
+            configuration?.baseBackgroundColor = .baseGray
+        } else {
+            configuration?.baseBackgroundColor = .pointBlue
+        }
+    }
+    
     private func configureBorderedButton(title: String) {
         var config = UIButton.Configuration.filled()
-
+        let handler: UIButton.ConfigurationUpdateHandler = { button in
+            switch button.state {
+            case .normal:
+                button.configuration?.baseBackgroundColor = .pointBlue
+            case .disabled:
+                button.configuration?.baseBackgroundColor = .baseGray
+            default:
+                button.configuration?.baseBackgroundColor = .pointBlue
+            }
+        }
+        
         var titleAttr = AttributedString.init(title)
         titleAttr.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         config.attributedTitle = titleAttr
         
-        config.baseBackgroundColor = .baseGray
         config.baseForegroundColor = .baseWhite
+        config.baseBackgroundColor = isEnabled ? .pointBlue : .baseGray
         
         config.cornerStyle = .capsule
 //        config.background.strokeWidth = 2
 //        config.background.strokeColor = .mainBlue
         
+        configurationUpdateHandler = handler
         configuration = config
     }
     
@@ -62,6 +89,7 @@ final class CustomButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        configureBorderedButton(title: "")
     }
     
     @available(*, unavailable)

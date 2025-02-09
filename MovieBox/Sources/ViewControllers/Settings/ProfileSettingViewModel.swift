@@ -12,20 +12,14 @@ class ProfileSettingViewModel {
     let inputViewDidLoad: Observable<Void?> = Observable(nil)
     let inputNicknameText: Observable<String?> = Observable(nil)
     let inputMBTICellTapped: Observable<(Int, IndexPath)?> = Observable(nil)
+    let inputRegisterAvailable: Observable<Void?> = Observable(nil)
     let inputCompleteButtonTapped: Observable<Void?> = Observable(nil)
     
     let outputProfileImageIndex: Observable<Int> = Observable(0)
     let outputGuideLabel: Observable<String> = Observable("")
     let outputNicknameValid: Observable<Bool> = Observable(false)
     let outputMBTIValid: Observable<Bool> = Observable(false)
-    var outputRegisterAvailable: Observable<Bool> {
-        get {
-            print(#function, "register valid test ")
-            return Observable(
-                self.outputNicknameValid.value && self.outputMBTIValid.value
-            )
-        }
-    }
+    var outputRegisterAvailable: Observable<Bool> = Observable(false)
     
     var randomNum: Int = 0
     var outputMBTIArray: Observable<[String?]> = Observable([nil, nil, nil, nil])
@@ -34,7 +28,6 @@ class ProfileSettingViewModel {
         inputViewDidLoad.lazyBind { [weak self] _ in
             self?.randomNum = Int.random(in: 0...11)
             self?.outputProfileImageIndex.value = self?.randomNum ?? 0
-            print("inputViewDidLoad", self?.randomNum)
         }
         
         inputNicknameText.lazyBind { [weak self] value in
@@ -44,6 +37,12 @@ class ProfileSettingViewModel {
         inputMBTICellTapped.lazyBind { [weak self] value in
             let (tag, indexPath): (Int, IndexPath) = value ?? (0, IndexPath(item: 0, section: 0))
             self?.configureMBTI(tag: tag, indexPath: indexPath)
+        }
+        
+        inputRegisterAvailable.lazyBind { [weak self] value in
+//            self?.outputRegisterAvailable.value = (self?.outputNicknameValid.value)! && (self?.outputMBTIValid.value)!
+            guard let nicknameValid = self?.outputNicknameValid.value, let mbtiValid = self?.outputMBTIValid.value else { return }
+            self?.outputRegisterAvailable.value = nicknameValid && mbtiValid
         }
         
         inputCompleteButtonTapped.lazyBind { value in
@@ -82,7 +81,6 @@ class ProfileSettingViewModel {
         
         outputGuideLabel.value = "사용할 수 있는 닉네임이에요"
         outputNicknameValid.value = true
-//        mainView.guideLabel.textColor = .mainBlue
 //        mainView.completeButton.isEnabled = true
     }
     
