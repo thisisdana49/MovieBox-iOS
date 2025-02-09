@@ -15,11 +15,15 @@ class ProfileSettingViewModel {
     let inputRegisterAvailable: Observable<Void?> = Observable(nil)
     let inputCompleteButtonTapped: Observable<Void?> = Observable(nil)
     
+    let inputProfileImageSelected: Observable<IndexPath?> = Observable(nil)
+    
     let outputProfileImageIndex: Observable<Int> = Observable(0)
     let outputGuideLabel: Observable<String> = Observable("")
     let outputNicknameValid: Observable<Bool> = Observable(false)
     let outputMBTIValid: Observable<Bool> = Observable(false)
     var outputRegisterAvailable: Observable<Bool> = Observable(false)
+    
+    let outputSelectedProfileImage: Observable<Int> = Observable(0)
     
     var randomNum: Int = 0
     var outputMBTIArray: Observable<[String?]> = Observable([nil, nil, nil, nil])
@@ -40,7 +44,7 @@ class ProfileSettingViewModel {
         }
         
         inputRegisterAvailable.lazyBind { [weak self] value in
-//            self?.outputRegisterAvailable.value = (self?.outputNicknameValid.value)! && (self?.outputMBTIValid.value)!
+            //            self?.outputRegisterAvailable.value = (self?.outputNicknameValid.value)! && (self?.outputMBTIValid.value)!
             guard let nicknameValid = self?.outputNicknameValid.value, let mbtiValid = self?.outputMBTIValid.value else { return }
             self?.outputRegisterAvailable.value = nicknameValid && mbtiValid
         }
@@ -48,8 +52,15 @@ class ProfileSettingViewModel {
         inputCompleteButtonTapped.lazyBind { value in
             print(#function)
         }
+        
+        inputProfileImageSelected.lazyBind { [weak self] indexPath in
+            guard let indexPath = indexPath else { return }
+            print("inputProfileImageSelected", indexPath.item)
+            self?.outputProfileImageIndex.value = indexPath.item
+            self?.randomNum = indexPath.item
+        }
     }
-
+    
     private func validateNickname(_ nickname: String?) {
         guard let nickname = nickname else { return }
         print("start validate nickname", nickname)
@@ -109,7 +120,7 @@ class ProfileSettingViewModel {
             }
         }
         outputMBTIValid.value = !outputMBTIArray.value.contains(nil)
-//        print(outputMBTIArray.value, outputMBTIValid.value)
+        //        print(outputMBTIArray.value, outputMBTIValid.value)
     }
     
     private func saveUserInformation() {

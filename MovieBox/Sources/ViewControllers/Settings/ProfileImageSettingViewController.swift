@@ -9,10 +9,7 @@ import UIKit
 
 final class ProfileImageSettingViewController: UIViewController {
     
-    var viewModel: ProfileSettingViewModel?
-    var passDelegate: ProfileImagePassDelegate?
-    
-    var profileImage: Int = 0
+    var viewModel: ProfileSettingViewModel!
     let profileImages: [UIImage] = [.profile0, .profile1, .profile2, .profile3, .profile4, .profile5, .profile6, .profile7, .profile8, .profile9, .profile10, .profile11 ]
     let mainView = ProfileImageSettingView()
     
@@ -26,20 +23,22 @@ final class ProfileImageSettingViewController: UIViewController {
         super.viewDidLoad()
         configureViewController()
         
-        selectedIndexPath = IndexPath(item: profileImage, section: 0)
-        mainView.collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .top)
-        mainView.imageView.image = profileImages[selectedIndexPath?.row ?? 0]
+        bindData()
+        
+        let initialIndex = IndexPath(item: viewModel.outputProfileImageIndex.value, section: 0)
+        mainView.collectionView.selectItem(at: initialIndex, animated: false, scrollPosition: .top)
+        mainView.imageView.image = profileImages[initialIndex.item]
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        passDelegate?.didSelectProfileImage(selectedIndexPath?.row ?? 0)
+    private func bindData() {
+        viewModel.outputProfileImageIndex.bind { [weak self] index in
+            self?.mainView.imageView.image = self?.profileImages[index]
+        }
     }
     
     fileprivate func configureViewController() {
         navigationItem.title = "프로필 이미지 설정"
-        
-        mainView.imageView.image = UIImage(named: "profile_\(profileImage)")
-        
+                
         mainView.collectionView.delegate = self
         mainView.collectionView.dataSource = self
         mainView.collectionView.register(ProfileImageCollectionViewCell.self, forCellWithReuseIdentifier: ProfileImageCollectionViewCell.id)
@@ -57,27 +56,19 @@ extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollect
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileImageCollectionViewCell.id, for: indexPath) as? ProfileImageCollectionViewCell else { return UICollectionViewCell() }
         
         cell.profileImageView.image = profileImages[indexPath.item]
-        
-        if indexPath == selectedIndexPath {
-            cell.setSelected(true)
-        } else {
-            cell.setSelected(false)
-        }
+        cell.setSelected(indexPath.item == viewModel.outputProfileImageIndex.value)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let selectedIndexPath = selectedIndexPath {
-            let previousCell = collectionView.cellForItem(at: selectedIndexPath) as? ProfileImageCollectionViewCell
-            previousCell?.setSelected(false)
+        viewModel.inputProfileImageSelected.value = indexPath
+        
+        collectionView.visibleCells.forEach { cell in
+            guard let cell = cell as? ProfileImageCollectionViewCell,
+                  let cellIndexPath = collectionView.indexPath(for: cell) else { return }
+            cell.setSelected(cellIndexPath == indexPath)
         }
-        
-        let currentCell = collectionView.cellForItem(at: indexPath) as? ProfileImageCollectionViewCell
-        currentCell?.setSelected(true)
-        
-        selectedIndexPath = indexPath
-        mainView.imageView.image = profileImages[indexPath.row]
     }
     
 }

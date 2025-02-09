@@ -10,12 +10,12 @@ import SnapKit
 
 final class ProfileSettingView: BaseView {
     
-    var profileImage: Int = 0 {
-        didSet {
-            print("profile image did set")
-            imageView.image = UIImage(named: "profile_\(profileImage)")
-        }
-    }
+//    var profileImage: Int = 4 {
+//        didSet {
+//            print("profile image did set", profileImage)
+//            imageView.image = UIImage(named: "profile_\(profileImage)")
+//        }
+//    }
     
     let imageView = UIImageView()
     let cameraImageView = UIImageView()
@@ -35,8 +35,8 @@ final class ProfileSettingView: BaseView {
 //            textField.text = currentNickname
 //            completeButton.isHidden = true
 //        }
-        print(#function, profileImage)
-        imageView.image = UIImage(named: "profile_\(profileImage)")
+//        print(#function, profileImage)
+//        imageView.image = UIImage(named: "profile_\(profileImage)")
     }
     
     override init(frame: CGRect) {

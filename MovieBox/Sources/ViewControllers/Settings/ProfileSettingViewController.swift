@@ -29,17 +29,27 @@ final class ProfileSettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(#function)
         
         setupUI()
         configureViewController()
         bindData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.outputProfileImageIndex.bind { [weak self] value in
+            print("outputProfileImageIndex", value)
+            self?.mainView.imageView.image = UIImage(named: "profile_\(value)")
+        }
+    }
+    
     private func bindData() {
         viewModel.inputViewDidLoad.value = ()
         
         viewModel.outputProfileImageIndex.bind { [weak self] value in
-            self?.mainView.profileImage = value
+            print("outputProfileImageIndex", value)
+            self?.mainView.imageView.image = UIImage(named: "profile_\(value)")
         }
         
         viewModel.outputGuideLabel.bind { [weak self] value in
@@ -117,7 +127,6 @@ final class ProfileSettingViewController: UIViewController {
     @objc
     func imageViewTapped() {
         let vc = ProfileImageSettingViewController()
-        vc.passDelegate = self
 //        vc.profileImage = mainView.profileImage
         vc.viewModel = viewModel
         navigationController?.pushViewController(vc, animated: true)
@@ -221,7 +230,6 @@ extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionVi
 extension ProfileSettingViewController: ProfileImagePassDelegate {
     
     func didSelectProfileImage(_ imageIndex: Int) {
-        mainView.profileImage = imageIndex
         mainView.imageView.image = UIImage(named: "profile_\(imageIndex)")
     }
     
