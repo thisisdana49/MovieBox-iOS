@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class ProfileSettingView: BaseView {
     
@@ -15,6 +16,7 @@ final class ProfileSettingView: BaseView {
     let cameraImageView = UIImageView()
     let textField = CustomTextField()
     let guideLabel = UILabel()
+    let mbtiSection = ProfileMBTIView()
     let completeButton = CustomButton(title: "완료", style: .bordered)
     
     init(mode: ProfileSettingMode) {
@@ -41,7 +43,7 @@ final class ProfileSettingView: BaseView {
         
         let bottomBorder = CALayer()
         bottomBorder.frame = CGRect(x: 0, y: textField.frame.height + 12, width: textField.frame.width, height: 1)
-        bottomBorder.backgroundColor = UIColor.white.cgColor
+        bottomBorder.backgroundColor = UIColor.gray1.cgColor
         textField.layer.addSublayer(bottomBorder)
     }
     
@@ -51,6 +53,7 @@ final class ProfileSettingView: BaseView {
         addSubview(cameraImageView)
         addSubview(textField)
         addSubview(guideLabel)
+        addSubview(mbtiSection)
         addSubview(completeButton)
     }
     
@@ -76,32 +79,44 @@ final class ProfileSettingView: BaseView {
             make.leading.equalTo(safeAreaLayoutGuide).offset(16)
         }
         
+        mbtiSection.snp.makeConstraints { make in
+            make.top.equalTo(textField.snp.bottom).offset(48)
+            make.horizontalEdges.equalToSuperview().inset(16)
+            make.height.equalTo(140)
+        }
+        
         completeButton.snp.makeConstraints { make in
-            make.top.equalTo(textField.snp.bottom).offset(56)
+            make.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             make.horizontalEdges.equalToSuperview().inset(20)
             make.height.equalTo(44)
         }
     }
     
     override func configureView() {
-        super.configureView()
-        print(#function, profileImage)
+        backgroundColor = .baseWhite
         
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 60
-        imageView.layer.borderColor = UIColor.mainBlue.cgColor
+        imageView.layer.borderColor = UIColor.pointBlue.cgColor
         imageView.layer.borderWidth = 3
         imageView.clipsToBounds = true
         imageView.isUserInteractionEnabled = true
         
         cameraImageView.image = UIImage(systemName: "camera.fill")?.withTintColor(.baseWhite).withRenderingMode(.alwaysOriginal)
         cameraImageView.contentMode = .center
-        cameraImageView.backgroundColor = .mainBlue
+        cameraImageView.backgroundColor = .pointBlue
         cameraImageView.layer.cornerRadius = 20
         cameraImageView.clipsToBounds = true
         
-        textField.textColor = .baseWhite
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.gray2,
+            .font: UIFont.systemFont(ofSize: 14, weight: .medium)
+        ]
+        textField.attributedPlaceholder = NSAttributedString(string: "닉네임을 입력해주세요 :)", attributes: attributes)
+        textField.textColor = .baseBlack
         textField.borderStyle = .none
+        textField.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        
         
         // TODO: extension으로 빼기
         guideLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)

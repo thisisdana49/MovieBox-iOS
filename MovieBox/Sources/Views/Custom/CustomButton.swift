@@ -28,18 +28,18 @@ final class CustomButton: UIButton {
     }
     
     private func configureBorderedButton(title: String) {
-        var config = UIButton.Configuration.borderedTinted()
+        var config = UIButton.Configuration.filled()
 
         var titleAttr = AttributedString.init(title)
         titleAttr.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         config.attributedTitle = titleAttr
         
-        config.baseBackgroundColor = .baseBlack
-        config.baseForegroundColor = .mainBlue
+        config.baseBackgroundColor = .baseGray
+        config.baseForegroundColor = .baseWhite
         
         config.cornerStyle = .capsule
-        config.background.strokeWidth = 2
-        config.background.strokeColor = .mainBlue
+//        config.background.strokeWidth = 2
+//        config.background.strokeColor = .mainBlue
         
         configuration = config
     }

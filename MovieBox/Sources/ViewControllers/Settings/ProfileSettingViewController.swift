@@ -67,8 +67,20 @@ final class ProfileSettingViewController: UIViewController {
         
         mainView.textField.delegate = self
         
+        mainView.mbtiSection.collectionViews.forEach { view in
+            view.delegate = self
+            view.dataSource = self
+            view.register(MBTICollectionViewCell.self, forCellWithReuseIdentifier: MBTICollectionViewCell.id)
+            print(#function, view)
+        }
+        
         mainView.completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
-        navigationItem.title = "프로필 설정"
+        navigationItem.title = "PROFILE SETTING"
+        navigationController?.navigationBar.topItem?.title = ""
+        navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: UIColor.baseBlack]
+        navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .baseWhite
+        navigationController?.navigationBar.tintColor = .baseBlack
+        
     }
     
     private func saveUserInformation() {
@@ -152,6 +164,49 @@ extension ProfileSettingViewController: UITextFieldDelegate {
         mainView.guideLabel.text = "사용할 수 있는 닉네임이에요"
         mainView.guideLabel.textColor = .mainBlue
         mainView.completeButton.isEnabled = true
+    }
+    
+}
+
+extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MBTICollectionViewCell.id, for: indexPath) as! MBTICollectionViewCell
+        
+        if collectionView.tag == 0 {
+            if indexPath.item == 0 {
+                cell.configureData(with: "E")
+            } else {
+                cell.configureData(with: "I")
+            }
+        }
+        if collectionView.tag == 1 {
+            if indexPath.item == 0 {
+                cell.configureData(with: "S")
+            } else {
+                cell.configureData(with: "N")
+            }
+        }
+        if collectionView.tag == 2 {
+            if indexPath.item == 0 {
+                cell.configureData(with: "T")
+            } else {
+                cell.configureData(with: "F")
+            }
+        }
+        if collectionView.tag == 3 {
+            if indexPath.item == 0 {
+                cell.configureData(with: "J")
+            } else {
+                cell.configureData(with: "P")
+            }
+        }
+        
+        return cell
     }
     
 }
