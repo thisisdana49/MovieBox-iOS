@@ -51,6 +51,10 @@ final class ProfileSettingViewController: UIViewController {
         viewModel.outputNicknameValid.lazyBind { [weak self] value in
             self?.mainView.guideLabel.textColor = value ? .pointBlue : .pointRed
         }
+        
+        viewModel.outputRegisterAvailable.lazyBind { [weak self] _ in
+            print(#function, "register valid test ")
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -190,9 +194,12 @@ extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // TODO: cell을 다시 가져오면 안되는 이유?
 //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MBTICollectionViewCell.id, for: indexPath) as! MBTICollectionViewCell
-        print(#function)
+        print(#function, collectionView.tag, indexPath)
+        viewModel.inputMBTICellTapped.value = (collectionView.tag, indexPath)
         mainView.mbtiSection.collectionViews.forEach { view in
+            // TODO: view.indexPathsForSelectedItems 활용한 로직으로 변경해보기!
             print(view.indexPathsForSelectedItems)
         }
     }
