@@ -10,13 +10,6 @@ import SnapKit
 
 final class ProfileSettingView: BaseView {
     
-//    var profileImage: Int = 4 {
-//        didSet {
-//            print("profile image did set", profileImage)
-//            imageView.image = UIImage(named: "profile_\(profileImage)")
-//        }
-//    }
-    
     let imageView = UIImageView()
     let cameraImageView = UIImageView()
     let textField = CustomTextField()

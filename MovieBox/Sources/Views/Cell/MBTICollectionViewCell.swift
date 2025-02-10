@@ -36,7 +36,7 @@ final class MBTICollectionViewCell: UICollectionViewCell {
             make.edges.equalTo(contentView)
         }
         contentLabel.textAlignment = .center
-        contentView.layer.cornerRadius = 34
+        contentView.layer.cornerRadius = 28
         
         contentLabel.textColor = .gray2
         contentView.layer.borderWidth = 1

@@ -25,13 +25,13 @@ final class ProfileImageSettingViewController: UIViewController {
         
         bindData()
         
-        let initialIndex = IndexPath(item: viewModel.outputProfileImageIndex.value, section: 0)
+        let initialIndex = IndexPath(item: viewModel.output.profileImageIndex.value, section: 0)
         mainView.collectionView.selectItem(at: initialIndex, animated: false, scrollPosition: .top)
         mainView.imageView.image = profileImages[initialIndex.item]
     }
     
     private func bindData() {
-        viewModel.outputProfileImageIndex.bind { [weak self] index in
+        viewModel.output.profileImageIndex.bind { [weak self] index in
             self?.mainView.imageView.image = self?.profileImages[index]
         }
     }
@@ -56,13 +56,13 @@ extension ProfileImageSettingViewController: UICollectionViewDelegate, UICollect
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProfileImageCollectionViewCell.id, for: indexPath) as? ProfileImageCollectionViewCell else { return UICollectionViewCell() }
         
         cell.profileImageView.image = profileImages[indexPath.item]
-        cell.setSelected(indexPath.item == viewModel.outputProfileImageIndex.value)
+        cell.setSelected(indexPath.item == viewModel.output.profileImageIndex.value)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.inputProfileImageSelected.value = indexPath
+        viewModel.input.profileImageSelected.value = indexPath
         
         collectionView.visibleCells.forEach { cell in
             guard let cell = cell as? ProfileImageCollectionViewCell,

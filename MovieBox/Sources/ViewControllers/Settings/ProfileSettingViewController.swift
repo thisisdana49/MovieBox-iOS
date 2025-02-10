@@ -38,30 +38,30 @@ final class ProfileSettingViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.outputProfileImageIndex.bind { [weak self] value in
+        viewModel.output.profileImageIndex.bind { [weak self] value in
             print("outputProfileImageIndex", value)
             self?.mainView.imageView.image = UIImage(named: "profile_\(value)")
         }
     }
     
     private func bindData() {
-        viewModel.inputViewDidLoad.value = ()
+        viewModel.input.viewDidLoad.value = ()
         
-        viewModel.outputProfileImageIndex.bind { [weak self] value in
+        viewModel.output.profileImageIndex.bind { [weak self] value in
             print("outputProfileImageIndex", value)
             self?.mainView.imageView.image = UIImage(named: "profile_\(value)")
         }
         
-        viewModel.outputGuideLabel.bind { [weak self] value in
+        viewModel.output.guideLabel.bind { [weak self] value in
             self?.mainView.guideLabel.isHidden = false
             self?.mainView.guideLabel.text = value
         }
         
-        viewModel.outputNicknameValid.lazyBind { [weak self] value in
+        viewModel.output.nicknameValid.lazyBind { [weak self] value in
             self?.mainView.guideLabel.textColor = value ? .pointBlue : .pointRed
         }
         
-        viewModel.outputRegisterAvailable.bind { [weak self] value in
+        viewModel.output.registerAvailable.bind { [weak self] value in
             self?.mainView.completeButton.isEnabled = value
         }
     }
@@ -134,7 +134,7 @@ final class ProfileSettingViewController: UIViewController {
     
     @objc
     func completeButtonTapped() {
-        viewModel.inputCompleteButtonTapped.value = ()
+        viewModel.input.completeButtonTapped.value = ()
         
         switch mode {
         case .onboarding:
@@ -153,8 +153,8 @@ final class ProfileSettingViewController: UIViewController {
 extension ProfileSettingViewController: UITextFieldDelegate {
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        viewModel.inputNicknameText.value = textField.text
-        viewModel.inputRegisterAvailable.value = ()
+        viewModel.input.nicknameText.value = textField.text
+        viewModel.input.registerAvailable.value = ()
     }
     
 }
@@ -219,9 +219,8 @@ extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionVi
             cell.updateUI()
         }
         
-        
-        viewModel.inputMBTICellTapped.value = (collectionView.tag, indexPath)
-        viewModel.inputRegisterAvailable.value = ()
+        viewModel.input.mbtiCellTapped.value = (collectionView.tag, indexPath)
+        viewModel.input.registerAvailable.value = ()
     }
     
 }

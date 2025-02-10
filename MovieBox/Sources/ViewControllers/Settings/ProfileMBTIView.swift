@@ -42,25 +42,25 @@ final class ProfileMBTIView: BaseView {
         firstCollectionView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalTo(headerView.snp.trailing)
-            make.width.equalTo(68)
+            make.width.equalTo(56)
             make.height.equalTo(140)
         }
         secondCollectionView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.equalTo(firstCollectionView.snp.trailing)
-            make.width.equalTo(68)
+            make.leading.equalTo(firstCollectionView.snp.trailing).offset(12)
+            make.width.equalTo(56)
             make.height.equalTo(140)
         }
         thirdCollectionView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.equalTo(secondCollectionView.snp.trailing)
-            make.width.equalTo(68)
+            make.leading.equalTo(secondCollectionView.snp.trailing).offset(12)
+            make.width.equalTo(56)
             make.height.equalTo(140)
         }
         fourthCollectionView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.equalTo(thirdCollectionView.snp.trailing)
-            make.width.equalTo(68)
+            make.leading.equalTo(thirdCollectionView.snp.trailing).offset(12)
+            make.width.equalTo(56)
             make.height.equalTo(140)
         }
     }
@@ -84,9 +84,10 @@ final class ProfileMBTIView: BaseView {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 0
+        layout.minimumLineSpacing = 12
         layout.minimumInteritemSpacing = 0
         layout.itemSize = CGSizeMake(cellWidth / 4, cellWidth / 4)
+        layout.itemSize = CGSizeMake(56, 56)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return layout
     }

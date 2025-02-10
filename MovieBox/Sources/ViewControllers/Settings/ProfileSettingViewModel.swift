@@ -7,56 +7,69 @@
 
 import Foundation
 
-class ProfileSettingViewModel {
+class ProfileSettingViewModel: BaseViewModel {
     
-    let inputViewDidLoad: Observable<Void?> = Observable(nil)
-    let inputNicknameText: Observable<String?> = Observable(nil)
-    let inputMBTICellTapped: Observable<(Int, IndexPath)?> = Observable(nil)
-    let inputRegisterAvailable: Observable<Void?> = Observable(nil)
-    let inputCompleteButtonTapped: Observable<Void?> = Observable(nil)
+    private(set) var input: Input
+    private(set) var output: Output
     
-    let inputProfileImageSelected: Observable<IndexPath?> = Observable(nil)
+    struct Input {
+        let viewDidLoad: Observable<Void?> = Observable(nil)
+        let nicknameText: Observable<String?> = Observable(nil)
+        let mbtiCellTapped: Observable<(Int, IndexPath)?> = Observable(nil)
+        let registerAvailable: Observable<Void?> = Observable(nil)
+        let completeButtonTapped: Observable<Void?> = Observable(nil)
+        
+        let profileImageSelected: Observable<IndexPath?> = Observable(nil)
+    }
     
-    let outputProfileImageIndex: Observable<Int> = Observable(0)
-    let outputGuideLabel: Observable<String> = Observable("")
-    let outputNicknameValid: Observable<Bool> = Observable(false)
-    let outputMBTIValid: Observable<Bool> = Observable(false)
-    var outputRegisterAvailable: Observable<Bool> = Observable(false)
-    
-    let outputSelectedProfileImage: Observable<Int> = Observable(0)
+    struct Output {
+        let profileImageIndex: Observable<Int> = Observable(0)
+        let guideLabel: Observable<String> = Observable("")
+        let nicknameValid: Observable<Bool> = Observable(false)
+        let mbtiValid: Observable<Bool> = Observable(false)
+        var registerAvailable: Observable<Bool> = Observable(false)
+        
+        var mbtiArray: Observable<[String?]> = Observable([nil, nil, nil, nil])
+
+        let outputSelectedProfileImage: Observable<Int> = Observable(0)
+    }
     
     var randomNum: Int = 0
-    var outputMBTIArray: Observable<[String?]> = Observable([nil, nil, nil, nil])
     
     init() {
-        inputViewDidLoad.lazyBind { [weak self] _ in
+        input = Input()
+        output = Output()
+        transform()
+    }
+    
+    internal func transform() {
+        input.viewDidLoad.lazyBind { [weak self] _ in
             self?.randomNum = Int.random(in: 0...11)
-            self?.outputProfileImageIndex.value = self?.randomNum ?? 0
+            self?.output.profileImageIndex.value = self?.randomNum ?? 0
         }
         
-        inputNicknameText.lazyBind { [weak self] value in
+        input.nicknameText.lazyBind { [weak self] value in
             self?.validateNickname(value)
         }
         
-        inputMBTICellTapped.lazyBind { [weak self] value in
+        input.mbtiCellTapped.lazyBind { [weak self] value in
             let (tag, indexPath): (Int, IndexPath) = value ?? (0, IndexPath(item: 0, section: 0))
             self?.configureMBTI(tag: tag, indexPath: indexPath)
         }
         
-        inputRegisterAvailable.lazyBind { [weak self] value in
-            //            self?.outputRegisterAvailable.value = (self?.outputNicknameValid.value)! && (self?.outputMBTIValid.value)!
-            guard let nicknameValid = self?.outputNicknameValid.value, let mbtiValid = self?.outputMBTIValid.value else { return }
-            self?.outputRegisterAvailable.value = nicknameValid && mbtiValid
+        input.registerAvailable.lazyBind { [weak self] value in
+            guard let nicknameValid = self?.output.nicknameValid.value, let mbtiValid = self?.output.mbtiValid.value else { return }
+            self?.output.registerAvailable.value = nicknameValid && mbtiValid
         }
         
-        inputCompleteButtonTapped.lazyBind { value in
+        input.completeButtonTapped.lazyBind { value in
             print(#function)
         }
         
-        inputProfileImageSelected.lazyBind { [weak self] indexPath in
+        input.profileImageSelected.lazyBind { [weak self] indexPath in
             guard let indexPath = indexPath else { return }
             print("inputProfileImageSelected", indexPath.item)
-            self?.outputProfileImageIndex.value = indexPath.item
+            self?.output.profileImageIndex.value = indexPath.item
             self?.randomNum = indexPath.item
         }
     }
@@ -68,66 +81,65 @@ class ProfileSettingViewModel {
         let numberPattern = "\\d"
         
         if nickname.count < 2 || nickname.count >= 10 {
-            outputGuideLabel.value = "2글자 이상 10글자 미만으로 설정해주세요."
-            outputNicknameValid.value = false
-            outputRegisterAvailable.value = false
+            output.guideLabel.value = "2글자 이상 10글자 미만으로 설정해주세요."
+            output.nicknameValid.value = false
+            output.registerAvailable.value = false
             return
         }
         
         if nickname.range(of: specialCharacterPattern, options: .regularExpression) != nil {
-            outputGuideLabel.value = "닉네임에 @, #, $, % 는 포함할 수 없어요."
-            outputNicknameValid.value = false
+            output.guideLabel.value = "닉네임에 @, #, $, % 는 포함할 수 없어요."
+            output.nicknameValid.value = false
             return
         }
         
         if nickname.range(of: numberPattern, options: .regularExpression) != nil {
-            outputGuideLabel.value = "닉네임에 숫자는 포함할 수 없어요."
-            outputNicknameValid.value = false
+            output.guideLabel.value = "닉네임에 숫자는 포함할 수 없어요."
+            output.nicknameValid.value = false
             return
         }
         
-        outputGuideLabel.value = "사용할 수 있는 닉네임이에요"
-        outputNicknameValid.value = true
+        output.guideLabel.value = "사용할 수 있는 닉네임이에요"
+        output.nicknameValid.value = true
     }
     
     private func configureMBTI(tag collectionViewTag: Int, indexPath: IndexPath) {
         if collectionViewTag == 0 {
             if indexPath.item == 0 {
-                outputMBTIArray.value[0] = "E"
+                output.mbtiArray.value[0] = "E"
             } else {
-                outputMBTIArray.value[0] = "I"
+                output.mbtiArray.value[0] = "I"
             }
         }
         if collectionViewTag == 1 {
             if indexPath.item == 0 {
-                outputMBTIArray.value[1] = "S"
+                output.mbtiArray.value[1] = "S"
             } else {
-                outputMBTIArray.value[1] = "N"
+                output.mbtiArray.value[1] = "N"
             }
         }
         if collectionViewTag == 2 {
             if indexPath.item == 0 {
-                outputMBTIArray.value[2] = "T"
+                output.mbtiArray.value[2] = "T"
             } else {
-                outputMBTIArray.value[2] = "F"
+                output.mbtiArray.value[2] = "F"
             }
         }
         if collectionViewTag == 3 {
             if indexPath.item == 0 {
-                outputMBTIArray.value[3] = "J"
+                output.mbtiArray.value[3] = "J"
             } else {
-                outputMBTIArray.value[3] = "P"
+                output.mbtiArray.value[3] = "P"
             }
         }
-        outputMBTIValid.value = !outputMBTIArray.value.contains(nil)
-        //        print(outputMBTIArray.value, outputMBTIValid.value)
+        output.mbtiValid.value = !output.mbtiArray.value.contains(nil)
     }
     
     private func saveUserInformation() {
         print(#function)
         let joinDate = Date().timeIntervalSince1970
         let profileImage = self.randomNum
-        let nickname = inputNicknameText.value ?? ""
+        let nickname = input.nicknameText.value ?? ""
         
         UserDefaultsManager.set(to: nickname, forKey: .userNickname)
         UserDefaultsManager.set(to: joinDate, forKey: .joinDate)
