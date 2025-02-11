@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SearchViewController: UIViewController {
+final class SearchViewController: BaseViewController {
 
     var passDelegate: SearchKeywordPassDelegate?
 
@@ -25,14 +25,13 @@ final class SearchViewController: UIViewController {
         bindData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        mainView.tableView.reloadData()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        mainView.tableView.reloadData()
+//    }
     
     private func bindData() {
-        viewModel.output.searchBarFocus.lazyBind { [weak self] value in
-            print("searchBarFocus", value)
+        viewModel.output.searchBarFocus.bind { [weak self] value in
             if value { self?.mainView.searchTextField.becomeFirstResponder() }
         }
         
@@ -46,13 +45,7 @@ final class SearchViewController: UIViewController {
         }
         
         viewModel.output.isNoResult.lazyBind { [weak self] _ in
-//            if isNoResult && searchWord != "" {
             self?.mainView.tableView.setEmptyMessage("원하는 검색 결과를 찾지 못했습니다.")
-//            self?.mainView.tableView.
-//                tableView.setEmptyMessage("원하는 검색결과를 찾지 못했습니다.")
-//            } else {
-//                tableView.restore()
-//            }
         }
         
     }

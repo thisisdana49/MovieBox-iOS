@@ -42,7 +42,6 @@ final class SearchViewModel: BaseViewModel  {
     
     func transform() {
         input.isFromMainView.lazyBind { [weak self] _ in
-            print("isFromMainView")
             self?.output.searchBarFocus.value = true
         }
         
