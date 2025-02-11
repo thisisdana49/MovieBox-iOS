@@ -10,8 +10,8 @@ import UIKit
 final class SearchViewController: UIViewController {
 
     var passDelegate: SearchKeywordPassDelegate?
-    var isFromMainView: Bool = false
 
+    let viewModel = SearchViewModel()
     let mainView = SearchView()
     var movies: [Movie] = []
     
@@ -39,6 +39,7 @@ final class SearchViewController: UIViewController {
         
         setupView()
         fetchMovies()
+        bindData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,11 +47,21 @@ final class SearchViewController: UIViewController {
         mainView.tableView.reloadData()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if isFromMainView {
-            mainView.searchTextField.becomeFirstResponder()
+    private func bindData() {
+        viewModel.output.searchBarFocus.lazyBind { [weak self] value in
+            print("searchBarFocus", value)
+            if value { self?.mainView.searchTextField.becomeFirstResponder() }
         }
+        
+        viewModel.output.scrollToTop.lazyBind { [weak self] _ in
+            print("output scroll to top")
+            self?.mainView.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        }
+        
+        viewModel.output.searchResultMovies.lazyBind { [weak self] _ in
+            self?.mainView.tableView.reloadData()
+        }
+        
     }
     
     private func setupView() {
@@ -98,9 +109,9 @@ final class SearchViewController: UIViewController {
 extension SearchViewController: UISearchTextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let inputText = textField.text else { return true }
-        searchWord = inputText
-        passDelegate?.didSearchKeyword(inputText)
+        viewModel.input.searchTextField.value = textField.text
+//        searchWord = inputText
+//        passDelegate?.didSearchKeyword(inputText)
         return true
     }
     
@@ -117,12 +128,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         } else {
             tableView.restore()
         }
-        return movies.count
+        return viewModel.output.searchResultMovies.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.id, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
-        let movie = movies[indexPath.row]
+        let movie = viewModel.output.searchResultMovies.value[indexPath.row]
         
         cell.configureData(movie)
         

@@ -105,7 +105,7 @@ final class MainViewController: UIViewController {
     func searchButtonTapped(_ sender: UIBarButtonItem) {
         let vc = SearchViewController()
         vc.passDelegate = self
-        vc.isFromMainView = true
+        vc.viewModel.input.isFromMainView.value = ()
         navigationController?.pushViewController(vc, animated: true)
     }
     
