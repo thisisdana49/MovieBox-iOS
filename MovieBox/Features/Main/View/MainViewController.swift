@@ -21,13 +21,12 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
-        setupNotifications()
         bindData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateRecentKeywords()
+//        updateRecentKeywords()
         mainView.profileSection.updateUserInfo()
     }
     
@@ -37,64 +36,14 @@ final class MainViewController: UIViewController {
         viewModel.output.fetchSuccess.lazyBind { [weak self] _ in
             self?.mainView.todaysMovieSection.collectionView.reloadData()
         }
-    }
-    
-    private func setupNotifications() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(reloadCollectionView),
-            name: NSNotification.Name("ReloadLikedButtons"),
-            object: nil
-        )
-    }
-    
-    private func updateRecentKeywords() {
-        recentKeywords = UserDefaultsManager.getSearchKeywords()
-        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
-
-        mainView.recentKeywordsView.keywordButtons.forEach { button in
-            // TODO: weak self 다시 한번 복습
-            button.onKeywordTapped = { [weak self] in
-                self?.keywordButtonTapped(button)
-            }
-            button.onXmarkTapped = { [weak self] in
-                self?.removeKeyword(button)
-            }
+        // TODO: lazy bind가 되지 않는 이유?
+        viewModel.output.recentKeywords.bind { [weak self] value in
+            print("output recent keywords", value)
+            self?.mainView.recentKeywordsView.configureData(keywords: value)
+            self?.configureActions()
         }
     }
-    
-    private func setupView() {
-        configureNavigationBar()
-        configureView()
-    }
-    
-    private func configureView() {
-        navigationItem.title = "MovieBox"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
-        
-        // TODO: Noti로 구성?
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileInformViewTapped))
-        mainView.profileSection.addGestureRecognizer(tapGesture)
-        mainView.profileSection.isUserInteractionEnabled = true
-        
-        mainView.recentKeywordsView.deleteButton.addTarget(self, action: #selector(clearAllKeywords), for: .touchUpInside)
-        
-        mainView.todaysMovieSection.collectionView.delegate = self
-        mainView.todaysMovieSection.collectionView.dataSource = self
-        mainView.todaysMovieSection.collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.id)
-    }
-    
-    
-    private func configureNavigationBar() {
-        navigationItem.title = "MovieBox"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "magnifyingglass"),
-            style: .plain,
-            target: self,
-            action: #selector(searchButtonTapped)
-        )
-    }
-    
+
     @objc
     private func reloadCollectionView() {
         mainView.todaysMovieSection.collectionView.reloadData()
@@ -133,9 +82,8 @@ final class MainViewController: UIViewController {
     @objc
     func keywordButtonTapped(_ sender: CustomKeywordButton) {
         // TODO: 선택 시 순서 변경 되도록 구현
-        print(#function)
         let vc = SearchViewController()
-//        vc.searchWord = sender.name
+        vc.viewModel.input.recentKeywordTapped.value = sender.name
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -148,6 +96,10 @@ final class MainViewController: UIViewController {
         print(UserDefaultsManager.getSearchKeywords())
         mainView.recentKeywordsView.configureData(keywords: recentKeywords)
         updateRecentKeywords()
+    }
+    
+    private func updateRecentKeywords() {
+        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
     }
     
 }
@@ -194,6 +146,62 @@ extension MainViewController: SearchKeywordPassDelegate,ProfileSettingPassDelega
     
     func didUpdateProfile() {
         mainView.profileSection.updateUserInfo()
+    }
+    
+}
+
+
+extension MainViewController {
+    
+    private func setupView() {
+        configureNavigationBar()
+        configureView()
+        configureNotifications()
+    }
+    
+    private func configureNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(reloadCollectionView),
+            name: NSNotification.Name("ReloadLikedButtons"),
+            object: nil
+        )
+    }
+    private func configureView() {
+        navigationItem.title = "MovieBox"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
+        
+        // TODO: Noti로 구성?
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileInformViewTapped))
+        mainView.profileSection.addGestureRecognizer(tapGesture)
+        mainView.profileSection.isUserInteractionEnabled = true
+        
+        mainView.recentKeywordsView.deleteButton.addTarget(self, action: #selector(clearAllKeywords), for: .touchUpInside)
+        
+        mainView.todaysMovieSection.collectionView.delegate = self
+        mainView.todaysMovieSection.collectionView.dataSource = self
+        mainView.todaysMovieSection.collectionView.register(MainCollectionViewCell.self, forCellWithReuseIdentifier: MainCollectionViewCell.id)
+    }
+    
+    private func configureNavigationBar() {
+        navigationItem.title = "MovieBox"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "magnifyingglass"),
+            style: .plain,
+            target: self,
+            action: #selector(searchButtonTapped)
+        )
+    }
+    
+    private func configureActions() {
+        mainView.recentKeywordsView.keywordButtons.forEach { button in
+            button.onKeywordTapped = { [weak self] in
+                self?.keywordButtonTapped(button)
+            }
+            button.onXmarkTapped = { [weak self] in
+                self?.removeKeyword(button)
+            }
+        }
     }
     
 }

@@ -63,7 +63,7 @@ class ProfileSettingViewModel: BaseViewModel {
         }
         
         input.completeButtonTapped.lazyBind { value in
-            print(#function)
+            print("register complete")
         }
         
         input.profileImageSelected.lazyBind { [weak self] indexPath in

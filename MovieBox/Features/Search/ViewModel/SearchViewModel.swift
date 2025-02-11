@@ -15,6 +15,7 @@ final class SearchViewModel: BaseViewModel  {
     struct Input {
         let isFromMainView: Observable<Void?> = Observable(nil)
         let searchTextField: Observable<String?> = Observable("")
+        let recentKeywordTapped: Observable<String> = Observable("")
         let prefetchRows: Observable<[IndexPath]> = Observable([])
     }
     
@@ -23,6 +24,7 @@ final class SearchViewModel: BaseViewModel  {
         let scrollToTop: Observable<Void?> = Observable(nil)
         let searchResultMovies: Observable<[Movie]> = Observable([])
         let isNoResult: Observable<Bool>  = Observable(false)
+        let recentKeywords: Observable<[String]> = Observable([])
     }
     
     var searchWord: String = "" {
@@ -48,8 +50,13 @@ final class SearchViewModel: BaseViewModel  {
         input.searchTextField.lazyBind { [weak self] value in
             if let inputValue = value {
                 self?.searchWord = inputValue
+                self?.didSearchKeyword(with: inputValue)
                 self?.callMovies()
             }
+        }
+        input.recentKeywordTapped.lazyBind { [weak self] value in
+            self?.searchWord = value
+            self?.callMovies()
         }
         input.prefetchRows.lazyBind { [weak self] value in
             self?.prefetchingData(at: value)
@@ -87,6 +94,14 @@ final class SearchViewModel: BaseViewModel  {
                 page += 1
                 callMovies()
             }
+        }
+    }
+    
+    private func didSearchKeyword(with keyword: String) {
+        if !output.recentKeywords.value.contains(keyword) {
+            UserDefaultsManager.saveSearchKeyword(keyword)
+            output.recentKeywords.value.insert(keyword, at: 0)
+            print("최근 검색어: \(output.recentKeywords.value)")
         }
     }
 }

@@ -31,6 +31,7 @@ final class MainViewModel: BaseViewModel {
     func transform() {
         input.viewDidLoad.lazyBind { [weak self] _ in
             self?.callTrendingMovies()
+            self?.setupInitInformations()
         }
     }
     
@@ -46,6 +47,12 @@ final class MainViewModel: BaseViewModel {
                 print("네트워크 오류", error.localizedDescription)
             }
         )
+    }
+    
+    // TODO: 함수명 증명가능한 단위로 수정... :( 마음에 들지 않음
+    private func setupInitInformations() {
+        output.recentKeywords.value = UserDefaultsManager.getSearchKeywords()
+        print(#function, output.recentKeywords.value)
     }
     
 }
