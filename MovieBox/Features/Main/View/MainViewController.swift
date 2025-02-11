@@ -135,7 +135,7 @@ final class MainViewController: UIViewController {
         // TODO: 선택 시 순서 변경 되도록 구현
         print(#function)
         let vc = SearchViewController()
-        vc.searchWord = sender.name
+//        vc.searchWord = sender.name
         navigationController?.pushViewController(vc, animated: true)
     }
     

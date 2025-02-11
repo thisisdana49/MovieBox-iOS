@@ -15,19 +15,24 @@ final class SearchViewModel: BaseViewModel  {
     struct Input {
         let isFromMainView: Observable<Void?> = Observable(nil)
         let searchTextField: Observable<String?> = Observable("")
+        let prefetchRows: Observable<[IndexPath]> = Observable([])
     }
     
     struct Output {
         let searchBarFocus: Observable<Bool> = Observable(false)
         let scrollToTop: Observable<Void?> = Observable(nil)
         let searchResultMovies: Observable<[Movie]> = Observable([])
+        let isNoResult: Observable<Bool>  = Observable(false)
     }
     
     var searchWord: String = "" {
         didSet { page = 1 }
     }
-    var isNoResult: Bool = false
-    var page: Int = 1
+    var page: Int = 1 {
+        didSet { isEnd = page == totalPages }
+    }
+    var totalPages = 0
+    var isEnd = false
     
     init() {
         input = Input()
@@ -47,15 +52,22 @@ final class SearchViewModel: BaseViewModel  {
                 self?.callMovies()
             }
         }
+        input.prefetchRows.lazyBind { [weak self] value in
+            self?.prefetchingData(at: value)
+        }
     }
  
     private func callMovies() {
+        print(#function, page, isEnd, totalPages)
+
         NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: searchWord, page: page), requestType: MovieListResponse.self) { value in
             if self.page == 1 {
+                self.output.searchResultMovies.value.removeAll()
                 if value.totalResults == 0 {
-                    self.isNoResult = true
+                    self.output.isNoResult.value = true
                 } else {
-                    self.isNoResult = false
+                    self.output.isNoResult.value = false
+                    self.totalPages = value.totalPages
                     self.output.searchResultMovies.value = value.results
                     self.output.scrollToTop.value = ()
                     print("input scroll to top")
@@ -67,6 +79,15 @@ final class SearchViewModel: BaseViewModel  {
         }
         failureHandler: { error in
             print("네트워크 오류", error.localizedDescription)
+        }
+    }
+    
+    private func prefetchingData(at indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            if (output.searchResultMovies.value.count - 2) == indexPath.row && !isEnd {
+                page += 1
+                callMovies()
+            }
         }
     }
 }

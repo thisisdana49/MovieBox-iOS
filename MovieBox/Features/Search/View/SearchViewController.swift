@@ -13,22 +13,6 @@ final class SearchViewController: UIViewController {
 
     let viewModel = SearchViewModel()
     let mainView = SearchView()
-    var movies: [Movie] = []
-    
-    var searchWord: String = "" {
-        didSet {
-            page = 1
-            fetchMovies()
-        }
-    }
-    private var page = 1 {
-        didSet {
-            isEnd = page == totalPages
-        }
-    }
-    private var totalPages = 0
-    private var isEnd = false
-    var isNoResult = false
     
     override func loadView() {
         view = mainView
@@ -38,7 +22,6 @@ final class SearchViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
-        fetchMovies()
         bindData()
     }
     
@@ -62,6 +45,16 @@ final class SearchViewController: UIViewController {
             self?.mainView.tableView.reloadData()
         }
         
+        viewModel.output.isNoResult.lazyBind { [weak self] _ in
+//            if isNoResult && searchWord != "" {
+            self?.mainView.tableView.setEmptyMessage("원하는 검색 결과를 찾지 못했습니다.")
+//            self?.mainView.tableView.
+//                tableView.setEmptyMessage("원하는 검색결과를 찾지 못했습니다.")
+//            } else {
+//                tableView.restore()
+//            }
+        }
+        
     }
     
     private func setupView() {
@@ -73,33 +66,6 @@ final class SearchViewController: UIViewController {
         mainView.tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.id)
         
         mainView.searchTextField.delegate = self
-        mainView.searchTextField.text = searchWord
-    }
-    
-    private func fetchMovies() {
-        NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: searchWord, page: page), requestType: MovieListResponse.self) { value in
-            if self.page == 1 {
-                if value.totalResults == 0 {
-                    self.isNoResult = true
-                } else {
-                    self.isNoResult = false
-                    self.movies = value.results
-                }
-            } else {
-                self.movies.append(contentsOf: value.results)
-            }
-            
-            DispatchQueue.main.async {
-                self.mainView.tableView.reloadData()
-                
-                if self.page == 1 {
-                    self.mainView.tableView.setContentOffset(.zero, animated: true)
-                }
-            }
-        }
-        failureHandler: { error in
-            print("네트워크 오류", error.localizedDescription)
-        }
     }
 
 }
@@ -110,7 +76,6 @@ extension SearchViewController: UISearchTextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         viewModel.input.searchTextField.value = textField.text
-//        searchWord = inputText
 //        passDelegate?.didSearchKeyword(inputText)
         return true
     }
@@ -122,12 +87,6 @@ extension SearchViewController: UISearchTextFieldDelegate {
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isNoResult && searchWord != "" {
-            movies.removeAll()
-            tableView.setEmptyMessage("원하는 검색결과를 찾지 못했습니다.")
-        } else {
-            tableView.restore()
-        }
         return viewModel.output.searchResultMovies.value.count
     }
     
@@ -142,7 +101,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = SearchDetailViewController()
-        vc.movie = movies[indexPath.row]
+//        vc.movie = movies[indexPath.row]
         
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -162,13 +121,7 @@ extension SearchViewController: UITableViewDataSourcePrefetching {
 //    }
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-//        print(#function)
-        for indexPath in indexPaths {
-            if (movies.count - 2) == indexPath.row && !isEnd {
-                page += 1
-                fetchMovies()
-            }
-        }
+        viewModel.input.prefetchRows.value = indexPaths
     }
     
 }
