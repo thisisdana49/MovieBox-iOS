@@ -75,49 +75,6 @@ final class ProfileSettingViewController: UIViewController {
         super.viewWillDisappear(animated)
         passDelegate?.didUpdateProfile()
     }
-    
-    private func setupUI() {
-        switch mode {
-        case .onboarding:
-            navigationItem.title = "프로필 설정"
-        case .edit(let currentNickname):
-            navigationItem.title = "프로필 수정"
-            mainView.textField.text = currentNickname
-            setupNavigationBarButton()
-        }
-    }
-    
-    private func setupNavigationBarButton() {
-        let completeButton = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(completeButtonTapped))
-        let dismissButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissView))
-        navigationItem.rightBarButtonItem = completeButton
-        navigationItem.setLeftBarButton(dismissButton, animated: true)
-    }
-    
-    private func configureViewController() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
-        mainView.imageView.addGestureRecognizer(tapGesture)
-        
-        mainView.textField.delegate = self
-        
-        mainView.mbtiSection.collectionViews.forEach { view in
-            view.delegate = self
-            view.dataSource = self
-            view.register(MBTICollectionViewCell.self, forCellWithReuseIdentifier: MBTICollectionViewCell.id)
-            view.allowsMultipleSelection = true
-        }
-        
-        navigationItem.title = "PROFILE SETTING"
-        navigationController?.navigationBar.topItem?.title = ""
-        navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: UIColor.baseBlack]
-        navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .baseWhite
-        navigationController?.navigationBar.tintColor = .baseBlack
-    }
-    
-    private func configureActions() {
-        mainView.textField.becomeFirstResponder()
-        mainView.completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
-    }
 
     @objc
     func dismissView() {
@@ -221,6 +178,54 @@ extension ProfileSettingViewController: UICollectionViewDelegate, UICollectionVi
         
         viewModel.input.mbtiCellTapped.value = (collectionView.tag, indexPath)
         viewModel.input.registerAvailable.value = ()
+    }
+    
+}
+
+
+extension ProfileSettingViewController {
+    
+    private func setupUI() {
+        switch mode {
+        case .onboarding:
+            navigationItem.title = "프로필 설정"
+        case .edit(let currentNickname):
+            navigationItem.title = "프로필 수정"
+            mainView.textField.text = currentNickname
+            setupNavigationBarButton()
+        }
+    }
+    
+    private func setupNavigationBarButton() {
+        let completeButton = UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(completeButtonTapped))
+        let dismissButton = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(dismissView))
+        navigationItem.rightBarButtonItem = completeButton
+        navigationItem.setLeftBarButton(dismissButton, animated: true)
+    }
+    
+    private func configureViewController() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
+        mainView.imageView.addGestureRecognizer(tapGesture)
+        
+        mainView.textField.delegate = self
+        
+        mainView.mbtiSection.collectionViews.forEach { view in
+            view.delegate = self
+            view.dataSource = self
+            view.register(MBTICollectionViewCell.self, forCellWithReuseIdentifier: MBTICollectionViewCell.id)
+            view.allowsMultipleSelection = true
+        }
+        
+        navigationItem.title = "PROFILE SETTING"
+        navigationController?.navigationBar.topItem?.title = ""
+        navigationController?.navigationBar.scrollEdgeAppearance?.titleTextAttributes = [.foregroundColor: UIColor.baseBlack]
+        navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .baseWhite
+        navigationController?.navigationBar.tintColor = .baseBlack
+    }
+    
+    private func configureActions() {
+        mainView.textField.becomeFirstResponder()
+        mainView.completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
     }
     
 }

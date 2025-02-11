@@ -62,8 +62,9 @@ class ProfileSettingViewModel: BaseViewModel {
             self?.output.registerAvailable.value = nicknameValid && mbtiValid
         }
         
-        input.completeButtonTapped.lazyBind { value in
+        input.completeButtonTapped.lazyBind { [weak self] value in
             print("register complete")
+            self?.saveUserInformation()
         }
         
         input.profileImageSelected.lazyBind { [weak self] indexPath in
@@ -140,6 +141,7 @@ class ProfileSettingViewModel: BaseViewModel {
         let joinDate = Date().timeIntervalSince1970
         let profileImage = self.randomNum
         let nickname = input.nicknameText.value ?? ""
+        // TODO: MBTI 저장 추가하기
         
         UserDefaultsManager.set(to: nickname, forKey: .userNickname)
         UserDefaultsManager.set(to: joinDate, forKey: .joinDate)
