@@ -9,9 +9,9 @@ import UIKit
 
 final class MainViewController: UIViewController {
     
+    let viewModel = MainViewModel()
     let mainView = MainView()
     var recentKeywords: [String] = []
-    var todaysMovies: [Movie] = []
     
     override func loadView() {
         view = mainView
@@ -22,7 +22,7 @@ final class MainViewController: UIViewController {
         
         setupView()
         setupNotifications()
-        fetchTrendingMovies()
+        bindData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,18 +31,12 @@ final class MainViewController: UIViewController {
         mainView.profileSection.updateUserInfo()
     }
     
-    private func fetchTrendingMovies() {
-        NetworkManager.shared.fetchData(
-            apiRequest: .trendingMovies,
-            requestType: MovieListResponse.self,
-            successHandler: { [weak self] value in
-                self?.todaysMovies = value.results
-                self?.mainView.todaysMovieSection.collectionView.reloadData()
-            },
-            failureHandler: { error in
-                print("네트워크 오류", error.localizedDescription)
-            }
-        )
+    private func bindData() {
+        viewModel.input.viewDidLoad.value = ()
+        
+        viewModel.output.fetchSuccess.lazyBind { [weak self] _ in
+            self?.mainView.todaysMovieSection.collectionView.reloadData()
+        }
     }
     
     private func setupNotifications() {
@@ -163,13 +157,13 @@ final class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return todaysMovies.count
+        return viewModel.output.todaysMovies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainCollectionViewCell.id, for: indexPath) as? MainCollectionViewCell else { return UICollectionViewCell() }
         
-        let movie = todaysMovies[indexPath.row]
+        let movie = viewModel.output.todaysMovies[indexPath.row]
         // TODO: 전달용 model 구성
         cell.configureData(movie)
         
@@ -178,7 +172,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = SearchDetailViewController()
-        vc.movie = todaysMovies[indexPath.row]
+        vc.movie = viewModel.output.todaysMovies[indexPath.row]
         
         navigationController?.pushViewController(vc, animated: true)
     }
