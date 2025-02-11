@@ -8,9 +8,7 @@
 import UIKit
 
 final class SearchViewController: BaseViewController {
-
-    var passDelegate: SearchKeywordPassDelegate?
-
+    
     let viewModel = SearchViewModel()
     let mainView = SearchView()
     
@@ -44,8 +42,12 @@ final class SearchViewController: BaseViewController {
             self?.mainView.tableView.reloadData()
         }
         
-        viewModel.output.isNoResult.lazyBind { [weak self] _ in
-            self?.mainView.tableView.setEmptyMessage("원하는 검색 결과를 찾지 못했습니다.")
+        viewModel.output.isNoResult.lazyBind { [weak self] value in
+            if value {
+                self?.mainView.tableView.setEmptyMessage("원하는 검색 결과를 찾지 못했습니다.")
+            } else {
+                self?.mainView.tableView.restore()
+            }
         }
         
     }
@@ -69,7 +71,6 @@ extension SearchViewController: UISearchTextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         viewModel.input.searchTextField.value = textField.text
-//        passDelegate?.didSearchKeyword(inputText)
         return true
     }
     

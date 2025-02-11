@@ -11,7 +11,6 @@ final class MainViewController: UIViewController {
     
     let viewModel = MainViewModel()
     let mainView = MainView()
-    var recentKeywords: [String] = []
     
     override func loadView() {
         view = mainView
@@ -53,7 +52,6 @@ final class MainViewController: UIViewController {
     @objc
     func searchButtonTapped(_ sender: UIBarButtonItem) {
         let vc = SearchViewController()
-        vc.passDelegate = self
         vc.viewModel.input.isFromMainView.value = ()
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -72,36 +70,27 @@ final class MainViewController: UIViewController {
     
     @objc
     func clearAllKeywords() {
-        recentKeywords.removeAll()
-        
-        UserDefaultsManager.clearSearchKeywords()
-        
-        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
+        viewModel.input.clearAllKeywords.value = ()
     }
     
+    // TODO: 선택 시 순서 변경 되도록 구현
     @objc
     func keywordButtonTapped(_ sender: CustomKeywordButton) {
-        // TODO: 선택 시 순서 변경 되도록 구현
         let vc = SearchViewController()
-        vc.viewModel.input.recentKeywordTapped.value = sender.name
+        vc.viewModel.input.keywordTapped.value = sender.name
         navigationController?.pushViewController(vc, animated: true)
     }
     
     private func removeKeyword(_ button: CustomKeywordButton) {
-        guard let index = recentKeywords.firstIndex(of: button.name) else { return }
-        recentKeywords.remove(at: index)
-        UserDefaultsManager.removeSearchKeyword(button.name)
-        print(#function)
-        print(recentKeywords)
-        print(UserDefaultsManager.getSearchKeywords())
-        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
-        updateRecentKeywords()
+        viewModel.input.keywordRemoveTapped.value = button.name
     }
     
+    @objc
     private func updateRecentKeywords() {
-        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
+        print(#function)
+        viewModel.input.updateRecentKeywords.value = ()
     }
-    
+
 }
 
 
@@ -133,17 +122,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
 
 // MARK: Pass Delegate
-extension MainViewController: SearchKeywordPassDelegate,ProfileSettingPassDelegate {
-    
-    func didSearchKeyword(_ keyword: String) {
-        if !recentKeywords.contains(keyword) {
-            recentKeywords.insert(keyword, at: 0)
-        }
-        print("최근 검색어: \(recentKeywords)")
-        UserDefaultsManager.saveSearchKeyword(keyword)
-        mainView.recentKeywordsView.configureData(keywords: recentKeywords)
-    }
-    
+extension MainViewController: ProfileSettingPassDelegate  {
+
     func didUpdateProfile() {
         mainView.profileSection.updateUserInfo()
     }
@@ -162,15 +142,21 @@ extension MainViewController {
     private func configureNotifications() {
         NotificationCenter.default.addObserver(
             self,
+            selector: #selector(updateRecentKeywords),
+            // TODO: Enum으로 관리
+            name: NSNotification.Name("ReceiveKeywordSearch"),
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
             selector: #selector(reloadCollectionView),
             name: NSNotification.Name("ReloadLikedButtons"),
             object: nil
         )
     }
+    
     private func configureView() {
-        navigationItem.title = "MovieBox"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
-        
         // TODO: Noti로 구성?
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileInformViewTapped))
         mainView.profileSection.addGestureRecognizer(tapGesture)

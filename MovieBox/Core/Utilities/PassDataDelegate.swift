@@ -8,7 +8,7 @@
 import Foundation
 
 protocol SearchKeywordPassDelegate: AnyObject {
-    func didSearchKeyword(_ keyword: String)
+    func didSearchKeyword()
 }
 
 protocol ProfileImagePassDelegate: AnyObject {

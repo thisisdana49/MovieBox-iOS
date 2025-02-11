@@ -14,6 +14,9 @@ final class MainViewModel: BaseViewModel {
     
     struct Input {
         let viewDidLoad: Observable<Void?> = Observable(nil)
+        let keywordRemoveTapped: Observable<String> = Observable("")
+        let clearAllKeywords: Observable<Void?> = Observable(nil)
+        let updateRecentKeywords: Observable<Void?> = Observable(nil)
     }
     
     struct Output {
@@ -31,6 +34,20 @@ final class MainViewModel: BaseViewModel {
     func transform() {
         input.viewDidLoad.lazyBind { [weak self] _ in
             self?.callTrendingMovies()
+            self?.setupInitInformations()
+        }
+        
+        input.keywordRemoveTapped.lazyBind { [weak self] value in
+            self?.removeKeyword(at: value)
+        }
+        
+        input.clearAllKeywords.lazyBind { [weak self] _  in
+            self?.output.recentKeywords.value.removeAll()
+            UserDefaultsManager.clearSearchKeywords()
+        }
+
+        input.updateRecentKeywords.lazyBind { [weak self] _  in
+            print("updateRecentKeywords")
             self?.setupInitInformations()
         }
     }
@@ -55,4 +72,12 @@ final class MainViewModel: BaseViewModel {
         print(#function, output.recentKeywords.value)
     }
     
+    private func removeKeyword(at keyword: String) {
+        print(#function)
+        guard let index = output.recentKeywords.value.firstIndex(of: keyword) else { return }
+        output.recentKeywords.value.remove(at: index)
+        UserDefaultsManager.removeSearchKeyword(keyword)
+        print(UserDefaultsManager.getSearchKeywords())
+
+    }
 }

@@ -15,8 +15,9 @@ final class SearchViewModel: BaseViewModel  {
     struct Input {
         let isFromMainView: Observable<Void?> = Observable(nil)
         let searchTextField: Observable<String?> = Observable("")
-        let recentKeywordTapped: Observable<String> = Observable("")
         let prefetchRows: Observable<[IndexPath]> = Observable([])
+        // TODO: Search VM의 입장에서 네이밍 필요
+        let keywordTapped: Observable<String> = Observable("")
     }
     
     struct Output {
@@ -54,13 +55,16 @@ final class SearchViewModel: BaseViewModel  {
                 self?.callMovies()
             }
         }
-        input.recentKeywordTapped.lazyBind { [weak self] value in
-            self?.searchWord = value
-            self?.callMovies()
-        }
+        
         input.prefetchRows.lazyBind { [weak self] value in
             self?.prefetchingData(at: value)
         }
+        
+        input.keywordTapped.lazyBind { [weak self] value in
+            self?.searchWord = value
+            self?.callMovies()
+        }
+
     }
  
     private func callMovies() {
@@ -103,5 +107,11 @@ final class SearchViewModel: BaseViewModel  {
             output.recentKeywords.value.insert(keyword, at: 0)
             print("최근 검색어: \(output.recentKeywords.value)")
         }
+        
+        NotificationCenter.default.post(
+            name: NSNotification.Name("ReceiveKeywordSearch"),
+            object: nil
+        )
     }
+    
 }
