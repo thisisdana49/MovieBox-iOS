@@ -51,9 +51,10 @@ final class MainViewController: UIViewController {
     
     @objc
     func searchButtonTapped(_ sender: UIBarButtonItem) {
-        let vc = SearchViewController()
-        vc.viewModel.input.isFromMainView.value = ()
-        navigationController?.pushViewController(vc, animated: true)
+        navigate(to: .search)
+//        let vc = SearchViewController()
+//        vc.viewModel.input.isFromMainView.value = ()
+//        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc
@@ -112,7 +113,6 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: 뷰 전환 시에 넘겨주는 방법에 대한 고민... O
         let movie = viewModel.output.todaysMovies[indexPath.row]
         let vc = SearchDetailViewController(movie: movie)
         
