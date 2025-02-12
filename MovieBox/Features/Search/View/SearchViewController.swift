@@ -23,10 +23,11 @@ final class SearchViewController: BaseViewController {
         bindData()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        mainView.tableView.reloadData()
-//    }
+    // TODO: 어떤 위치로? 혹은 다른 로직으로 고민해보기
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        mainView.tableView.reloadData()
+    }
     
     private func bindData() {
         viewModel.output.searchBarFocus.bind { [weak self] value in
@@ -95,7 +96,8 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = SearchDetailViewController()
-//        vc.movie = movies[indexPath.row]
+        let movie = viewModel.output.searchResultMovies.value[indexPath.row]
+        vc.viewModel.input.movie.value = movie
         
         navigationController?.pushViewController(vc, animated: true)
     }

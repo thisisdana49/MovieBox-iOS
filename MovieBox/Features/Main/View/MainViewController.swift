@@ -113,7 +113,10 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = SearchDetailViewController()
-        vc.movie = viewModel.output.todaysMovies[indexPath.row]
+//        vc.movie = viewModel.output.todaysMovies[indexPath.row]
+        // TODO: 뷰 전환 시에 넘겨주는 방법에 대한 고민...
+        let movie = viewModel.output.todaysMovies[indexPath.row]
+        vc.viewModel.input.movie.value = movie
         
         navigationController?.pushViewController(vc, animated: true)
     }

@@ -84,7 +84,6 @@ final class ProfileSettingViewController: UIViewController {
     @objc
     func imageViewTapped() {
         let vc = ProfileImageSettingViewController()
-//        vc.profileImage = mainView.profileImage
         vc.viewModel = viewModel
         navigationController?.pushViewController(vc, animated: true)
     }

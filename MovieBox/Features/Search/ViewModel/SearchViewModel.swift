@@ -64,7 +64,7 @@ final class SearchViewModel: BaseViewModel  {
             self?.searchWord = value
             self?.callMovies()
         }
-
+        
     }
  
     private func callMovies() {

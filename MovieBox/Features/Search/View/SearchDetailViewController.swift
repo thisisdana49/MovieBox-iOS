@@ -9,11 +9,12 @@ import UIKit
 
 final class SearchDetailViewController: UIViewController {
     
+    let viewModel = SearchDetailViewModel()
     let mainView = SearchDetailView()
-    var movie: Movie?
     var likeButton = CustomLikeButton()
-    var movieCredit: MovieCredit?
-    var movieImage: MovieImage?
+//    var movie: Movie?
+//    var movieCredit: MovieCredit?
+//    var movieImage: MovieImage?
     
     override func loadView() {
         view = mainView
@@ -22,42 +23,23 @@ final class SearchDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
-        fetchMovieData()
+        bindData()
     }
     
-    // TODO: Movie Detail Model 만들기
-    private func fetchMovieData() {
-        guard let movie = movie else { return }
-        let group = DispatchGroup()
+    private func bindData() {
+        viewModel.input.viewDidLoad.value = ()
         
-        group.enter()
-        NetworkManager.shared.fetchData(apiRequest: .movieCredits(id: "\(movie.id)"), requestType: MovieCredit.self) { [weak self] value in
-            self?.movieCredit = value
-            group.leave()
-        } failureHandler: { error in
-            print("네트워크 오류", error.localizedDescription)
-            group.leave()
-        }
-        
-        group.enter()
-        NetworkManager.shared.fetchData(apiRequest: .movieImages(id: "\(movie.id)"), requestType: MovieImage.self) { [weak self] value in
-            self?.movieImage = value
-            group.leave()
-        } failureHandler: { error in
-            print("네트워크 오류", error.localizedDescription)
-            group.leave()
-        }
-        
-        group.notify(queue: .main) { [weak self] in
+        viewModel.output.fetchSuccess.bind { [weak self] _ in
+            self?.mainView.configureData(movie: self?.viewModel.input.movie.value)
+            self?.setupView(with: self?.viewModel.input.movie.value)
             self?.mainView.castSection.reloadData()
             self?.mainView.posterSection.reloadData()
             self?.mainView.backdropSection.reloadData()
-            
-            if let backdropCount = self?.movieImage?.backdrops.prefix(5).count {
-                self?.mainView.pageControl.numberOfPages = backdropCount
-                self?.mainView.pageControl.isHidden = (backdropCount == 0)
-            }
+        }
+        
+        viewModel.output.backdropCount.bind { [weak self] value in
+            self?.mainView.pageControl.numberOfPages = value
+            self?.mainView.pageControl.isHidden = (value == 0)
         }
     }
     
@@ -74,14 +56,13 @@ final class SearchDetailViewController: UIViewController {
         }
     }
     
-    private func setupView() {
+    private func setupView(with movie: Movie?) {
         guard let movie = movie else { return }
         
         navigationItem.title = movie.title
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: likeButton)
         likeButton.setMovieID(movie.id)
-        
-        mainView.configureData(movie: movie)
+
         configureCollectionView()
         
         NotificationCenter.default.addObserver(
@@ -120,26 +101,26 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView.tag == 0 {
-            let backdropCount = movieImage?.backdrops.count ?? 0
+            let backdropCount = viewModel.output.movieImage?.backdrops.count ?? 0
             return min(5, max(1, backdropCount))
         }
         else if collectionView.tag == 1 {
-            if movieCredit?.cast.count == 0 {
+            if viewModel.output.movieCredit?.cast.count == 0 {
                 collectionView.setEmptyMessage("출연진 정보가 없는 영화입니다.")
             }
             else {
                 collectionView.restore()
             }
-            return movieCredit?.cast.count ?? 0
+            return viewModel.output.movieCredit?.cast.count ?? 0
         }
         else {
-            if movieImage?.posters.count == 0 {
+            if viewModel.output.movieImage?.posters.count == 0 {
                 collectionView.setEmptyMessage("포스터 이미지가 없는 영화입니다.")
             }
             else {
                 collectionView.restore()
             }
-            return movieImage?.posters.count ?? 0
+            return viewModel.output.movieImage?.posters.count ?? 0
         }
     }
     
@@ -147,7 +128,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         
         if collectionView.tag == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackdropCollectionViewCell.id, for: indexPath) as? BackdropCollectionViewCell else { return UICollectionViewCell() }
-            let backdrops = movieImage?.backdrops.prefix(5)
+            let backdrops = viewModel.output.movieImage?.backdrops.prefix(5)
             if backdrops?.isEmpty ?? true {
                 cell.configureData(with: nil)
             } else {
@@ -160,7 +141,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         
         else if collectionView.tag == 1 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCollectionViewCell.id, for: indexPath) as? CastCollectionViewCell else { return UICollectionViewCell() }
-            let cast = movieCredit?.cast[indexPath.item]
+            let cast = viewModel.output.movieCredit?.cast[indexPath.item]
             cell.configureData(cast: cast)
             print(self, #function)
             return cell
@@ -168,7 +149,7 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
         
         else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.id, for: indexPath) as? PosterCollectionViewCell else { return UICollectionViewCell() }
-            let poster = movieImage?.posters[indexPath.item]
+            let poster = viewModel.output.movieImage?.posters[indexPath.item]
             cell.configureData(with: poster)
             
             return cell
