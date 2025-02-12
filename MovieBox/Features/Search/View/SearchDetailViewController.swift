@@ -11,10 +11,15 @@ final class SearchDetailViewController: UIViewController {
     
     let viewModel = SearchDetailViewModel()
     let mainView = SearchDetailView()
-    var likeButton = CustomLikeButton()
-//    var movie: Movie?
-//    var movieCredit: MovieCredit?
-//    var movieImage: MovieImage?
+    
+    init(movie: Movie) {
+        self.viewModel.input.movie.value = movie
+        super.init(nibName: "", bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = mainView
@@ -58,7 +63,8 @@ final class SearchDetailViewController: UIViewController {
     
     private func setupView(with movie: Movie?) {
         guard let movie = movie else { return }
-        
+        var likeButton = CustomLikeButton()
+
         navigationItem.title = movie.title
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: likeButton)
         likeButton.setMovieID(movie.id)
