@@ -30,6 +30,8 @@ final class SearchViewController: BaseViewController {
     }
     
     private func bindData() {
+        viewModel.input.viewDidLoad.value = ()
+        
         viewModel.output.searchBarFocus.bind { [weak self] value in
             if value { self?.mainView.searchTextField.becomeFirstResponder() }
         }

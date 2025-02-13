@@ -13,7 +13,7 @@ final class SearchViewModel: BaseViewModel  {
     private(set) var output: Output
     
     struct Input {
-        let isFromMainView: Observable<Void?> = Observable(nil)
+        let viewDidLoad: Observable<Void?> = Observable(nil)
         let searchTextField: Observable<String?> = Observable("")
         let prefetchRows: Observable<[IndexPath]> = Observable([])
         // TODO: Search VM의 입장에서 네이밍 필요
@@ -44,8 +44,9 @@ final class SearchViewModel: BaseViewModel  {
     }
     
     func transform() {
-        input.isFromMainView.lazyBind { [weak self] _ in
-            self?.output.searchBarFocus.value = true
+        input.viewDidLoad.bind { [weak self] _ in
+            guard let noSearchWord = self?.searchWord.isEmpty, let noSearchResult = self?.output.searchResultMovies.value.isEmpty else { return }
+            self?.output.searchBarFocus.value = noSearchWord && noSearchResult
         }
         
         input.searchTextField.lazyBind { [weak self] value in
@@ -61,6 +62,7 @@ final class SearchViewModel: BaseViewModel  {
         }
         
         input.keywordTapped.lazyBind { [weak self] value in
+            print("keyword tapped", value)
             self?.searchWord = value
             self?.callMovies()
         }

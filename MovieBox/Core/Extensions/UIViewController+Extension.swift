@@ -8,7 +8,7 @@
 import UIKit
 
 enum Screen {
-    case search
+    case search(keyword: String? = nil)
     case searchDetail(movie: Movie)
     case profileSetting(currentNickname: String)
 }
@@ -19,8 +19,10 @@ extension UIViewController {
         let destinationVC: UIViewController
         
         switch screen {
-        case .search:
-            destinationVC = SearchViewController()
+        case .search(let keyword):
+            let vc = SearchViewController()
+            vc.viewModel.input.keywordTapped.value = keyword ?? ""
+            destinationVC = vc
             
         case .searchDetail(let movie):
             destinationVC = SearchDetailViewController(movie: movie)

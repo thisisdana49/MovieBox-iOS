@@ -51,10 +51,7 @@ final class MainViewController: UIViewController {
     
     @objc
     func searchButtonTapped(_ sender: UIBarButtonItem) {
-        navigate(to: .search)
-//        let vc = SearchViewController()
-//        vc.viewModel.input.isFromMainView.value = ()
-//        navigationController?.pushViewController(vc, animated: true)
+        navigate(to: .search())
     }
     
     @objc
@@ -77,9 +74,7 @@ final class MainViewController: UIViewController {
     // TODO: 선택 시 순서 변경 되도록 구현
     @objc
     func keywordButtonTapped(_ sender: CustomKeywordButton) {
-        let vc = SearchViewController()
-        vc.viewModel.input.keywordTapped.value = sender.name
-        navigationController?.pushViewController(vc, animated: true)
+        navigate(to: .search(keyword: sender.name))
     }
     
     private func removeKeyword(_ button: CustomKeywordButton) {
@@ -114,9 +109,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movie = viewModel.output.todaysMovies[indexPath.row]
-        let vc = SearchDetailViewController(movie: movie)
-        
-        navigationController?.pushViewController(vc, animated: true)
+        navigate(to: .searchDetail(movie: movie))
     }
     
 }
