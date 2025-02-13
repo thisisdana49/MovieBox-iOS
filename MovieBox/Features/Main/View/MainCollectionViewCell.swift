@@ -51,6 +51,7 @@ final class MainCollectionViewCell: UICollectionViewCell {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(posterImageView.snp.bottom).offset(6)
             make.leading.equalToSuperview()
+            make.trailing.equalToSuperview().inset(25)
         }
         
         likeButton.snp.makeConstraints { make in
