@@ -24,10 +24,20 @@ final class SearchViewModel: BaseViewModel  {
         let searchBarFocus: Observable<Bool> = Observable(false)
         let scrollToTop: Observable<Void?> = Observable(nil)
         let searchResultMovies: Observable<[Movie]> = Observable([])
-        let isNoResult: Observable<Bool>  = Observable(false)
+        let tableViewStatus: Observable<String> = Observable("")
         let recentKeywords: Observable<[String]> = Observable([])
     }
     
+    private var isNoResult: Bool = false {
+        didSet {
+            if isNoResult {
+                print(#function, "is no result", isNoResult)
+                self.output.tableViewStatus.value = "\(searchWord)에 해당하는 검색 결과를 찾지 못했습니다."
+            } else {
+                self.output.tableViewStatus.value = ""
+            }
+        }
+    }
     var searchWord: String = "" {
         didSet { page = 1 }
     }
@@ -70,15 +80,14 @@ final class SearchViewModel: BaseViewModel  {
     }
  
     private func callMovies() {
-        print(#function, page, isEnd, totalPages)
-
+        print(#function)
         NetworkManager.shared.fetchData(apiRequest: .searchMovies(keyword: searchWord, page: page), requestType: MovieListResponse.self) { value in
             if self.page == 1 {
                 self.output.searchResultMovies.value.removeAll()
                 if value.totalResults == 0 {
-                    self.output.isNoResult.value = true
+                    self.isNoResult = true
                 } else {
-                    self.output.isNoResult.value = false
+                    self.isNoResult = false
                     self.totalPages = value.totalPages
                     self.output.searchResultMovies.value = value.results
                     self.output.scrollToTop.value = ()

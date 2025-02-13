@@ -149,7 +149,6 @@ extension SearchDetailViewController: UICollectionViewDelegate, UICollectionView
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastCollectionViewCell.id, for: indexPath) as? CastCollectionViewCell else { return UICollectionViewCell() }
             let cast = viewModel.output.movieCredit?.cast[indexPath.item]
             cell.configureData(cast: cast)
-            print(self, #function)
             return cell
         }
         

@@ -38,7 +38,6 @@ final class SearchDetailViewModel: BaseViewModel {
     }
     
     private func callMovie() {
-        print(#function, input.movie.value?.id)
         guard let movieId = input.movie.value?.id else { return }
         let group = DispatchGroup()
         

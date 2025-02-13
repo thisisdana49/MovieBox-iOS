@@ -21,7 +21,7 @@ extension UIViewController {
         switch screen {
         case .search(let keyword):
             let vc = SearchViewController()
-            vc.viewModel.input.keywordTapped.value = keyword ?? ""
+            if let keyword { vc.viewModel.input.keywordTapped.value = keyword }
             destinationVC = vc
             
         case .searchDetail(let movie):
