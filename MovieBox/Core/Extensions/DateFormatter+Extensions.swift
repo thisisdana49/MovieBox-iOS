@@ -15,16 +15,12 @@ extension DateFormatter {
         return formatter
     }()
     
-    static func getDateFormatter() -> DateFormatter {
-        return krDateFormatter
-    }
-    
 }
 
 extension Date {
     
     func toFormattedString(_ dateFormat: String = "yyyy. MM. dd") -> String {
-        let dateFormatter = DateFormatter.getDateFormatter()
+        let dateFormatter = DateFormatter.krDateFormatter
         dateFormatter.dateFormat = dateFormat
         return dateFormatter.string(from: self)
     }

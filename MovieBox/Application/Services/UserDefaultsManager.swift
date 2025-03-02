@@ -34,7 +34,7 @@ struct UserDefaultsManager {
 
     static func saveSearchKeyword(_ keyword: String) {
         var keywords = getSearchKeywords()
-        if keywords.contains(keyword) {
+        if keywords.cosntains(keyword) {
             keywords.removeAll { $0 == keyword }
         }
         keywords.insert(keyword, at: 0)
